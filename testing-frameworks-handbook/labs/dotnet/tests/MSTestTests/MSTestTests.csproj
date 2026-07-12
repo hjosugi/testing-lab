@@ -1,0 +1,12 @@
+<Project Sdk="MSTest.Sdk/4.3.0">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Checkout/Checkout.csproj" />
+  </ItemGroup>
+</Project>
+

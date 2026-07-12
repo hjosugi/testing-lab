@@ -1,0 +1,25 @@
+{
+  "name": "testing-handbook-node-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "npm run test:node && npm run test:mocha && npm run test:ava",
+    "test:node": "node --test test/node/*.test.js",
+    "test:mocha": "mocha 'test/mocha/**/*.test.js'",
+    "test:ava": "ava 'test/ava/**/*.test.js'",
+    "coverage": "node --test --experimental-test-coverage test/node/*.test.js"
+  },
+  "devDependencies": {
+    "ava": "8.0.1",
+    "mocha": "11.7.6",
+    "sinon": "22.0.0"
+  },
+  "overrides": {
+    "diff": "8.0.3",
+    "serialize-javascript": "7.0.5"
+  }
+}

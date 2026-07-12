@@ -1,0 +1,1358 @@
+# 観点6 ハンズオン・ロードマップ・全Issue
+
+> Testing Frameworks Handbook のNotebookLM取り込み用バンドル。
+> 生成元: https://github.com/hjosugi/testing-lab （scripts/build-notebooklm.sh で再生成）
+
+---
+
+<!-- SOURCE: docs/10-interview-guide.md -->
+
+# Google面接向け説明
+
+## 30秒版
+
+I separate the test runner, test framework, assertion library, and mocking library. For unit-test design, I use Classical-style state tests for domain logic and London-style interaction tests for important orchestration protocols. I avoid mocking value objects and internal methods. I add real integration tests for databases, contract tests for service compatibility, and only a small number of critical E2E tests. I measure reliability with flake rate and mutation testing, not coverage alone.
+
+## Classical vs London
+
+Classical TDD usually tests a group of real in-memory objects and verifies the final state or returned value. It is resilient to internal refactoring, but a failure may be less local.
+
+London TDD usually isolates one subject and replaces collaborators with test doubles. It verifies important interactions and supports outside-in design. It gives local failures, but too many interaction checks can couple tests to implementation details.
+
+I do not choose one school for the whole codebase. I choose by boundary and risk.
+
+## framework選定の2分版
+
+First, I define the test layer and failure types. A unit-test runner, a browser E2E tool, and a mutation tool solve different problems, so I do not compare them only by popularity.
+
+Then I run a small spike with the same cases: async success, dependency failure, parameterized tests, parallel isolation, and diagnostic output.
+
+I evaluate execution semantics, failure messages, IDE and CI support, version policy, and team debugging cost. For a new Java project, I would start with JUnit 6. For Go or Rust, I would start with the standard toolchain. For Node.js, I would evaluate the built-in test runner before adding Mocha or AVA.
+
+Finally, I design a test portfolio. Domain rules use state and property tests. External adapters use integration tests. Service compatibility uses contract tests. Critical user journeys use a small number of E2E tests.
+
+## follow-up questions
+
+### Why not mock every dependency?
+
+Mocks improve isolation, but they can lock the current call sequence. I mock only important boundaries or protocols. For stable in-memory domain objects, I prefer real objects.
+
+### Is 100% coverage good?
+
+It can show that every line ran, but it cannot prove that assertions detect wrong behavior. I use coverage to find gaps and mutation testing to evaluate test strength.
+
+### How do you handle flaky tests?
+
+I classify the cause: time, concurrency, shared state, network, UI waiting, randomness, or environment. I make the dependency deterministic. Retry is temporary and must have an owner and an expiry date.
+
+
+---
+
+<!-- SOURCE: docs/11-sources.md -->
+
+# 公式情報源と確認日
+
+確認日: 2026-07-12
+
+可能な限り公式documentation、official repository、project siteを参照しています。versionは教材生成時点のものであり、実行前にlockfileとrelease noteを再確認してください。
+
+## 思想
+
+- Martin Fowler, Mocks Aren't Stubs: https://martinfowler.com/articles/mocksArentStubs.html
+- Growing Object-Oriented Software, Guided by Tests（London schoolの代表的文献）: http://www.growing-object-oriented-software.com/
+- Test Double wiki（Detroit/Londonの整理）: https://github.com/testdouble/contributing-tests/wiki/Test-Double
+
+## JavaScript／TypeScript
+
+- Node.js v26 test runner: https://nodejs.org/api/test.html
+- Mocha docs: https://mochajs.org/
+- Mocha parallel mode: https://mochajs.org/#parallel-tests
+- AVA: https://avajs.dev/
+- Playwright Test: https://playwright.dev/docs/test-intro
+- TestCafe architecture: https://testcafe.io/documentation/402631/guides/overview/why-testcafe
+
+確認したnpm version: Node docs 26.5.0、Mocha 11.7.6、AVA 8.0.1、Sinon 22.0.0、TypeScript 7.0.2（2026-07-12 registry）。
+
+## Python
+
+- pytest stable docs: https://docs.pytest.org/en/stable/
+- fixtures: https://docs.pytest.org/en/stable/explanation/fixtures.html
+- parametrization: https://docs.pytest.org/en/stable/how-to/parametrize.html
+
+## JVM
+
+- JUnit: https://junit.org/
+- JUnit 6.1.1 overview: https://docs.junit.org/6.1.1/overview.html
+- JUnit 6.1.1 release notes: https://docs.junit.org/6.1.1/release-notes.html
+- Truth: https://truth.dev/
+
+JUnit 6.1.1は2026-06-28公開。JUnit 6はJava 17以上、Kotlin 2.1以上を要求します。
+
+## .NET
+
+- Testing in .NET: https://learn.microsoft.com/dotnet/core/testing/
+- MTP overview: https://learn.microsoft.com/dotnet/core/testing/microsoft-testing-platform-intro
+- MSTest overview: https://learn.microsoft.com/dotnet/core/testing/unit-testing-mstest-intro
+- NUnit docs: https://docs.nunit.org/
+- NUnit framework release notes: https://docs.nunit.org/articles/nunit/release-notes/framework.html
+
+NUnit 4.6.0は2026-05-04公開。MTP資料は2026-04-27更新。
+
+## C++
+
+- Catch2 docs: https://catch2-temp.readthedocs.io/
+- test cases and SECTION: https://catch2-temp.readthedocs.io/en/latest/test-cases-and-sections.html
+- generators: https://catch2-temp.readthedocs.io/en/latest/generators.html
+- CMake integration: https://github.com/catchorg/Catch2/blob/devel/docs/cmake-integration.md
+
+## Go
+
+- package testing: https://pkg.go.dev/testing
+- testing tutorial: https://go.dev/doc/tutorial/add-a-test
+- fuzzing tutorial: https://go.dev/doc/tutorial/fuzz
+
+## Rust
+
+- Rust Book, testing: https://doc.rust-lang.org/book/ch11-00-testing.html
+- test execution: https://doc.rust-lang.org/book/ch11-02-running-tests.html
+- test organization: https://doc.rust-lang.org/book/ch11-03-test-organization.html
+- Rust rstest crate: https://crates.io/crates/rstest
+
+## PHP
+
+- PHPUnit 13 announcement: https://phpunit.de/announcements/phpunit-13.html
+- supported versions: https://phpunit.de/supported-versions.html
+- Infection guide: https://infection.github.io/guide/
+
+PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開。InfectionはPHP 8.3以上。
+
+## Contract／specialized
+
+- Pact introduction: https://docs.pact.io/
+- How Pact works: https://docs.pact.io/getting_started/how_pact_works
+- Pact consumer tests: https://docs.pact.io/consumer
+- Airtest docs: https://airtest.doc.io.netease.com/en/
+- EarlGrey repository: https://github.com/google/EarlGrey
+- mountebank docs: https://www.mbtest.org/docs/gettingStarted
+
+## Nix
+
+- Nix manual: https://nix.dev/manual/nix/latest/
+- `nix develop`: https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-develop
+- flakes: https://nix.dev/concepts/flakes.html
+
+## Integration／UI／mobile
+
+- Testcontainers: https://java.testcontainers.org/
+- Storybook testing: https://storybook.js.org/docs/writing-tests
+- Storybook Vitest addon: https://storybook.js.org/docs/writing-tests/integrations/vitest-addon
+- Schemathesis: https://schemathesis.readthedocs.io/
+- Appium 3 architecture: https://appium.io/docs/en/3.5/intro/appium/
+- Testing Library guiding principles: https://testing-library.com/docs/guiding-principles
+- Playwright best practices: https://playwright.dev/docs/best-practices
+
+## 研究論文
+
+論文の分類、DOI、peer-reviewed／preprintの区別、実務への含意は [13-research-and-modern-practice.md](13-research-and-modern-practice.md) にまとめています。
+
+---
+
+<!-- SOURCE: docs/12-nix-setup.md -->
+
+# Nix setup
+
+## 目的
+
+`flake.nix` はlanguage toolchainとtest toolを同じshellへ揃えます。package managerのlockfileは各ecosystemのdependency graph、NixはOS/toolchain dependencyを担当します。
+
+## Linux／macOS
+
+公式installerまたは組織で承認されたinstallerを使い、flakesを有効にします。導入後:
+
+```bash
+nix --version
+nix develop
+./scripts/bootstrap.sh
+./scripts/test-all.sh
+```
+
+`nix develop` は初回にnixpkgs inputをlockし得ます。生成された`flake.lock`をreviewしてcommitしてください。
+
+## Windows
+
+NixはWindows nativeの主要workflowではありません。次のどちらかです。
+
+1. WSL2内でNixを使う
+2. Windows nativeは各SDK、CI/LinuxはNixで検証する
+
+C#やnative UIのWindows固有testはNix shellの対象外です。Nixで共通unit testを実行し、Windows runnerでOS固有testを追加します。
+
+## shellを分ける
+
+default shellは全言語を含み重いので、日常作業では個別shellを使えます。
+
+```bash
+nix develop .#python
+nix develop .#node
+nix develop .#jvm
+nix develop .#dotnet
+nix develop .#cpp
+nix develop .#go
+nix develop .#rust
+nix develop .#php
+```
+
+## reproducibilityの境界
+
+Nix shellだけでは次を固定しません。
+
+- remote test serviceのbehavior
+- browser binaryを別downloadするtool
+- Docker image tagがmutableな場合
+- timezone/locale/CPU scheduling
+- npm/Maven/NuGet/Composer/Cargo dependency（各lockfileで固定）
+
+したがって、flake.lockとlanguage lockfileの両方をcommitし、CIでclean bootstrapを定期検証します。
+
+
+---
+
+<!-- SOURCE: issues/README.md -->
+
+# Issue backlog
+
+各Issueは依存順に番号を付けています。`gh`で投入する前にrepositoryのlabelを作成してください。
+
+```bash
+./scripts/create-issues.sh --dry-run
+./scripts/create-issues.sh --apply
+```
+
+## Phase
+
+| Phase | Issues | Exit criteria |
+|---|---|---|
+| Foundation | 00-04 | 用語、Nix、Classical/Londonを説明可能 |
+| Polyglot | 05-12 | 8言語の同一behaviorがgreen |
+| Integration/UI | 13-18 | real boundary、contract、E2Eを分離 |
+| Specialized | 19-27 | mobile、performance、security、data/AI等をrisk-based設計 |
+| Operations/research | 28-34 | continuous verification、論文再現、品質audit |
+| Deep-dive practice | 35-50 | oracle、state、concurrency、data、運用、AIまで実証 |
+
+`blocked`、`needs-hardware`、`needs-cloud`を使い、localで完了できない検証を曖昧にcloseしないでください。
+
+---
+
+<!-- SOURCE: issues/00-define-test-language.md -->
+
+# docs: test taxonomyと共通語彙をteam標準にする
+<!-- labels: documentation,testing,priority-high -->
+
+## Goal
+
+runner、framework、assertion、double、specialized toolと、各test layerの意味を混同しない共通語彙を作る。
+
+## Tasks
+
+- [ ] `docs/00-map.md`と`docs/14-complete-testing-taxonomy.md`をreview
+- [ ] unit/component/integration/contract/system/E2Eのteam定義を記録
+- [ ] 各suite名にscope/boundaryを含める命名規約を決定
+- [ ] 既存suiteをtaxonomyへmapping
+
+## Acceptance criteria
+
+- [ ] 各suiteについて実物、double、oracle、riskを1文で説明できる
+- [ ] 「integration test」という無修飾名を新規に作らない
+
+
+---
+
+<!-- SOURCE: issues/01-lock-nix-environment.md -->
+
+# build: Nix flakeと全ecosystem lockfileを固定・検証する
+<!-- labels: build,nix,reproducibility,priority-high -->
+
+## Depends on
+
+- #00
+
+## Tasks
+
+- [ ] `nix flake lock`を実行し差分をreview
+- [ ] `nix flake check`相当のCI jobを作成
+- [ ] npm/Cargo/Composer/Gradle/.NET dependencyをlock
+- [ ] x86_64-linuxとaarch64-darwinで`STRICT=1 ./scripts/test-all.sh`
+- [ ] Playwright browserとnpm packageのversion一致を固定
+
+## Acceptance criteria
+
+- [ ] clean machineで1 command bootstrap可能
+- [ ] toolchain/version/lock更新手順がdocument化される
+- [ ] Windows固有testの別runner方針がある
+
+
+---
+
+<!-- SOURCE: issues/02-practice-classical-tdd.md -->
+
+# learning: Classical TDDをstate-based designで完走する
+<!-- labels: learning,tdd,classical -->
+
+## Tasks
+
+- [ ] checkoutにdiscount ruleをred-green-refactorで追加
+- [ ] real domain objectとin-memory fakeでobservable outcomeを検証
+- [ ] internal methodを抽出/統合しtestが壊れないことを確認
+- [ ] fakeとreal adapterのcontract suite案を作る
+
+## Acceptance criteria
+
+- [ ] sociable unitとintegration testの違いを説明できる
+- [ ] state testのfailure局所性の弱点を実例で説明できる
+
+
+---
+
+<!-- SOURCE: issues/03-practice-london-tdd.md -->
+
+# learning: London TDDをoutside-inで完走する
+<!-- labels: learning,tdd,london,mocking -->
+
+## Tasks
+
+- [ ] notification collaboratorを未実装interfaceから追加
+- [ ] mockで重要protocolを先に定義
+- [ ] mock setupからresponsibility過多を検出し分割
+- [ ] call orderを仕様に含める場合/含めない場合を比較
+
+## Acceptance criteria
+
+- [ ] solitary unit、role、messageを説明できる
+- [ ] interaction couplingを起こすassertionを識別できる
+- [ ] wiringを補うcomponent testを追加できる
+
+
+---
+
+<!-- SOURCE: issues/04-build-hybrid-policy.md -->
+
+# architecture: Classical/Londonのhybrid testing policyを決める
+<!-- labels: architecture,testing,decision -->
+
+## Depends on
+
+- #02
+- #03
+
+## Tasks
+
+- [ ] domain/application/adapterごとのdefault styleを決定
+- [ ] mock対象と禁止対象を例示
+- [ ] fake contract suiteの必須条件を定義
+- [ ] exceptionをADR templateへ記録
+
+## Acceptance criteria
+
+- [ ] schoolをrepository全体へ一律適用していない
+- [ ] risk/boundaryから選べるdecision tableがある
+
+
+---
+
+<!-- SOURCE: issues/05-complete-python-lab.md -->
+
+# lab(python): pytest fixture/parametrize/mock/propertyを完成する
+<!-- labels: python,pytest,hands-on -->
+
+## Tasks
+
+- [ ] Classical/London testsを実行
+- [ ] fixture scope違いを追加しparallel safetyを確認
+- [ ] Hypothesisでtotal invariantを追加
+- [ ] wrong lookup site patchを再現し修正
+- [ ] branch coverageとmutation結果を比較
+
+## Acceptance criteria
+
+- [ ] `pytest -q` green
+- [ ] autouse fixtureを使う/避ける判断を説明可能
+
+
+---
+
+<!-- SOURCE: issues/06-complete-node-lab.md -->
+
+# lab(node): Node runner/Mocha/AVAのexecution semanticsを比較する
+<!-- labels: nodejs,javascript,hands-on -->
+
+## Tasks
+
+- [ ] 3 runnerで同じcheckout behaviorを実行
+- [ ] serial/concurrent/file isolationを計測
+- [ ] Node mockとSinon spy/stubを比較
+- [ ] ESM dependency injectionとmodule mockを比較
+- [ ] intentional failure outputを保存
+
+## Acceptance criteria
+
+- [ ] framework選定をfeature数でなくexecution modelから説明できる
+- [ ] unawaited async failureの再現testがある
+
+
+---
+
+<!-- SOURCE: issues/07-complete-jvm-lab.md -->
+
+# lab(jvm): JUnit 6 Platform/Jupiter/Mockito/Truthを完成する
+<!-- labels: java,junit,hands-on -->
+
+## Tasks
+
+- [ ] JUnit 6.1.1 testsを実行
+- [ ] parameterized/dynamic/extensionの各適用例を追加
+- [ ] Mockito agent要件をJDKごとに検証
+- [ ] Truth custom SubjectをOrderへ実装
+- [ ] Kotlin coroutine test差分をdocument化
+
+## Acceptance criteria
+
+- [ ] Platform、engine、Jupiter、assertion、mockを区別できる
+- [ ] JUnit Vintageを新規testへ使わない
+
+
+---
+
+<!-- SOURCE: issues/08-complete-dotnet-lab.md -->
+
+# lab(dotnet): NUnit 4とMSTest 4/MTPを比較する
+<!-- labels: dotnet,csharp,nunit,mstest,hands-on -->
+
+## Tasks
+
+- [ ] NUnit/MSTest両suiteを.NET 10で実行
+- [ ] NUnit constraintとMSTest assertionのfailureを比較
+- [ ] MTP/VSTestの起動とreport差を記録
+- [ ] cancellation/async failure testを追加
+- [ ] xUnit.net v3をspike候補に追加
+
+## Acceptance criteria
+
+- [ ] framework/platform/adapterのversion matrixがgreen
+- [ ] MTP採用ADRを作成
+
+
+---
+
+<!-- SOURCE: issues/09-complete-cpp-lab.md -->
+
+# lab(cpp): Catch2 3、sanitizer、benchmarkを完成する
+<!-- labels: cpp,catch2,hands-on -->
+
+## Tasks
+
+- [ ] SECTION/GENERATEを実行
+- [ ] ASan/UBSan/TSan別jobを作成
+- [ ] Catch2 benchmarkとmicrobenchmarkのnoiseを確認
+- [ ] handwritten spyとmock frameworkのcompile time比較
+- [ ] CTest sharding/random orderを検証
+
+## Acceptance criteria
+
+- [ ] clean CMake build/testがgreen
+- [ ] lifetime/UB failureをsanitizerが検出するfixtureがある
+
+
+---
+
+<!-- SOURCE: issues/10-complete-go-lab.md -->
+
+# lab(go): testing/table/race/fuzzを完成する
+<!-- labels: go,fuzzing,hands-on -->
+
+## Tasks
+
+- [ ] `go test ./...`と`-race`を実行
+- [ ] table/subtest/t.Parallelのresource isolationを確認
+- [ ] fuzz failure seedをcorpusへ保存
+- [ ] consumer-owned interfaceとgenerated mockを比較
+- [ ] benchmark allocationを追加
+
+## Acceptance criteria
+
+- [ ] race、goroutine leak、order dependenceの各failureを再現可能
+
+
+---
+
+<!-- SOURCE: issues/11-complete-rust-lab.md -->
+
+# lab(rust): cargo test、rstest、property、mutationを完成する
+<!-- labels: rust,rstest,hands-on -->
+
+## Tasks
+
+- [ ] unit/integration/doc testを実行
+- [ ] rstest fixture/caseを追加
+- [ ] proptestまたはquickcheckを比較
+- [ ] cargo-mutantsをhigh-risk functionへ実行
+- [ ] trait doubleのSend/Sync/ownership差を記録
+
+## Acceptance criteria
+
+- [ ] public API testとprivate unit testの境界が明確
+
+
+---
+
+<!-- SOURCE: issues/12-complete-php-lab.md -->
+
+# lab(php): PHPUnit 13とInfectionを完成する
+<!-- labels: php,phpunit,mutation-testing,hands-on -->
+
+## Tasks
+
+- [ ] PHP 8.4/PHPUnit 13.2でgreen
+- [ ] PHPUnit 12.5 deprecation-freeから13 migrationを再現
+- [ ] Infection MSI/covered MSIを記録
+- [ ] escaped mutantへassertionを追加
+- [ ] equivalent mutantを分類
+
+## Acceptance criteria
+
+- [ ] `composer test` green
+- [ ] high-risk codeで設定したmutation thresholdを満たす
+
+
+---
+
+<!-- SOURCE: issues/13-component-and-http-integration.md -->
+
+# test: component/HTTP integrationのvertical sliceを完成する
+<!-- labels: integration-testing,api,hands-on,priority-high -->
+
+## Tasks
+
+- [ ] in-process componentとreal HTTP testを分離
+- [ ] invalid JSON、timeout、cancellation、large bodyを追加
+- [ ] unique portとparallel executionを検証
+- [ ] trace ID/error problem detailをassert
+- [ ] test scope/boundary/double/oracleをREADMEへ記録
+
+## Acceptance criteria
+
+- [ ] `labs/system` integration testが100回連続green
+- [ ] test名だけで境界が分かる
+
+
+---
+
+<!-- SOURCE: issues/14-real-database-testcontainers.md -->
+
+# test: Testcontainersでreal Postgres integrationを追加する
+<!-- labels: integration-testing,testcontainers,database -->
+
+## Depends on
+
+- #13
+
+## Tasks
+
+- [ ] immutable digestのPostgres imageを指定
+- [ ] migrationを本番と同じ経路で適用
+- [ ] transaction、locking、unique constraint、timezoneを検証
+- [ ] in-memory repositoryと同じcontract suiteを実行
+- [ ] container readinessとcleanupを検証
+
+## Acceptance criteria
+
+- [ ] Docker-compatible runtimeのclean CIでgreen
+- [ ] container unavailable時はsilent skipせず明示failure
+
+
+---
+
+<!-- SOURCE: issues/15-api-schema-and-property.md -->
+
+# test(api): OpenAPI schema/property/stateful testを追加する
+<!-- labels: api-testing,openapi,property-testing -->
+
+## Tasks
+
+- [ ] OpenAPI 3.1をimplementationと同期
+- [ ] Schemathesisでpositive/negative generation
+- [ ] stateful POST→GET→DELETE chainを追加
+- [ ] deterministic seedとfailure corpusを保存
+- [ ] Dredd/Prism/Hurl/Pactum/Karateの役割差を比較
+
+## Acceptance criteria
+
+- [ ] undocumented 5xx、schema mismatch、unexpected fieldを検出
+
+
+---
+
+<!-- SOURCE: issues/16-consumer-driven-contract.md -->
+
+# test(contract): Pact consumer/provider verificationを実装する
+<!-- labels: contract-testing,pact,microservices -->
+
+## Tasks
+
+- [ ] consumer client unit testからPactを生成
+- [ ] minimal matching ruleを使用
+- [ ] provider stateを明示
+- [ ] provider verificationをCIへ追加
+- [ ] pending/WIP pactとcan-i-deploy policyを設計
+- [ ] OpenAPI conformanceとの重複/差分を記録
+
+## Acceptance criteria
+
+- [ ] breaking provider changeでprovider verificationがfail
+- [ ] irrelevant provider field追加ではconsumer testが壊れない
+
+
+---
+
+<!-- SOURCE: issues/17-ui-component-storybook.md -->
+
+# test(ui): Storybook/Vitest browser component testを追加する
+<!-- labels: ui-testing,storybook,accessibility -->
+
+## Tasks
+
+- [ ] storyをstate/variant matrixとして作成
+- [ ] Vitest addon browser modeでinteraction test
+- [ ] Testing Libraryのrole/name queryを使用
+- [ ] accessibility addonをCI gateへ追加
+- [ ] deprecated Storybook test-runnerからの移行要否を確認
+
+## Acceptance criteria
+
+- [ ] component testがreal browserでgreen
+- [ ] DOM class/component instanceへの不必要なcouplingがない
+
+
+---
+
+<!-- SOURCE: issues/18-playwright-critical-e2e.md -->
+
+# test(e2e): Playwright critical journeysを完成する
+<!-- labels: e2e,playwright,browser-testing,priority-high -->
+
+## Tasks
+
+- [ ] checkout success/failureの2 journeyを追加
+- [ ] Chromium/Firefox/WebKit matrix
+- [ ] per-test contextとtest data isolation
+- [ ] trace/video/screenshotをfailure時だけ保存
+- [ ] sleepを除去しweb-first assertionを使用
+- [ ] retry前failureをflake metricへ送る
+
+## Acceptance criteria
+
+- [ ] 100回shard実行でflake 0
+- [ ] 下位層で検出できる重複assertionを削除
+
+
+---
+
+<!-- SOURCE: issues/19-mobile-desktop-game-matrix.md -->
+
+# test(app): mobile/desktop/game/device matrixを設計する
+<!-- labels: mobile-testing,ui-testing,needs-hardware -->
+
+## Tasks
+
+- [ ] Appium 3、Detox、XCUITest/EarlGrey、Espresso、Airtest/Pocoをsurface別比較
+- [ ] simulator/emulator/real device/HILの責務を定義
+- [ ] OS/device/input/network matrixをrisk-basedで削減
+- [ ] device farm artifact、video、device logを保存
+- [ ] React NativeはDetox/Cavy、Flutterはintegration_test候補を評価
+
+## Acceptance criteria
+
+- [ ] WebDriver/emulation/gray-box/image recognitionを区別
+- [ ] hardware必須testにownerと予約手順がある
+
+
+---
+
+<!-- SOURCE: issues/20-property-fuzz-metamorphic.md -->
+
+# test: property/fuzz/metamorphic/differential suiteを追加する
+<!-- labels: property-testing,fuzzing,research -->
+
+## Tasks
+
+- [ ] domain invariantを5件定義
+- [ ] generator distributionとshrinkerをreview
+- [ ] parser/APIへcoverage-guided fuzz
+- [ ] oracleが難しい機能へmetamorphic relation
+- [ ]旧版/別実装とのdifferential test
+- [ ] seeds/counterexamplesをregression corpusへ保存
+
+## Acceptance criteria
+
+- [ ] example testでは見つからない1 defectを発見またはsynthetic defectで実証
+
+
+---
+
+<!-- SOURCE: issues/21-mutation-by-risk.md -->
+
+# test: risk-based mutation testingを全言語へ導入する
+<!-- labels: mutation-testing,quality,ci -->
+
+## Tasks
+
+- [ ] PIT/Stryker/Infection/cargo-mutants/Python toolをspike
+- [ ] billing/auth/data-loss codeを優先
+- [ ] changed-file laneとscheduled full laneを分離
+- [ ] survived/equivalent/low-value分類を記録
+- [ ] scoreではなくreview action rateを測る
+
+## Acceptance criteria
+
+- [ ] PR runtime budget内
+- [ ] survived high-risk mutantに明示decisionがある
+
+
+---
+
+<!-- SOURCE: issues/22-performance-capacity.md -->
+
+# test(perf): benchmark/load/stress/spike/soak/capacityを分離する
+<!-- labels: performance-testing,load-testing,needs-infrastructure -->
+
+## Tasks
+
+- [ ] SLOとworkload modelを定義
+- [ ] microbenchmarkとsystem loadを別suite化
+- [ ] k6/JMeter/Gatling候補を比較
+- [ ] coordinated omission、warm-up、client bottleneckを確認
+- [ ] p50/p95/p99、error rate、saturationを保存
+- [ ] soakでleak/queue buildupを検証
+
+## Acceptance criteria
+
+- [ ] functional E2E timingを性能根拠に使わない
+- [ ] capacity limitとdegradation behaviorがdocument化
+
+
+---
+
+<!-- SOURCE: issues/23-security-testing.md -->
+
+# test(sec): security verification portfolioを実装する
+<!-- labels: security,testing,devsecops -->
+
+## Tasks
+
+- [ ] SAST/SCA/secret/IaC scan
+- [ ] authn/authz/tenant isolationのnegative test
+- [ ] API fuzz/DASTをtest environmentへ実行
+- [ ] rate limit/abuse caseを追加
+- [ ] SBOM/provenance/signature verification
+- [ ] OWASP ASVS/WSTG requirementへtrace
+
+## Acceptance criteria
+
+- [ ] security findingのowner/SLA/suppression期限がある
+- [ ] production secret/PIIをfixtureへ含めない
+
+
+---
+
+<!-- SOURCE: issues/24-resilience-deterministic-simulation.md -->
+
+# test(resilience): fault injection/chaos/deterministic simulationを設計する
+<!-- labels: resilience,chaos-engineering,distributed-systems -->
+
+## Tasks
+
+- [ ] clock/network/disk/random/scheduler seamを棚卸し
+- [ ] retry/backoff/circuit breaker/idempotency test
+- [ ] deterministic seedでdelay/failure scheduleを再現
+- [ ] steady state、blast radius、abort conditionを定義
+- [ ] Chaos Monkey/Kubernetes chaos候補をcontrolled環境で評価
+- [ ] simulationとreal environmentのsemantic gapを検証
+
+## Acceptance criteria
+
+- [ ] failureをseedから再現可能
+- [ ] chaos experimentが安全にabort/rollback可能
+
+
+---
+
+<!-- SOURCE: issues/25-data-ml-llm-agent-evals.md -->
+
+# test(ai/data): data、ML、LLM、agent evaluationを実装する
+<!-- labels: data-quality,ml-testing,llm-evals -->
+
+## Tasks
+
+- [ ] schema/null/range/unique/reconciliation test
+- [ ] late/duplicate/out-of-order dataとidempotency
+- [ ] model slice/robustness/drift/fairness test
+- [ ] RAG retrieval recallとgroundedness dataset
+- [ ] prompt/agent tool contractとstate transition test
+- [ ] LLM-as-judgeをhuman sampleでcalibrate
+- [ ] model/prompt/dataset/version provenanceを保存
+
+## Acceptance criteria
+
+- [ ] aggregate scoreだけでなくcritical slice failureをgate
+- [ ] nondeterminismをdistribution/seed/repeatで評価
+
+
+---
+
+<!-- SOURCE: issues/26-flake-detection-and-test-selection.md -->
+
+# ci: systemic flakiness分析とsafe test selectionを導入する
+<!-- labels: ci,flaky-tests,test-selection,priority-high -->
+
+## Tasks
+
+- [ ] first-attempt failureを保存しretry後greenと分離
+- [ ] co-failureをworker/host/fixture/serviceでcluster化
+- [ ] random orderとseed保存
+- [ ] quarantine owner/expiry/原因分類
+- [ ] dependency-based affected testsを先に導入
+- [ ] predictive selectionはperiodic full runとmiss metricを併用
+
+## Acceptance criteria
+
+- [ ] flake rate、diagnosis time、selection missをdashboard化
+- [ ] retryでrequired checkを常時greenに見せない
+
+
+---
+
+<!-- SOURCE: issues/27-atdd-bdd-specification-by-example.md -->
+
+# product-test: ATDD/BDD/Specification by Exampleを導入する
+<!-- labels: atdd,bdd,acceptance-testing,product -->
+
+## Tasks
+
+- [ ] example mappingでrule/example/questionを整理
+- [ ] UI手順でなくbusiness behaviorをGherkin化
+- [ ] Cucumber/Gauge/Concordion等の実行層を比較
+- [ ] acceptance criteriaとlower-level testsをtrace
+- [ ] duplicate scenarioとslow step definitionを削減
+
+## Acceptance criteria
+
+- [ ] product/QA/engineerが同じexampleをreview
+- [ ] feature fileがimplementation detailに依存しない
+
+
+---
+
+<!-- SOURCE: issues/28-production-continuous-verification.md -->
+
+# ops: canary/shadow/synthetic/runtime invariantを実装する
+<!-- labels: continuous-testing,observability,sre -->
+
+## Tasks
+
+- [ ] synthetic accountとidempotent cleanup
+- [ ] canary metric/abort/rollback
+- [ ] sanitized shadow traffic
+- [ ] runtime business invariantとSLO alert
+- [ ] OpenTelemetry traceでcritical flowを検証
+- [ ] feature flag cohort/kill switchをtest
+
+## Acceptance criteria
+
+- [ ] production verificationのblast radius/privacyをreview
+- [ ] pre-deploy testをproduction monitoringで置換しない
+
+
+---
+
+<!-- SOURCE: issues/29-reproduce-key-papers.md -->
+
+# research: 主要論文の主張を小規模に再現する
+<!-- labels: research,experiment,documentation -->
+
+## Tasks
+
+- [ ] coverageとmutation effectivenessの相関をsample moduleで測る
+- [ ] property-based testingのgenerator/shrinker差を比較
+- [ ] flaky co-failure clusterをsynthetic datasetで再現
+- [ ] deterministic simulationのseed reproductionをprototype
+- [ ] LLM生成testをcoverage/mutation/smell/flakeで評価
+
+## Acceptance criteria
+
+- [ ] claim、context、evidence、threats、resultをtemplateで記録
+- [ ] 再現できない結果もnegative resultとして保存
+
+
+---
+
+<!-- SOURCE: issues/30-framework-selection-spike.md -->
+
+# decision: framework/tool選定spikeとADRを完了する
+<!-- labels: decision,architecture,testing-tools -->
+
+## Tasks
+
+- [ ] target layerとfailure typeを定義
+- [ ] async/failure/parameterized/parallel/diagnosticの共通5caseを実装
+- [ ] maintenance/security/runtime compatibilityを確認
+- [ ] team diagnosis timeを計測
+- [ ] migration/exit strategyを記録
+
+## Acceptance criteria
+
+- [ ] star数や更新日だけで選ばない
+- [ ] runner/framework/assertion/double/toolを誤分類しない
+
+
+---
+
+<!-- SOURCE: issues/31-infrastructure-cloud-native-testing.md -->
+
+# test(infra): IaC/Kubernetes/cloud emulator/upgrade testを実装する
+<!-- labels: infrastructure,kubernetes,cloud-testing -->
+
+## Tasks
+
+- [ ] IaC syntax/policy/plan test
+- [ ] LocalStack/Azurite等emulatorとreal cloud smokeを分離
+- [ ] Kubernetes manifest admission/policy/ephemeral namespace
+- [ ] Kuberhealthy等synthetic checkを評価
+- [ ] install/upgrade/rollback/backup/restore test
+- [ ] cloud quota/cost/cleanup guardrail
+
+## Acceptance criteria
+
+- [ ] emulatorとreal serviceのgapをdocument化
+- [ ] leaked resourceを検知/cleanupできる
+
+
+---
+
+<!-- SOURCE: issues/32-visual-a11y-i18n-compatibility.md -->
+
+# test(ui-quality): visual/accessibility/i18n/compatibilityを実装する
+<!-- labels: ui-testing,accessibility,i18n,visual-regression -->
+
+## Tasks
+
+- [ ] reviewed visual baselineとthreshold
+- [ ] font/OS/DPI/color modeを固定
+- [ ] axe自動検査 + keyboard/screen-reader manual checklist
+- [ ] locale/timezone/RTL/long text/pseudo-localization
+- [ ] browser/device/assistive technology matrix
+- [ ] WPT/standards conformanceが該当する箇所を確認
+
+## Acceptance criteria
+
+- [ ] snapshot一括更新を禁止
+- [ ] 自動a11y greenを完全準拠と表現しない
+
+
+---
+
+<!-- SOURCE: issues/33-exploratory-manual-usability.md -->
+
+# test(manual): exploratory/manual/usability testをportfolioへ統合する
+<!-- labels: exploratory-testing,manual-testing,ux -->
+
+## Tasks
+
+- [ ] risk-based test charter
+- [ ] session notes、evidence、bug taxonomy
+- [ ] automated testでは見えないUX/ambiguityを探索
+- [ ] real user usability sessionとsuccess criteria
+- [ ] discovered regressionを適切な自動層へ戻す
+
+## Acceptance criteria
+
+- [ ] manual testingを「自動化できなかった残り」と定義しない
+- [ ] learningがbacklog/testへ反映される
+
+
+---
+
+<!-- SOURCE: issues/34-final-audit-and-release.md -->
+
+# release: 教材・code・Nix・論文・Issueの最終auditを完了する
+<!-- labels: release,documentation,quality,priority-high -->
+
+## Depends on
+
+- #01
+- #05
+- #06
+- #07
+- #08
+- #09
+- #10
+- #11
+- #12
+- #13
+
+## Tasks
+
+- [ ] `STRICT=1 ./scripts/test-all.sh`
+- [ ] link/version/date audit
+- [ ] all source code format/lint/test
+- [ ] issue dry-run count/title/label audit
+- [ ] licenses、third-party notices、secret scan
+- [ ] ZIP manifest/checksum/reproducibility note
+- [ ] READMEのcommandをclean environmentで実行
+
+## Acceptance criteria
+
+- [ ] `VALIDATION.md`にpass/skip/failを正直に記録
+- [ ] known limitationにowner/follow-up Issueがある
+
+
+---
+
+<!-- SOURCE: issues/35-oracle-quality-review.md -->
+
+# quality: Test oracleの強さと独立性を監査する
+<!-- labels: testing,quality,oracle,priority-high -->
+
+## Tasks
+
+- [ ] critical testごとにoracle種別とprotected failureを記録
+- [ ] production codeと同じalgorithmを期待値計算に使うtestを検出
+- [ ] assertionなし、常にtrue、過剰snapshotを検出
+- [ ] false positive/negativeの代表例をmutationで確認
+
+## Acceptance criteria
+
+- [ ] critical riskに独立したoracleがある
+- [ ] passしても保証しないことを各suiteに記載
+
+
+---
+
+<!-- SOURCE: issues/36-model-based-state-machine.md -->
+
+# advanced: 注文状態をmodel-based testingで検証する
+<!-- labels: testing,model-based,property-based -->
+
+## Tasks
+
+- [ ] orderのstate/command/precondition/postconditionをmodel化
+- [ ] valid/invalid command sequenceを生成
+- [ ] failure seedと最小sequenceを保存
+- [ ] duplicate、cancel、refund、retryを追加
+
+## Acceptance criteria
+
+- [ ] 少なくとも1件の手書きexampleでは見逃すmutationをkill
+- [ ] 失敗を同じseedで再現可能
+
+
+---
+
+<!-- SOURCE: issues/37-combinatorial-configuration.md -->
+
+# advanced: 設定・環境のpairwise組合せtestを設計する
+<!-- labels: testing,combinatorial,configuration -->
+
+## Tasks
+
+- [ ] browser、locale、auth、payment、feature flagの因子/値を列挙
+- [ ] invalid constraintを定義
+- [ ] pairwise suiteとfull matrix costを比較
+- [ ] past incident combinationを必須caseに固定
+
+## Acceptance criteria
+
+- [ ] coverage criterionと除外理由が説明可能
+- [ ] matrixを再生成できる
+
+
+---
+
+<!-- SOURCE: issues/38-concurrency-race-liveness.md -->
+
+# concurrency: Race・deadlock・lost updateを検証する
+<!-- labels: testing,concurrency,priority-high -->
+
+## Tasks
+
+- [ ] shared resourceとcritical sectionをinventory
+- [ ] parallel duplicate checkoutをbarrier同期で再現
+- [ ] race detector/sanitizerをCIへ追加
+- [ ] liveness deadlineとgoroutine/thread/task leakを検査
+
+## Acceptance criteria
+
+- [ ] sequential testでは見えない失敗を再現
+- [ ] random sleepに依存せずfailure evidenceを保存
+
+
+---
+
+<!-- SOURCE: issues/39-messaging-delivery-semantics.md -->
+
+# integration: Messagingの重複・順序・redeliveryを検証する
+<!-- labels: integration-testing,messaging,resilience -->
+
+## Tasks
+
+- [ ] real brokerでpublish/consumeを確認
+- [ ] duplicate、out-of-order、late、poison messageを注入
+- [ ] consumer crashとredeliveryを再現
+- [ ] schema evolution、DLQ、correlationを確認
+
+## Acceptance criteria
+
+- [ ] at-least-once下でbusiness side effectがidempotent
+- [ ] eventual assertionにdeadlineとdiagnosticsがある
+
+
+---
+
+<!-- SOURCE: issues/40-migration-backup-dr.md -->
+
+# operations: Migration・backup/restore・DRを実地検証する
+<!-- labels: testing,database,disaster-recovery,needs-environment -->
+
+## Tasks
+
+- [ ] production-like old dataからmigration
+- [ ] rollback/roll-forward strategyを検証
+- [ ] backupを空環境へrestoreしreconciliation
+- [ ] region/service loss game dayでRTO/RPO測定
+
+## Acceptance criteria
+
+- [ ] documentだけでなく実行artifactがある
+- [ ] data invariant、RTO、RPOを満たす
+
+
+---
+
+<!-- SOURCE: issues/41-cli-filesystem-protocol.md -->
+
+# integration: CLI・filesystem・process protocolを検証する
+<!-- labels: integration-testing,cli,filesystem -->
+
+## Tasks
+
+- [ ] exit code、stdout、stderr、signalをcontract化
+- [ ] permission、disk full、partial write、atomic renameを注入
+- [ ] path space/Unicode/long pathを確認
+- [ ] child process timeoutとcleanupを確認
+
+## Acceptance criteria
+
+- [ ] temp directory/processをtestごとに隔離
+- [ ] OS固有差とmatrixを文書化
+
+
+---
+
+<!-- SOURCE: issues/42-observability-as-behavior.md -->
+
+# observability: Log・metric・trace・alertをbehaviorとしてtestする
+<!-- labels: testing,observability,operations -->
+
+## Tasks
+
+- [ ] critical journeyのcorrelation ID propagationを検証
+- [ ] metric label/cardinalityとSLO queryを確認
+- [ ] failure logのactionabilityとredactionを検証
+- [ ] synthetic incidentでalert route/runbookを確認
+
+## Acceptance criteria
+
+- [ ] incidentをartifactだけでtriage可能
+- [ ] secret/PIIをtelemetryへ出さないtestがある
+
+
+---
+
+<!-- SOURCE: issues/43-test-data-privacy.md -->
+
+# data: Test data factory・隔離・privacyを整備する
+<!-- labels: testing,test-data,privacy,security -->
+
+## Tasks
+
+- [ ] minimal factoryとmeaningful defaultsを作成
+- [ ] unique namespace/tenantとcleanupを実装
+- [ ] production data利用の禁止/匿名化policyを定義
+- [ ] clock、random seed、localeをrecord
+
+## Acceptance criteria
+
+- [ ] parallel実行でcollisionしない
+- [ ] artifactにPII/secretが残らない
+
+
+---
+
+<!-- SOURCE: issues/44-snapshot-visual-governance.md -->
+
+# ui: Snapshot・golden・visual差分の承認運用を作る
+<!-- labels: testing,snapshot,visual-testing,ui -->
+
+## Tasks
+
+- [ ] semantic assertionで置換できるsnapshotを整理
+- [ ] font/time/animation/viewportを固定
+- [ ] baseline updateにreviewerと理由を要求
+- [ ] perceptual thresholdとmask領域を監査
+
+## Acceptance criteria
+
+- [ ] bulk updateだけで重要差分を承認できない
+- [ ] failure artifactから意味のある差を判断可能
+
+
+---
+
+<!-- SOURCE: issues/45-accessibility-manual-exploratory.md -->
+
+# quality: Accessibility・manual・exploratory test charterを実施する
+<!-- labels: testing,accessibility,exploratory-testing,manual-testing -->
+
+## Tasks
+
+- [ ] automated axe/semantic checks
+- [ ] keyboard、screen reader、zoom/contrastをmanual確認
+- [ ] high-risk journeyのexploratory charterを作成
+- [ ] observation、evidence、follow-upを記録
+
+## Acceptance criteria
+
+- [ ] automated checkの限界を明記
+- [ ] 発見を再現testまたはproduct decisionへ変換
+
+
+---
+
+<!-- SOURCE: issues/46-performance-methodology.md -->
+
+# performance: Coordinated omissionを避けたSLO testを構築する
+<!-- labels: performance-testing,reliability,priority-high -->
+
+## Tasks
+
+- [ ] workload modelとarrival processを定義
+- [ ] latency histogram、p95/p99、error、throughputを測定
+- [ ] load/stress/spike/soakを分離
+- [ ] response correctnessとresource saturationを同時観測
+
+## Acceptance criteria
+
+- [ ] test environment/baseline/confidenceを保存
+- [ ] coordinated omissionとwarm-upを説明可能
+
+
+---
+
+<!-- SOURCE: issues/47-security-abuse-cases.md -->
+
+# security: Threat modelからabuse-case testを実装する
+<!-- labels: security,testing,priority-high -->
+
+## Tasks
+
+- [ ] asset/trust boundary/attacker capabilityをmodel化
+- [ ] authorization、injection、replay、rate abuseをtest
+- [ ] SAST/SCA/DAST findingをriskでtriage
+- [ ] secret/log/artifact leakをtest
+
+## Acceptance criteria
+
+- [ ] scanner件数ではなくexploit impactとmitigationを記録
+- [ ] critical abuse caseをCI/release gateへ接続
+
+
+---
+
+<!-- SOURCE: issues/48-agent-evaluation-sandbox.md -->
+
+# ai: LLM/Agentをtool sandboxとversioned evalで検証する
+<!-- labels: ai,testing,evaluation,security -->
+
+## Tasks
+
+- [ ] deterministic parser/tool-schema tests
+- [ ] golden dataset、rubric、slice、adversarial casesをversion化
+- [ ] tool emulatorでfailure/timeout/permissionを注入
+- [ ] trajectory、final outcome、cost、latencyを分離評価
+- [ ] judgeをhuman sampleでcalibrate
+
+## Acceptance criteria
+
+- [ ] prompt injectionで権限外tool/actionが起きない
+- [ ] model/prompt/tool/data versionを再現可能
+
+
+---
+
+<!-- SOURCE: issues/49-framework-internals-spike.md -->
+
+# framework: Discovery・fixture・parallel・reporterの内部を比較する
+<!-- labels: testing-framework,architecture,experiment -->
+
+## Tasks
+
+- [ ] 候補runnerで同じ5 testを実装
+- [ ] discovery、lifecycle、isolation、parallel schedulingを調査
+- [ ] intentional failureのdiff/stack/artifactを比較
+- [ ] IDE/CI/XML/plugin/upgradeを評価
+
+## Acceptance criteria
+
+- [ ] syntaxの好み以外のdecision recordがある
+- [ ] lock-inとmigration costを明記
+
+
+---
+
+<!-- SOURCE: issues/50-literature-reproduction-v2.md -->
+
+# research: 研究主張を同一budget・oracleで再現する
+<!-- labels: research,testing,experiment -->
+
+## Tasks
+
+- [ ] coverage vs mutationの小実験
+- [ ] generated vs human testをmutation/defect/maintenanceで比較
+- [ ] flaky detectionとselectionのmissを測定
+- [ ] peer-reviewedとpreprintを区別
+- [ ] `templates/research-reproduction.md`で記録
+
+## Acceptance criteria
+
+- [ ] positive/negative resultの両方を保存
+- [ ] 自社contextへのexternal validityを議論
+
+
+---
+
+<!-- SOURCE: issues/51-notebooklm-knowledge-base.md -->
+
+# notebooklm: ハンドブックを観点別knowledge baseとして運用する
+<!-- labels: documentation,learning,ai -->
+
+## Tasks
+
+- [ ] `./scripts/build-notebooklm.sh` でバンドルを再生成し、diffをreviewする
+- [ ] NotebookLMに6バンドルを取り込み、ノートブックを作成する
+- [ ] 日本語のAudio Overviewを観点1〜3で生成し、内容の誤りを1件以上探す
+- [ ] 観点横断の質問を10個投げ、回答と引用元チャンクの対応を確認する
+- [ ] docs更新時にバンドル再生成を忘れないよう、手順をREADMEかCIに記録する
+
+## Acceptance criteria
+
+- [ ] 6バンドルすべてが最新のdocs/issuesから再生成されている
+- [ ] NotebookLMの回答がソース引用付きで7観点の質問に答えられる
+- [ ] ハルシネーションを見つけた場合、元docの記述改善としてfeedbackされている

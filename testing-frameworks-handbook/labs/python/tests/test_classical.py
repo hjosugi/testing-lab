@@ -1,6 +1,11 @@
 import pytest
 
-from checkout import CartItem, CheckoutService, PaymentError
+from checkout import (
+    CartItem,
+    CheckoutService,
+    PaymentError,
+    ThresholdPercentageDiscount,
+)
 from fakes import FakePaymentGateway, InMemoryOrderRepository
 
 
@@ -33,3 +38,24 @@ def test_declined_payment_does_not_persist_an_order():
 
     assert orders.orders == {}
 
+
+def test_threshold_discount_changes_the_observable_checkout_outcome():
+    payments = FakePaymentGateway()
+    orders = InMemoryOrderRepository()
+    discount = ThresholdPercentageDiscount(
+        minimum_subtotal=1000,
+        percentage=10,
+    )
+    service = CheckoutService(payments, orders, discount)
+
+    result = service.checkout(
+        "order-discounted",
+        [CartItem("book", 2, 600)],
+        "token-1",
+    )
+
+    assert result.subtotal == 1200
+    assert result.discount == 120
+    assert result.total == 1080
+    assert orders.orders[result.order_id] == result
+    assert payments.captured == [(1080, "token-1")]

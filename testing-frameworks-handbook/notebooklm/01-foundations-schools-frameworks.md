@@ -782,7 +782,7 @@ verify no unexpected interaction
 
 利点は、orchestrator の責務と collaborator interface を outside-in で発見できることです。欠点は、呼び出し順や引数 object の作り方まで固定すると、振る舞いを変えない refactor でも壊れることです。
 
-実コードは各 `labs/*/tests` にあります。
+実コードは各 `labs/*/tests` にあります。discount ruleをRed-Green-Refactorで追加するClassical側のwalkthroughは[`labs/python/CLASSICAL-TDD.md`](../labs/python/CLASSICAL-TDD.md)にあります。
 
 ## mockist でも「全部 mock」ではない
 
@@ -828,7 +828,6 @@ double を作る前に次を確認します。
 3. 最終状態から同じ保証をもっと安定して観測できるか。
 4. fake を作るなら本物との behavioral contract をどう検証するか。
 5. mock によって production interface が良くなるか、test 都合の seam が増えるだけか。
-
 
 ---
 

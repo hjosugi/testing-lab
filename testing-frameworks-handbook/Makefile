@@ -1,4 +1,4 @@
-.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-node-semantics test-node-unawaited test-advanced test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-cpp-ctest test-cpp-benchmark test-cpp-compile-time test-cpp-sanitizers test-go test-rust test-php issues-dry-run notebooklm
+.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-node-semantics test-node-unawaited test-advanced test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-cpp-ctest test-cpp-benchmark test-cpp-compile-time test-cpp-sanitizers test-go test-go-race test-go-parallel test-go-fuzz test-go-generated test-go-benchmark test-go-failures test-rust test-php issues-dry-run notebooklm
 
 bootstrap:
 	./scripts/bootstrap.sh
@@ -68,6 +68,24 @@ test-cpp-sanitizers:
 
 test-go:
 	cd labs/go && go test -mod=readonly ./...
+
+test-go-race:
+	cd labs/go && go test -mod=readonly -race ./...
+
+test-go-parallel:
+	cd labs/go && ./scripts/verify-parallel-isolation.sh
+
+test-go-fuzz:
+	cd labs/go && ./scripts/run-fuzz.sh
+
+test-go-generated:
+	cd labs/go && ./scripts/verify-generated.sh
+
+test-go-benchmark:
+	cd labs/go && ./scripts/verify-benchmark.sh
+
+test-go-failures:
+	cd labs/go && ./scripts/verify-intentional-failures.sh
 
 test-rust:
 	cd labs/rust && cargo test --locked

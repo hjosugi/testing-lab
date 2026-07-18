@@ -46,6 +46,12 @@ run_test C++-CTest cmake labs/cpp ./scripts/verify-ctest-orchestration.sh
 run_test C++-benchmark cmake labs/cpp ./scripts/measure-benchmark-noise.sh
 run_test C++-compile-time cmake labs/cpp ./scripts/compare-compile-time.sh
 run_test Go go labs/go go test -mod=readonly ./...
+run_test Go-race go labs/go go test -mod=readonly -race ./...
+run_test Go-parallel go labs/go ./scripts/verify-parallel-isolation.sh
+run_test Go-fuzz go labs/go ./scripts/run-fuzz.sh
+run_test Go-generated go labs/go ./scripts/verify-generated.sh
+run_test Go-benchmark go labs/go ./scripts/verify-benchmark.sh
+run_test Go-intentional-failures go labs/go ./scripts/verify-intentional-failures.sh
 run_test Rust cargo labs/rust cargo test --locked
 run_test PHP composer labs/php composer test
 

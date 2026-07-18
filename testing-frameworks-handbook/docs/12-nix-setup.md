@@ -33,10 +33,10 @@ bootstrapはnpmの`npm ci`、Gradle dependency locking、NuGet locked restore、
 | Rust | `labs/rust/Cargo.lock` | `cargo fetch --locked` |
 | PHP | `labs/php/composer.lock` | `composer install` |
 | C++ fallback | Catch2/Trompeloeil releaseの40桁commit SHA | CMake `FetchContent` |
-| Go | standard libraryのみのため`go.mod`のみ | `go test`。dependency追加時は`go.sum`もcommit |
+| Go | `labs/go/go.mod` + `go.sum`、mockgen tool directive | `go mod download`、`-mod=readonly`、generated mock drift check |
 | Python | test dependencyはNix側で固定 | pinned nixpkgsからpytest、pytest-cov、pytest-xdist、Hypothesisを供給 |
 
-`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落と、CMake fallbackのmutable tagを検出します。
+`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tagを検出します。
 
 ## CI matrix
 

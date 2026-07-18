@@ -89,6 +89,8 @@ MTPは実行platform、MSTestはframework/adapterという層の違いを理解�
 
 single-headerの使いやすさ、compile time、registration、death test、mock supportを用途で比較します。
 
+Catch2のSECTION/GENERATE、3 sanitizer defect fixtures、benchmark noise、手書きspy対Trompeloeilのclean compile cost、CTest shard/random seedの実測は[C++ lab](../labs/cpp/README.md)を参照してください。
+
 ## Go / 標準testing
 
 - standard library中心でtable-driven testが自然

@@ -32,7 +32,7 @@ bootstrapはnpmの`npm ci`、Gradle dependency locking、NuGet locked restore、
 | .NET | 各projectの`packages.lock.json` + `global.json` | `dotnet restore --locked-mode` |
 | Rust | `labs/rust/Cargo.lock` | `cargo fetch --locked` |
 | PHP | `labs/php/composer.lock` | `composer install` |
-| C++ fallback | Catch2 releaseの40桁commit SHA | CMake `FetchContent` |
+| C++ fallback | Catch2/Trompeloeil releaseの40桁commit SHA | CMake `FetchContent` |
 | Go | standard libraryのみのため`go.mod`のみ | `go test`。dependency追加時は`go.sum`もcommit |
 | Python | test dependencyはNix側で固定 | pinned nixpkgsからpytest、pytest-cov、pytest-xdist、Hypothesisを供給 |
 

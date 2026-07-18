@@ -72,7 +72,7 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 | JavaScript | Node test、Mocha 11、AVA 8 | yes | yes | execution semantics、process/thread isolation、Sinon、ESM mock |
 | Java | JUnit 6 | yes | yes | dynamic/extension、Truth Subject、Mockito agent、coroutine差分 |
 | C# | NUnit 4、MSTest 4／MTP | yes | yes | constraints、runner と framework の分離 |
-| C++ | Catch2 3 | yes | yes | SECTION、RAII、手書き spy |
+| C++ | Catch2 3 | yes | yes | SECTION/GENERATE、ASan/UBSan/TSan、benchmark noise、CTest shard |
 | Go | 標準 `testing` | yes | yes | table test、interface、fuzzing |
 | Rust | `cargo test`、rstest | yes | yes | ownership、trait、unit/integration 境界 |
 | PHP | PHPUnit 13 | yes | yes | MockObject、Infection |

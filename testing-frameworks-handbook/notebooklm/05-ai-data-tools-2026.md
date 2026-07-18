@@ -566,6 +566,8 @@ frameworkを選ぶときはsyntaxより、isolation、parallel scheduling、exte
 
 良い形は、pure domainは小さなfunction test、I/O adapterはfixtureでreal resource、process boundaryはcontract/integrationに分けることです。
 
+実行可能なfixture scope、xdist、Hypothesis、lookup-site patch、coverage/mutation比較は[`labs/python/PYTEST-LAB.md`](../labs/python/PYTEST-LAB.md)にあります。
+
 ## JavaScript / TypeScript
 
 - event loop、promise、timer、module cacheが主要なnondeterminism源
@@ -670,7 +672,6 @@ mock frameworkを先に入れるより、小さいinterfaceとin-memory fakeを�
 5. intentional failureのdiagnostics
 
 測るものはcold/warm time、watch mode、parallel、IDE、failure diff、fixture ergonomics、plugin risk、upgrade policyです。
-
 
 ---
 

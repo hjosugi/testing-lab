@@ -195,7 +195,7 @@ bootstrapはnpmの`npm ci`、Gradle dependency locking、NuGet locked restore、
 | PHP | `labs/php/composer.lock` | `composer install` |
 | C++ fallback | Catch2 releaseの40桁commit SHA | CMake `FetchContent` |
 | Go | standard libraryのみのため`go.mod`のみ | `go test`。dependency追加時は`go.sum`もcommit |
-| Python | test dependencyはNix側で固定 | pinned nixpkgsからpytest等を供給 |
+| Python | test dependencyはNix側で固定 | pinned nixpkgsからpytest、pytest-cov、pytest-xdist、Hypothesisを供給 |
 
 `scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落と、CMake fallbackのmutable tagを検出します。
 

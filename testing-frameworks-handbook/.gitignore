@@ -1,5 +1,6 @@
 .direnv/
 .pytest_cache/
+.hypothesis/
 __pycache__/
 *.pyc
 node_modules/

@@ -68,7 +68,7 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 | 言語 | 主な runner／framework | Classical | London | 追加テーマ |
 |---|---|---:|---:|---|
-| Python | pytest 9 | yes | yes | fixture、parametrize、unittest.mock |
+| Python | pytest 9 | yes | yes | fixture、parametrize、unittest.mock、Hypothesis、xdist |
 | JavaScript | Node test、Mocha 11、AVA 8 | yes | yes | concurrency、isolation、Sinon |
 | Java | JUnit 6 | yes | yes | Mockito、Truth、parameterized test |
 | C# | NUnit 4、MSTest 4／MTP | yes | yes | constraints、runner と framework の分離 |

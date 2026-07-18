@@ -21,9 +21,42 @@ class CartItem:
 @dataclass(frozen=True)
 class Order:
     order_id: str
+    subtotal: int
+    discount: int
     total: int
     status: str
     payment_id: str
+
+
+class DiscountRule(Protocol):
+    def discount_for(self, subtotal: int) -> int: ...
+
+
+@dataclass(frozen=True)
+class NoDiscount:
+    def discount_for(self, subtotal: int) -> int:
+        if subtotal < 0:
+            raise ValueError("subtotal must be non-negative")
+        return 0
+
+
+@dataclass(frozen=True)
+class ThresholdPercentageDiscount:
+    minimum_subtotal: int
+    percentage: int
+
+    def __post_init__(self) -> None:
+        if self.minimum_subtotal < 0:
+            raise ValueError("minimum subtotal must be non-negative")
+        if not 0 <= self.percentage <= 100:
+            raise ValueError("percentage must be between 0 and 100")
+
+    def discount_for(self, subtotal: int) -> int:
+        if subtotal < 0:
+            raise ValueError("subtotal must be non-negative")
+        if subtotal < self.minimum_subtotal:
+            return 0
+        return subtotal * self.percentage // 100
 
 
 class PaymentGateway(Protocol):
@@ -35,16 +68,34 @@ class OrderRepository(Protocol):
 
 
 class CheckoutService:
-    def __init__(self, payments: PaymentGateway, orders: OrderRepository) -> None:
+    def __init__(
+        self,
+        payments: PaymentGateway,
+        orders: OrderRepository,
+        discount_rule: DiscountRule | None = None,
+    ) -> None:
         self._payments = payments
         self._orders = orders
+        self._discount_rule = (
+            discount_rule if discount_rule is not None else NoDiscount()
+        )
 
     def checkout(self, order_id: str, items: list[CartItem], token: str) -> Order:
         if not items:
             raise ValueError("cart must not be empty")
-        total = sum(item.subtotal() for item in items)
+        subtotal = sum(item.subtotal() for item in items)
+        discount = self._discount_rule.discount_for(subtotal)
+        if not 0 <= discount <= subtotal:
+            raise ValueError("discount must be between zero and subtotal")
+        total = subtotal - discount
         payment_id = self._payments.capture(total, token)
-        order = Order(order_id, total, "CONFIRMED", payment_id)
+        order = Order(
+            order_id=order_id,
+            subtotal=subtotal,
+            discount=discount,
+            total=total,
+            status="CONFIRMED",
+            payment_id=payment_id,
+        )
         self._orders.save(order)
         return order
-

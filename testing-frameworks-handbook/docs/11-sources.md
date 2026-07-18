@@ -64,7 +64,9 @@ NUnit 4.6.0は2026-05-04公開。MTP資料は2026-04-27更新。
 - Rust Book, testing: https://doc.rust-lang.org/book/ch11-00-testing.html
 - test execution: https://doc.rust-lang.org/book/ch11-02-running-tests.html
 - test organization: https://doc.rust-lang.org/book/ch11-03-test-organization.html
-- Rust rstest crate: https://crates.io/crates/rstest
+- Rust rstest crate: https://docs.rs/rstest/0.26.1/rstest/
+- Proptest book: https://proptest-rs.github.io/proptest/
+- cargo-mutants guide: https://mutants.rs/
 
 ## PHP
 

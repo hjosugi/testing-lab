@@ -30,7 +30,7 @@ bootstrapはnpmの`npm ci`、Gradle dependency locking、NuGet locked restore、
 | Playwright/system | `labs/system/package-lock.json` | `npm ci` + `verify:browser-lock` |
 | JVM | `labs/java/gradle.lockfile` | Gradle dependency locking |
 | .NET | 各projectの`packages.lock.json` + `global.json` | `dotnet restore --locked-mode` |
-| Rust | `labs/rust/Cargo.lock` | `cargo fetch --locked` |
+| Rust | `labs/rust/Cargo.lock`、Nixのcargo-mutants | `cargo fetch/test --locked`、targeted mutation |
 | PHP | `labs/php/composer.lock` | `composer install` |
 | C++ fallback | Catch2/Trompeloeil releaseの40桁commit SHA | CMake `FetchContent` |
 | Go | `labs/go/go.mod` + `go.sum`、mockgen tool directive | `go mod download`、`-mod=readonly`、generated mock drift check |

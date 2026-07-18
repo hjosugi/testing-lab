@@ -25,7 +25,7 @@
           dotnetPkgs = [ pkgs.dotnet-sdk_10 ];
           cppPkgs = [ pkgs.clang pkgs.cmake pkgs.ninja pkgs.catch2_3 pkgs.trompeloeil pkgs.llvmPackages.llvm ];
           goPkgs = [ pkgs.go ];
-          rustPkgs = [ pkgs.cargo pkgs.rustc pkgs.rustfmt pkgs.clippy ];
+          rustPkgs = [ pkgs.cargo pkgs.rustc pkgs.rustfmt pkgs.clippy pkgs.cargo-mutants ];
           phpPkgs = [ pkgs.php84 pkgs.php84Packages.composer ];
           commonPkgs = [ pkgs.git pkgs.gnumake pkgs.jq pkgs.zip pkgs.unzip ];
         in {

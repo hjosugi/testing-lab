@@ -30,8 +30,12 @@ while IFS= read -r manifest; do
   require_lock "$manifest" "$directory/packages.lock.json"
 done < <(cd "$root" && find labs/dotnet -name '*.csproj' -print | LC_ALL=C sort)
 
-if ! grep -Eq 'GIT_TAG [0-9a-f]{40}' "$root/labs/cpp/CMakeLists.txt"; then
-  echo "MISSING  immutable Catch2 commit in labs/cpp/CMakeLists.txt" >&2
+if ! grep -Eq 'GIT_TAG 6ee0826dcae55ed1e06b2c5701981221e979e1e6' "$root/labs/cpp/CMakeLists.txt"; then
+  echo "MISSING  immutable Catch2 v3.15.0 commit in labs/cpp/CMakeLists.txt" >&2
+  failures=$((failures + 1))
+fi
+if ! grep -Eq 'GIT_TAG eaeb89c1ce9d354b0ba7eb921fd5712cdbd78adf' "$root/labs/cpp/CMakeLists.txt"; then
+  echo "MISSING  immutable Trompeloeil v49 commit in labs/cpp/CMakeLists.txt" >&2
   failures=$((failures + 1))
 fi
 

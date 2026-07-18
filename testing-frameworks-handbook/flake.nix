@@ -23,7 +23,7 @@
           nodePkgs = [ pkgs.nodejs_24 ];
           jvmPkgs = [ pkgs.jdk21 pkgs.gradle ];
           dotnetPkgs = [ pkgs.dotnet-sdk_10 ];
-          cppPkgs = [ pkgs.clang pkgs.cmake pkgs.ninja pkgs.catch2_3 pkgs.llvmPackages.llvm ];
+          cppPkgs = [ pkgs.clang pkgs.cmake pkgs.ninja pkgs.catch2_3 pkgs.trompeloeil pkgs.llvmPackages.llvm ];
           goPkgs = [ pkgs.go ];
           rustPkgs = [ pkgs.cargo pkgs.rustc pkgs.rustfmt pkgs.clippy ];
           phpPkgs = [ pkgs.php84 pkgs.php84Packages.composer ];

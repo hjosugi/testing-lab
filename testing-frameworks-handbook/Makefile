@@ -1,4 +1,4 @@
-.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-node-semantics test-node-unawaited test-advanced test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-go test-rust test-php issues-dry-run notebooklm
+.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-node-semantics test-node-unawaited test-advanced test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-cpp-ctest test-cpp-benchmark test-cpp-compile-time test-cpp-sanitizers test-go test-rust test-php issues-dry-run notebooklm
 
 bootstrap:
 	./scripts/bootstrap.sh
@@ -50,7 +50,21 @@ test-dotnet-failure-diagnostics:
 	cd labs/dotnet && ./scripts/verify-failure-diagnostics.sh
 
 test-cpp:
-	cmake --fresh -S labs/cpp -B labs/cpp/build -G Ninja -DCMAKE_CXX_COMPILER=clang++ && cmake --build labs/cpp/build && ctest --test-dir labs/cpp/build --output-on-failure
+	cmake --fresh -S labs/cpp -B labs/cpp/build -G Ninja -DCMAKE_CXX_COMPILER=clang++ && cmake --build labs/cpp/build && ctest --test-dir labs/cpp/build --output-on-failure --no-tests=error
+
+test-cpp-ctest:
+	cd labs/cpp && ./scripts/verify-ctest-orchestration.sh
+
+test-cpp-benchmark:
+	cd labs/cpp && ./scripts/measure-benchmark-noise.sh
+
+test-cpp-compile-time:
+	cd labs/cpp && ./scripts/compare-compile-time.sh
+
+test-cpp-sanitizers:
+	cd labs/cpp && ./scripts/run-sanitizer.sh address
+	cd labs/cpp && ./scripts/run-sanitizer.sh undefined
+	cd labs/cpp && ./scripts/run-sanitizer.sh thread
 
 test-go:
 	cd labs/go && go test -mod=readonly ./...

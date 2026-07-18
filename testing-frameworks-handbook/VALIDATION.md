@@ -13,6 +13,7 @@
 | Lock coverage | PASS | Nix、npm 3 project、Gradle、NuGet 3 project、Cargo、Composer、Catch2 commit pin |
 | Playwright lock | PASS | Playwright 1.61.1とChromium revision 1228および実行binaryを照合 |
 | Workflow lint | PASS | `.github/workflows/reproducibility.yml`を`actionlint`で検証 |
+| Hybrid policy links | PASS | ADR/index/template/entrypointを`lychee --offline`で検証、error 0 |
 | NotebookLM build | PASS | 6 bundleを再生成 |
 
 実行command:

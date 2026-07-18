@@ -94,6 +94,8 @@ value object、immutable collection、pure function まで mock にする必要�
 4. remote API は client unit test + Pact + 少数 smoke test
 5. E2E は重要 journey に限定
 
+repositoryで採用するdefault、mock禁止線、fake contract、例外手順は[ADR-0001: Classical/London hybrid testing policy](adr/0001-hybrid-testing-policy.md)を正とします。
+
 ## 判断質問
 
 double を作る前に次を確認します。

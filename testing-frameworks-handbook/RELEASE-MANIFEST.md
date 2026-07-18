@@ -11,7 +11,7 @@
 - dependency-free advanced techniqueラボ11件
 - Nix flakeとtoolchain別development shell
 - GitHub Issue本文51件
-- test design、strategy、research reproduction template
+- test design、strategy、research reproduction、testing policy exception ADR template
 - source/research links、validation report、license
 
 ## Archiveから除外する生成物

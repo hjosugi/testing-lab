@@ -32,7 +32,8 @@ bundle() {
 bundle 01-foundations-schools-frameworks.md \
   "観点1 基礎・思想・フレームワーク" \
   docs/00-beginner-friendly-all-tests.md docs/00-map.md docs/01-foundations.md \
-  docs/02-london-vs-classical.md docs/03-framework-catalog.md \
+  docs/02-london-vs-classical.md docs/adr/0001-hybrid-testing-policy.md \
+  docs/03-framework-catalog.md \
   docs/04-language-differences.md docs/29-glossary.md
 
 bundle 02-design-oracles-levels.md \

@@ -59,6 +59,13 @@ class ThresholdPercentageDiscount:
         return subtotal * self.percentage // 100
 
 
+@dataclass(frozen=True)
+class _PriceBreakdown:
+    subtotal: int
+    discount: int
+    total: int
+
+
 class PaymentGateway(Protocol):
     def capture(self, amount: int, token: str) -> str: ...
 
@@ -83,19 +90,26 @@ class CheckoutService:
     def checkout(self, order_id: str, items: list[CartItem], token: str) -> Order:
         if not items:
             raise ValueError("cart must not be empty")
-        subtotal = sum(item.subtotal() for item in items)
-        discount = self._discount_rule.discount_for(subtotal)
-        if not 0 <= discount <= subtotal:
-            raise ValueError("discount must be between zero and subtotal")
-        total = subtotal - discount
-        payment_id = self._payments.capture(total, token)
+        price = self._price(items)
+        payment_id = self._payments.capture(price.total, token)
         order = Order(
             order_id=order_id,
-            subtotal=subtotal,
-            discount=discount,
-            total=total,
+            subtotal=price.subtotal,
+            discount=price.discount,
+            total=price.total,
             status="CONFIRMED",
             payment_id=payment_id,
         )
         self._orders.save(order)
         return order
+
+    def _price(self, items: list[CartItem]) -> _PriceBreakdown:
+        subtotal = sum(item.subtotal() for item in items)
+        discount = self._discount_rule.discount_for(subtotal)
+        if not 0 <= discount <= subtotal:
+            raise ValueError("discount must be between zero and subtotal")
+        return _PriceBreakdown(
+            subtotal=subtotal,
+            discount=discount,
+            total=subtotal - discount,
+        )

@@ -540,9 +540,8 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Acceptance criteria
 
-- [ ] `labs/system` integration testが100回連続green
+- [ ] `labs/system` HTTP adapter testが100回連続green
 - [ ] test名だけで境界が分かる
-
 
 ---
 

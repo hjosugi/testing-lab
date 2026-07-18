@@ -10,6 +10,8 @@ oracle: 何を正しいと判定するか
 purpose: どのriskを検出するか
 ```
 
+この5項目をsuite名へ落とすときは、[全体マップのTeam標準](00-map.md#team標準のtest-level定義)を正とします。特にintegration系suiteは、実物にするboundaryを省略しません。現在の実装は[labsのsuite mapping](../labs/README.md#現在のsuite-taxonomy-mapping)で追跡します。
+
 ## 1. Build前／static verification
 
 | 種類 | 検出対象 | Tool例 |
@@ -44,7 +46,7 @@ snapshot更新を一括承認するとoracleを捨てます。差分のbusiness 
 
 ## 3. Componentとintegration
 
-`integration test`は曖昧なので、名前に境界を入れます。
+`integration test`というカテゴリ名だけでは実行範囲が曖昧なので、実際のsuite名には必ず境界を入れます。
 
 | 推奨名 | 本物 | 置換 | 検出対象 |
 |---|---|---|---|
@@ -241,4 +243,3 @@ Wallaby.jsのようなcontinuous runner、GoCDのようなdelivery platform、Ku
 | Infection/Stryker/PIT | mutation |
 | Detox/Appium/Airtest | mobile/app automation |
 | promptfoo等 | LLM evaluation/red-team layer |
-

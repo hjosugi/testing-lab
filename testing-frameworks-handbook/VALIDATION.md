@@ -30,7 +30,7 @@ nix develop --command env STRICT=1 ./scripts/test-all.sh
 
 | Target | Result | Detail |
 |---|---|---|
-| pytest | PASS | 15 tests |
+| pytest | PASS | 18 tests |
 | Node built-in / Mocha / AVA | PASS | 3 + 1 + 1 tests |
 | HTTP adapter / contract / property | PASS | 3 tests |
 | Playwright E2E / accessibility | PASS | 2 browser tests |

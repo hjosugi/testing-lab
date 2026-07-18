@@ -4,7 +4,7 @@ from checkout import CartItem, CheckoutService
 from checkout.domain import OrderRepository, PaymentGateway
 
 
-def test_checkout_collaborates_with_payment_and_repository():
+def test_checkout_messages_without_specifying_a_global_call_order():
     payments = create_autospec(PaymentGateway, instance=True)
     orders = create_autospec(OrderRepository, instance=True)
     payments.capture.return_value = "payment-42"
@@ -30,4 +30,3 @@ def test_empty_cart_calls_no_collaborator():
 
     payments.capture.assert_not_called()
     orders.save.assert_not_called()
-

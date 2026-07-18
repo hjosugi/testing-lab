@@ -22,3 +22,11 @@ class InMemoryOrderRepository:
 
     def find(self, order_id: str) -> Order | None:
         return self.orders.get(order_id)
+
+
+class InMemoryOrderConfirmationNotifier:
+    def __init__(self) -> None:
+        self.confirmations: list[Order] = []
+
+    def send_confirmation(self, order: Order) -> None:
+        self.confirmations.append(order)

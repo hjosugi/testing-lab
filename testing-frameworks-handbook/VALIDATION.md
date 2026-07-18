@@ -1,86 +1,60 @@
 # Validation report
 
-検証日: 2026-07-12
+検証日: 2026-07-19
 
-## 実行済み
+## Reproducibility gate
 
-| Target | Result | Detail |
-|---|---|---|
-| Node built-in test | PASS | 3 tests |
-| Mocha 11 + Sinon 22 | PASS | 1 test |
-| AVA 8 | PASS | 1 test |
-| system HTTP adapter | PASS | real ephemeral TCP port |
-| API response contract | PASS | status/header/shape/type |
-| fast-check property | PASS | generated item arrays |
-| advanced technique lab | PASS | 11 tests: example/property/metamorphic/differential/model/concurrency/fault/characterization/snapshot/security/performance |
-| Node dependency audit | PASS | overrides適用後0 vulnerability |
-| system dependency audit | PASS | 0 vulnerability |
-| Playwright discovery | PASS | 2 E2E/a11y testsをload/list |
-| Python source/test syntax | PASS | `compileall` |
-| shell syntax | PASS | `bash -n scripts/*.sh` |
-| JSON parse | PASS | npm/composer manifests |
-| XML parse | PASS | csproj/phpunit config |
-| Issue generation dry-run | PASS | 51 issue files、title/label/bodyをparse |
-| Markdown local links | PASS | 101 Markdown files、broken link 0 |
-| Advanced JavaScript syntax | PASS | production/testを`node --check` |
-
-## 2回目の検証（2026-07-12、Arch Linux実機・Nixなし）
-
-初回生成環境で実行できなかった項目を、実機（CachyOS、Node 22、Python 3.14、Go、Rust 1.95、GCC 16、CMake 4.4）で再検証しました。
+ローカルの`x86_64-linux`環境で、commit対象のlockとNix shellだけを使って次を実行しました。
 
 | Target | Result | Detail |
 |---|---|---|
-| pytest runtime | PASS | 5 tests（classical/london） |
-| Go `testing` | PASS | `go test ./...` |
-| Rust `cargo test` | PASS | 3 tests（classical/london/rstest cases） |
-| Catch2/CMake/CTest | PASS | 2 tests。Catch2はFetchContentフォールバックで取得 |
-| Playwright E2E + axe | PASS | Chromium実ブラウザで2 tests（journey/a11y） |
-| Node/Mocha/AVA再実行 | PASS | `npm ci`後にすべてgreen |
-| system HTTP adapter/contract/property | PASS | 失敗0 |
-| advanced 11-technique lab | PASS | 全pass |
-| NotebookLMバンドル生成 | PASS | 6 bundles、`bash -n`構文check |
+| Flake evaluation | PASS | `x86_64-linux`、`aarch64-linux`、`aarch64-darwin`の全dev shellを`--all-systems --no-build`で評価 |
+| Clean bootstrap | PASS | npm、Gradle、NuGet、Cargo、Composerをcommit済みlockから復元 |
+| Lock coverage | PASS | Nix、npm 3 project、Gradle、NuGet 3 project、Cargo、Composer、Catch2 commit pin |
+| Playwright lock | PASS | Playwright 1.61.1とChromium revision 1228および実行binaryを照合 |
+| Workflow lint | PASS | `.github/workflows/reproducibility.yml`を`actionlint`で検証 |
+| NotebookLM build | PASS | 6 bundleを再生成 |
 
-未実行のまま: JUnit/Gradle（gradle未導入）、.NET（dotnet未導入）、PHPUnit/Infection（php未導入）、Nix評価（nix未導入）。これらはNix導入ホストでの実行手順を下表に残します。
-
-## この環境では未実行
-
-| Target | Reason | 実行方法 |
-|---|---|---|
-| pytest runtime | current hostにpytestがない | `nix develop .#python --command pytest -q labs/python` |
-| JUnit 6/Gradle | current hostにJDK/Gradleがない | `nix develop .#jvm --command gradle -p labs/java test` |
-| .NET/NUnit/MSTest | current hostにdotnetがない | `nix develop .#dotnet --command bash -c 'cd labs/dotnet && dotnet test ...'` |
-| Catch2/CMake | current hostにCMake/compilerがない | `nix develop .#cpp`後にREADMEのcommand |
-| Go | current hostにGoがない | `nix develop .#go --command go test ./labs/go/...` |
-| Rust/rstest | current hostにCargoがない | `nix develop .#rust --command cargo test --manifest-path labs/rust/Cargo.toml` |
-| PHPUnit/Infection | current hostにPHP/Composerがない | `nix develop .#php`後にREADMEのcommand |
-| Nix evaluation | current hostにNixがない | Nix導入済みhostで`nix develop` |
-
-## Playwright browser実行
-
-**2026-07-12更新: 実機で`npx playwright install chromium`後に`npm run test:e2e`を実行し、E2E＋accessibilityの2 testsがpassしました（上の2回目検証表を参照）。**
-
-初回生成環境の記録: Playwright test discoveryは成功しました。Chromium binary取得は、この生成環境のnetwork proxyが0-byte responseを返したため実行できませんでした。test codeのskipやretryで隠さず、Issue #18と#34の実環境検証として残しています。
+実行command:
 
 ```bash
-cd labs/system
-npx playwright install chromium
-npm run test:e2e
-```
-
-## Known limitations
-
-- `flake.lock`はNixがない生成環境では作れません。Issue #01でclean Nix host上に生成しreviewします。
-- Docker、real Postgres、real device、cloud、load、chaosはartifact内で勝手に実行しません。各Issueにenvironment、safety、acceptance criteriaがあります。
-- researchの最新preprintはpeer-reviewed resultと分けています。採用判断には再現/追加検証が必要です。
-- browser、managed cloud、mobile deviceはlocal emulatorだけでproduction equivalenceを保証しません。
-- performance labの時間はcharacterization情報であり、異なるhostを一律に落とす固定thresholdにはしていません。正式な性能gateはcontrolled environment、warm-up、複数sample、SLOで設定します。
-
-## Release gate
-
-正式なrepository releaseでは次を必須にします。
-
-```bash
+nix flake check --all-systems --no-build
+nix develop --command env STRICT=1 ./scripts/bootstrap.sh
+nix develop --command ./scripts/check-lockfiles.sh
 nix develop --command env STRICT=1 ./scripts/test-all.sh
 ```
 
-全toolchainがgreenにならない限り、`STRICT=1`はskipを失敗扱いにします。
+## STRICT test result
+
+`STRICT=1 ./scripts/test-all.sh`は`failures=0 skips=0`で完了しました。
+
+| Target | Result | Detail |
+|---|---|---|
+| pytest | PASS | 5 tests |
+| Node built-in / Mocha / AVA | PASS | 3 + 1 + 1 tests |
+| HTTP adapter / contract / property | PASS | 3 tests |
+| Playwright E2E / accessibility | PASS | 2 browser tests |
+| Advanced techniques | PASS | 11 tests |
+| JUnit / Mockito / Truth | PASS | Gradle locked build |
+| NUnit 4 | PASS | 4 tests、Microsoft.Testing.Platform |
+| MSTest 4 | PASS | 4 tests、Microsoft.Testing.Platform |
+| Catch2 / CTest | PASS | 2 tests、Nix clang++ |
+| Go | PASS | `-mod=readonly` |
+| Rust / rstest | PASS | 3 tests、`--locked` |
+| PHPUnit | PASS | 3 tests、9 assertions |
+
+## CI runtime matrix
+
+ローカル検証に加え、PRと`main`では次のruntime gateを必須にします。
+
+- `ubuntu-24.04`: `x86_64-linux`のstrict bootstrapと全test
+- `macos-14`: `aarch64-darwin`のstrict bootstrapと全test
+- `windows-2025`: locked NuGet restore後のNUnit/MSTest
+
+Linux/macOS jobは最後に`git status --porcelain`が空であることも検証し、bootstrapやtestがlockfileまたは生成物を変更した場合は失敗します。
+
+## Known limitations
+
+- Docker、real Postgres、real device、cloud、load、chaosはこのgateで自動実行しません。各Issueでenvironment、safety、acceptance criteriaを定義します。
+- browser、managed cloud、mobile deviceはlocal emulatorだけでproduction equivalenceを保証しません。
+- performance labの時間はcharacterization情報です。正式な性能gateはcontrolled environment、warm-up、複数sample、SLOを使います。

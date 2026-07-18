@@ -15,8 +15,8 @@
 ## 最短ルート
 
 ```bash
-nix develop
-./scripts/test-all.sh
+nix develop --command env STRICT=1 ./scripts/bootstrap.sh
+nix develop --command env STRICT=1 ./scripts/test-all.sh
 ```
 
 Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を参照してください。初回は各エコシステムの依存関係を取得するためネットワーク接続が必要です。

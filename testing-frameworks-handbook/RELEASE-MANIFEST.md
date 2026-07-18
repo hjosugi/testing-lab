@@ -36,5 +36,7 @@ scriptはpathをsortし、ZIP extra metadataを外します。ZIP自体のtimest
 詳細は[VALIDATION.md](VALIDATION.md)を参照してください。未導入toolchainを含む正式gateは次です。
 
 ```bash
+nix develop --command env STRICT=1 ./scripts/bootstrap.sh
+nix develop --command ./scripts/check-lockfiles.sh
 nix develop --command env STRICT=1 ./scripts/test-all.sh
 ```

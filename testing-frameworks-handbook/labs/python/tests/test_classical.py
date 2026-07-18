@@ -27,6 +27,7 @@ def test_checkout_confirms_and_persists_the_order(items, expected):
     assert result.subtotal == expected
     assert result.discount == 0
     assert result.total == expected
+    assert result.payment_id == "pay-1"
     assert orders.find("order-1") == result
     assert payments.captured == [(expected, "token-1")]
 

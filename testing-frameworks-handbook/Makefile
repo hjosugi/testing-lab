@@ -1,4 +1,4 @@
-.PHONY: bootstrap bootstrap-locked check-locks test test-python test-node test-advanced test-java test-dotnet test-cpp test-go test-rust test-php issues-dry-run notebooklm
+.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-advanced test-java test-dotnet test-cpp test-go test-rust test-php issues-dry-run notebooklm
 
 bootstrap:
 	./scripts/bootstrap.sh
@@ -13,7 +13,13 @@ test:
 	./scripts/test-all.sh
 
 test-python:
-	cd labs/python && pytest
+	cd labs/python && pytest --cov=checkout --cov-branch --cov-fail-under=100
+
+test-python-parallel:
+	cd labs/python && pytest -q -n 2
+
+test-python-mutation:
+	cd labs/python && python scripts/mutation_demo.py --require-all-killed
 
 test-node:
 	cd labs/node && npm test

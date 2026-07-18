@@ -19,7 +19,7 @@
     in {
       devShells = forAllSystems (pkgs:
         let
-          pythonPkgs = with pkgs.python313Packages; [ python pytest pytest-cov hypothesis ];
+          pythonPkgs = with pkgs.python313Packages; [ python pytest pytest-cov pytest-xdist hypothesis ];
           nodePkgs = [ pkgs.nodejs_24 ];
           jvmPkgs = [ pkgs.jdk21 pkgs.gradle ];
           dotnetPkgs = [ pkgs.dotnet-sdk_10 ];

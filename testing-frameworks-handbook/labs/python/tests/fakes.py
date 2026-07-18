@@ -20,3 +20,5 @@ class InMemoryOrderRepository:
     def save(self, order: Order) -> None:
         self.orders[order.order_id] = order
 
+    def find(self, order_id: str) -> Order | None:
+        return self.orders.get(order_id)

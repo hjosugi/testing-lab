@@ -24,8 +24,10 @@ def test_checkout_confirms_and_persists_the_order(items, expected):
     result = service.checkout("order-1", items, "token-1")
 
     assert result.status == "CONFIRMED"
+    assert result.subtotal == expected
+    assert result.discount == 0
     assert result.total == expected
-    assert orders.orders["order-1"] == result
+    assert orders.find("order-1") == result
     assert payments.captured == [(expected, "token-1")]
 
 
@@ -36,7 +38,7 @@ def test_declined_payment_does_not_persist_an_order():
     with pytest.raises(PaymentError, match="declined"):
         service.checkout("order-1", [CartItem("book", 1, 1200)], "bad-token")
 
-    assert orders.orders == {}
+    assert orders.find("order-1") is None
 
 
 def test_threshold_discount_changes_the_observable_checkout_outcome():
@@ -57,5 +59,5 @@ def test_threshold_discount_changes_the_observable_checkout_outcome():
     assert result.subtotal == 1200
     assert result.discount == 120
     assert result.total == 1080
-    assert orders.orders[result.order_id] == result
+    assert orders.find(result.order_id) == result
     assert payments.captured == [(1080, "token-1")]

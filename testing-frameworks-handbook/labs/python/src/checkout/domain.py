@@ -73,6 +73,8 @@ class PaymentGateway(Protocol):
 class OrderRepository(Protocol):
     def save(self, order: Order) -> None: ...
 
+    def find(self, order_id: str) -> Order | None: ...
+
 
 class CheckoutService:
     def __init__(

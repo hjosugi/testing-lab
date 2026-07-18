@@ -9,7 +9,7 @@
 | Node built-in test | PASS | 3 tests |
 | Mocha 11 + Sinon 22 | PASS | 1 test |
 | AVA 8 | PASS | 1 test |
-| system HTTP integration | PASS | real ephemeral TCP port |
+| system HTTP adapter | PASS | real ephemeral TCP port |
 | API response contract | PASS | status/header/shape/type |
 | fast-check property | PASS | generated item arrays |
 | advanced technique lab | PASS | 11 tests: example/property/metamorphic/differential/model/concurrency/fault/characterization/snapshot/security/performance |
@@ -36,7 +36,7 @@
 | Catch2/CMake/CTest | PASS | 2 tests。Catch2はFetchContentフォールバックで取得 |
 | Playwright E2E + axe | PASS | Chromium実ブラウザで2 tests（journey/a11y） |
 | Node/Mocha/AVA再実行 | PASS | `npm ci`後にすべてgreen |
-| system integration/contract/property | PASS | 失敗0 |
+| system HTTP adapter/contract/property | PASS | 失敗0 |
 | advanced 11-technique lab | PASS | 全pass |
 | NotebookLMバンドル生成 | PASS | 6 bundles、`bash -n`構文check |
 

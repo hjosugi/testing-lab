@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { createApp } from '../src/app.js';
 import { listen } from './helpers.js';
 
-test('real HTTP stack creates an order and invokes adapters', async t => {
+test('checkout HTTP adapter creates an order and invokes ports', async t => {
   const calls = [];
   const server = createApp({
     capture: async (amount, token) => { calls.push(['capture', amount, token]); return 'pay-42'; },
@@ -23,4 +23,3 @@ test('real HTTP stack creates an order and invokes adapters', async t => {
   assert.equal(calls[0][0], 'capture');
   assert.equal(calls[1][0], 'save');
 });
-

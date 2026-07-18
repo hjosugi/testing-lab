@@ -16,6 +16,7 @@
 | Hybrid policy links | PASS | ADR/index/template/entrypointを`lychee --offline`で検証、error 0 |
 | Python parallel / mutation | PASS | pytest-xdist `-n 2`、targeted mutants 6/6 killed |
 | Node execution semantics | PASS | 8 scheduling/isolation scenarios、3 intentional async failures |
+| Mockito agent matrix | PASS | OpenJDK 21.0.12 / 25.0.4、explicit agent、self-attachなし |
 | NotebookLM build | PASS | 6 bundleを再生成 |
 
 実行command:
@@ -38,7 +39,7 @@ nix develop --command env STRICT=1 ./scripts/test-all.sh
 | HTTP adapter / contract / property | PASS | 3 tests |
 | Playwright E2E / accessibility | PASS | 2 browser tests |
 | Advanced techniques | PASS | 11 tests |
-| JUnit / Mockito / Truth | PASS | Gradle locked build |
+| JUnit / Mockito / Truth | PASS | 13 tests、Jupiter 6.1.1 present、Vintage absent |
 | NUnit 4 | PASS | 4 tests、Microsoft.Testing.Platform |
 | MSTest 4 | PASS | 4 tests、Microsoft.Testing.Platform |
 | Catch2 / CTest | PASS | 2 tests、Nix clang++ |

@@ -15,6 +15,7 @@
 | Workflow lint | PASS | `.github/workflows/reproducibility.yml`を`actionlint`で検証 |
 | Hybrid policy links | PASS | ADR/index/template/entrypointを`lychee --offline`で検証、error 0 |
 | Python parallel / mutation | PASS | pytest-xdist `-n 2`、targeted mutants 6/6 killed |
+| Node execution semantics | PASS | 8 scheduling/isolation scenarios、3 intentional async failures |
 | NotebookLM build | PASS | 6 bundleを再生成 |
 
 実行command:
@@ -33,7 +34,7 @@ nix develop --command env STRICT=1 ./scripts/test-all.sh
 | Target | Result | Detail |
 |---|---|---|
 | pytest | PASS | 33 tests、branch coverage 100% |
-| Node built-in / Mocha / AVA | PASS | 3 + 1 + 1 tests |
+| Node built-in / module mock / Mocha / AVA | PASS | 6 + 1 + 5 + 2 tests |
 | HTTP adapter / contract / property | PASS | 3 tests |
 | Playwright E2E / accessibility | PASS | 2 browser tests |
 | Advanced techniques | PASS | 11 tests |

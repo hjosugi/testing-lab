@@ -1,4 +1,4 @@
-.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-advanced test-java test-dotnet test-cpp test-go test-rust test-php issues-dry-run notebooklm
+.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-node-semantics test-node-unawaited test-advanced test-java test-dotnet test-cpp test-go test-rust test-php issues-dry-run notebooklm
 
 bootstrap:
 	./scripts/bootstrap.sh
@@ -23,6 +23,12 @@ test-python-mutation:
 
 test-node:
 	cd labs/node && npm test
+
+test-node-semantics:
+	cd labs/node && npm run test:semantics
+
+test-node-unawaited:
+	cd labs/node && npm run test:unawaited
 
 test-advanced:
 	cd labs/advanced && npm test

@@ -7,10 +7,16 @@
     "node": ">=24"
   },
   "scripts": {
-    "test": "npm run test:node && npm run test:mocha && npm run test:ava",
+    "test": "npm run test:node && npm run test:node:module-mock && npm run test:mocha && npm run test:ava && npm run test:semantics && npm run test:unawaited",
     "test:node": "node --test test/node/*.test.js",
+    "test:node:module-mock": "node --experimental-test-module-mocks --test test/module-mock/*.test.js",
     "test:mocha": "mocha 'test/mocha/**/*.test.js'",
+    "test:mocha:parallel": "mocha --parallel --jobs=2 'test/mocha/**/*.test.js'",
     "test:ava": "ava 'test/ava/**/*.test.js'",
+    "test:semantics": "node scripts/execution-semantics.mjs --check",
+    "record:semantics": "node scripts/execution-semantics.mjs --record",
+    "test:unawaited": "node scripts/intentional-failures.mjs --check",
+    "record:unawaited": "node scripts/intentional-failures.mjs --record",
     "coverage": "node --test --experimental-test-coverage test/node/*.test.js"
   },
   "devDependencies": {

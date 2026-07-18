@@ -1,17 +1,12 @@
 import test from 'ava';
-import { CartItem, CheckoutService } from '../../src/checkout.js';
-import { FakePayments, InMemoryOrders } from '../helpers/fakes.js';
+import { checkoutCases, executeCheckoutCase } from '../helpers/checkout-cases.js';
 
-test('AVA isolates a state-based checkout test', async t => {
-  const payments = new FakePayments();
-  const orders = new InMemoryOrders();
-  const service = new CheckoutService({ payments, orders });
+for (const { name, ...checkoutCase } of checkoutCases) {
+  test(`Classical checkout: ${name}`, async t => {
+    const { expected, orders, payments, result } = await executeCheckoutCase(checkoutCase);
 
-  const result = await service.checkout({
-    orderId: 'o-1', items: [new CartItem('book', 2, 600)], token: 't-1'
+    t.is(result.total, expected);
+    t.deepEqual(orders.byId.get('o-1'), result);
+    t.deepEqual(payments.captured, [{ amount: expected, token: 't-1' }]);
   });
-
-  t.is(result.total, 1200);
-  t.deepEqual(orders.byId.get('o-1'), result);
-});
-
+}

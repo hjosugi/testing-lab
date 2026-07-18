@@ -54,7 +54,10 @@ verify no unexpected interaction
 
 利点は、orchestrator の責務と collaborator interface を outside-in で発見できることです。欠点は、呼び出し順や引数 object の作り方まで固定すると、振る舞いを変えない refactor でも壊れることです。
 
-実コードは各 `labs/*/tests` にあります。discount ruleをRed-Green-Refactorで追加するClassical側のwalkthroughは[`labs/python/CLASSICAL-TDD.md`](../labs/python/CLASSICAL-TDD.md)にあります。
+実コードは各 `labs/*/tests` にあります。
+
+- Classical: [`labs/python/CLASSICAL-TDD.md`](../labs/python/CLASSICAL-TDD.md)
+- London: [`labs/python/LONDON-TDD.md`](../labs/python/LONDON-TDD.md)
 
 ## mockist でも「全部 mock」ではない
 

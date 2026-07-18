@@ -575,6 +575,8 @@ frameworkを選ぶときはsyntaxより、isolation、parallel scheduling、exte
 - Mochaはrunner/lifecycleを柔軟に組み、assertion/doubleを選ぶ思想
 - AVAはtest isolationとconcurrencyを強く意識する
 - Jest/Vitestはrunner、assertion、mock、snapshotを統合する
+
+同一behavior、serial/concurrent scheduling、process/thread isolation、Node mockとSinon、ESM DI/module mock、unawaited failure outputの実測は[`labs/node/EXECUTION-MODEL.md`](../labs/node/EXECUTION-MODEL.md)にあります。
 - TypeScript type testとruntime testは別。型が通ってもJSON入力は壊れ得る
 
 `await`漏れ、fake timerとreal I/O混在、global mock、shared portを重点的にreviewします。

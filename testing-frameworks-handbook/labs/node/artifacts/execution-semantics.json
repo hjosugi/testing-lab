@@ -1,0 +1,91 @@
+{
+  "measuredAt": "2026-07-18T21:30:01.789Z",
+  "runtime": {
+    "ava": "8.0.1",
+    "mocha": "11.7.6",
+    "node": "v24.18.0"
+  },
+  "note": "Timings are observations; overlap and isolation relationships are the gated invariants.",
+  "scenarios": [
+    {
+      "runner": "node:test",
+      "scenario": "same-file serial",
+      "command": "node --test same-file-serial.mjs",
+      "contextCount": 1,
+      "overlap": false,
+      "overlapMs": 0,
+      "processCount": 1,
+      "windowMs": 605
+    },
+    {
+      "runner": "node:test",
+      "scenario": "same-file concurrent",
+      "command": "node --test same-file-concurrent.mjs",
+      "contextCount": 1,
+      "overlap": true,
+      "overlapMs": 297,
+      "processCount": 1,
+      "windowMs": 306
+    },
+    {
+      "runner": "node:test",
+      "scenario": "process-isolated files",
+      "command": "node --test --test-concurrency=2 file-a.mjs file-b.mjs",
+      "contextCount": 2,
+      "overlap": true,
+      "overlapMs": 285,
+      "processCount": 2,
+      "windowMs": 317
+    },
+    {
+      "runner": "Mocha",
+      "scenario": "same-file serial",
+      "command": "node mocha.js --no-color same-file-serial.mjs",
+      "contextCount": 1,
+      "overlap": false,
+      "overlapMs": 0,
+      "processCount": 1,
+      "windowMs": 605
+    },
+    {
+      "runner": "Mocha",
+      "scenario": "parallel worker files",
+      "command": "node mocha.js --no-color --parallel --jobs=2 file-a.mjs file-b.mjs",
+      "contextCount": 2,
+      "overlap": true,
+      "overlapMs": 303,
+      "processCount": 2,
+      "windowMs": 303
+    },
+    {
+      "runner": "AVA",
+      "scenario": "same-file serial",
+      "command": "node cli.js --no-color --verbose same-file-serial.mjs",
+      "contextCount": 1,
+      "overlap": false,
+      "overlapMs": 0,
+      "processCount": 1,
+      "windowMs": 605
+    },
+    {
+      "runner": "AVA",
+      "scenario": "same-file concurrent",
+      "command": "node cli.js --no-color --verbose same-file-concurrent.mjs",
+      "contextCount": 1,
+      "overlap": true,
+      "overlapMs": 300,
+      "processCount": 1,
+      "windowMs": 302
+    },
+    {
+      "runner": "AVA",
+      "scenario": "worker-thread-isolated files",
+      "command": "node cli.js --no-color --verbose --concurrency=2 file-a.mjs file-b.mjs",
+      "contextCount": 2,
+      "overlap": true,
+      "overlapMs": 288,
+      "processCount": 1,
+      "windowMs": 312
+    }
+  ]
+}

@@ -8,8 +8,12 @@
     <EnableNUnitRunner>true</EnableNUnitRunner>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(IntentionalFailures)' == 'true'">
+    <DefineConstants>$(DefineConstants);INTENTIONAL_FAILURES</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
+    <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="2.1.0" />
     <PackageReference Include="NUnit" Version="4.6.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="6.2.0" />
     <ProjectReference Include="../../src/Checkout/Checkout.csproj" />

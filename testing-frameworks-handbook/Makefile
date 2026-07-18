@@ -1,4 +1,4 @@
-.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-node-semantics test-node-unawaited test-advanced test-java test-java-agent-matrix test-dotnet test-cpp test-go test-rust test-php issues-dry-run notebooklm
+.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-node-semantics test-node-unawaited test-advanced test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-go test-rust test-php issues-dry-run notebooklm
 
 bootstrap:
 	./scripts/bootstrap.sh
@@ -42,6 +42,12 @@ test-java-agent-matrix:
 test-dotnet:
 	cd labs/dotnet && dotnet test --project tests/NUnitTests/NUnitTests.csproj
 	cd labs/dotnet && dotnet test --project tests/MSTestTests/MSTestTests.csproj
+
+test-dotnet-runner-matrix:
+	cd labs/dotnet && ./scripts/verify-runner-matrix.sh
+
+test-dotnet-failure-diagnostics:
+	cd labs/dotnet && ./scripts/verify-failure-diagnostics.sh
 
 test-cpp:
 	cmake --fresh -S labs/cpp -B labs/cpp/build -G Ninja -DCMAKE_CXX_COMPILER=clang++ && cmake --build labs/cpp/build && ctest --test-dir labs/cpp/build --output-on-failure

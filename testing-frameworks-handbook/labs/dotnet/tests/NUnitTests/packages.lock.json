@@ -12,6 +12,16 @@
           "Microsoft.TestPlatform.TestHost": "18.7.0"
         }
       },
+      "Microsoft.Testing.Extensions.TrxReport": {
+        "type": "Direct",
+        "requested": "[2.1.0, )",
+        "resolved": "2.1.0",
+        "contentHash": "cXmP225WcMLLOSrW8xekaNhfzdBwXX3cbXbE5qSzmLbK0KZe3z8rAObKj70FWiPPPzm2W22x0ZW93gsmAfK6Mg==",
+        "dependencies": {
+          "Microsoft.Testing.Extensions.TrxReport.Abstractions": "2.1.0",
+          "Microsoft.Testing.Platform": "2.1.0"
+        }
+      },
       "NUnit": {
         "type": "Direct",
         "requested": "[4.6.0, )",

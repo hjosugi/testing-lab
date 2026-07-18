@@ -89,6 +89,8 @@ nix develop .#jvm --command gradle -p labs/java dependencies --write-locks --no-
 nix develop .#dotnet --command dotnet restore labs/dotnet/src/Checkout/Checkout.csproj --force-evaluate -p:RestoreLockedMode=false
 nix develop .#dotnet --command dotnet restore labs/dotnet/tests/NUnitTests/NUnitTests.csproj --force-evaluate -p:RestoreLockedMode=false
 nix develop .#dotnet --command dotnet restore labs/dotnet/tests/MSTestTests/MSTestTests.csproj --force-evaluate -p:RestoreLockedMode=false
+nix develop .#dotnet --command dotnet restore labs/dotnet/tests/NUnitVSTestTests/NUnitVSTestTests.csproj --force-evaluate -p:RestoreLockedMode=false
+nix develop .#dotnet --command dotnet restore labs/dotnet/tests/MSTestVSTestTests/MSTestVSTestTests.csproj --force-evaluate -p:RestoreLockedMode=false
 ```
 
 Playwrightを更新した場合はbrowserも再取得して`verify:browser-lock`を実行します。CMake fallbackを更新するときはrelease tagではなく、そのtagが指す40桁commit SHAを記録します。

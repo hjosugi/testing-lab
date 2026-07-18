@@ -23,6 +23,24 @@ public sealed class MemoryOrders : IOrderRepository
     }
 }
 
+public sealed class CancelAwarePayments : IPaymentGateway
+{
+    public async Task<string> Capture(
+        int amount, string token, CancellationToken cancellationToken = default)
+    {
+        await Task.Yield();
+        cancellationToken.ThrowIfCancellationRequested();
+        return "pay-1";
+    }
+}
+
+public sealed class FailingPayments(Exception failure) : IPaymentGateway
+{
+    public Task<string> Capture(
+        int amount, string token, CancellationToken cancellationToken = default) =>
+        Task.FromException<string>(failure);
+}
+
 [TestFixture]
 public class CheckoutTests
 {
@@ -55,5 +73,41 @@ public class CheckoutTests
             Assert.That(orders.Saved, Is.EqualTo(new[] { result }));
         });
     }
-}
 
+    [Test]
+    public void CancellationStopsBeforeOrderPersistence()
+    {
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
+        var orders = new MemoryOrders();
+        var service = new CheckoutService(new CancelAwarePayments(), orders);
+
+        var error = Assert.ThrowsAsync<OperationCanceledException>(
+            async () => await service.Checkout(
+                "o-cancelled", [new("book", 1, 600)], "t-1", cancellation.Token));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(error!.CancellationToken, Is.EqualTo(cancellation.Token));
+            Assert.That(orders.Saved, Is.Empty);
+        });
+    }
+
+    [Test]
+    public void AsyncPaymentFailureIsPropagatedWithoutSaving()
+    {
+        var orders = new MemoryOrders();
+        var service = new CheckoutService(
+            new FailingPayments(new InvalidOperationException("payment declined")), orders);
+
+        var error = Assert.ThrowsAsync<InvalidOperationException>(
+            async () => await service.Checkout(
+                "o-declined", [new("book", 1, 600)], "t-declined"));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(error!.Message, Is.EqualTo("payment declined"));
+            Assert.That(orders.Saved, Is.Empty);
+        });
+    }
+}

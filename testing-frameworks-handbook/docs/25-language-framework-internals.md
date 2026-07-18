@@ -77,7 +77,7 @@ JUnit 6.1.1のparameterized/dynamic/extension、Truth custom Subject、Jupiter/V
 - fixture lifecycleとparallelizable属性がshared stateへ影響する
 - ASP.NETのin-process test hostはsubcutaneous/component testに向く
 
-MTPは実行platform、MSTestはframework/adapterという層の違いを理解すると選定しやすくなります。
+MTPは実行platform、MSTestはframework/adapterという層の違いを理解すると選定しやすくなります。NUnit/MSTest × MTP/VSTestの実測matrix、TRX option、failure diagnostic、採用判断は[.NET lab](../labs/dotnet/README.md)と[ADR-0002](adr/0002-adopt-microsoft-testing-platform.md)を参照してください。
 
 ## C++ / Catch2・doctest・GoogleTest
 

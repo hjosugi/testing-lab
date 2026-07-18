@@ -4,6 +4,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(IntentionalFailures)' == 'true'">
+    <DefineConstants>$(DefineConstants);INTENTIONAL_FAILURES</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/Checkout/Checkout.csproj" />
   </ItemGroup>

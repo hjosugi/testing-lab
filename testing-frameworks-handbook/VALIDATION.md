@@ -10,13 +10,14 @@
 |---|---|---|
 | Flake evaluation | PASS | `x86_64-linux`、`aarch64-linux`、`aarch64-darwin`の全dev shellを`--all-systems --no-build`で評価 |
 | Clean bootstrap | PASS | npm、Gradle、NuGet、Cargo、Composerをcommit済みlockから復元 |
-| Lock coverage | PASS | Nix、npm 3 project、Gradle、NuGet 3 project、Cargo、Composer、Catch2 commit pin |
+| Lock coverage | PASS | Nix、npm 3 project、Gradle、NuGet 5 project、Cargo、Composer、Catch2 commit pin |
 | Playwright lock | PASS | Playwright 1.61.1とChromium revision 1228および実行binaryを照合 |
 | Workflow lint | PASS | `.github/workflows/reproducibility.yml`を`actionlint`で検証 |
 | Hybrid policy links | PASS | ADR/index/template/entrypointを`lychee --offline`で検証、error 0 |
 | Python parallel / mutation | PASS | pytest-xdist `-n 2`、targeted mutants 6/6 killed |
 | Node execution semantics | PASS | 8 scheduling/isolation scenarios、3 intentional async failures |
 | Mockito agent matrix | PASS | OpenJDK 21.0.12 / 25.0.4、explicit agent、self-attachなし |
+| .NET runner matrix | PASS | NUnit/MSTest × MTP/VSTest、4 TRX、intentional failure 2 cases |
 | NotebookLM build | PASS | 6 bundleを再生成 |
 
 実行command:
@@ -40,8 +41,8 @@ nix develop --command env STRICT=1 ./scripts/test-all.sh
 | Playwright E2E / accessibility | PASS | 2 browser tests |
 | Advanced techniques | PASS | 11 tests |
 | JUnit / Mockito / Truth | PASS | 13 tests、Jupiter 6.1.1 present、Vintage absent |
-| NUnit 4 | PASS | 4 tests、Microsoft.Testing.Platform |
-| MSTest 4 | PASS | 4 tests、Microsoft.Testing.Platform |
+| NUnit 4 | PASS | 6 tests、MTP 2.1.0 / VSTest、cancel・async failure |
+| MSTest 4 | PASS | 9 tests、MTP 2.3.1 / VSTest、cancel・async failure |
 | Catch2 / CTest | PASS | 2 tests、Nix clang++ |
 | Go | PASS | `-mod=readonly` |
 | Rust / rstest | PASS | 3 tests、`--locked` |

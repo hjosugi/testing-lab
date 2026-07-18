@@ -27,6 +27,8 @@ run_if npm labs/system npm run verify:browser-lock
 run_if gradle labs/java gradle dependencies --no-daemon
 run_if dotnet labs/dotnet dotnet restore tests/NUnitTests/NUnitTests.csproj --locked-mode
 run_if dotnet labs/dotnet dotnet restore tests/MSTestTests/MSTestTests.csproj --locked-mode
+run_if dotnet labs/dotnet dotnet restore tests/NUnitVSTestTests/NUnitVSTestTests.csproj --locked-mode
+run_if dotnet labs/dotnet dotnet restore tests/MSTestVSTestTests/MSTestVSTestTests.csproj --locked-mode
 run_if cargo labs/rust cargo fetch --locked
 run_if composer labs/php composer install --no-interaction --no-progress
 

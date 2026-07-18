@@ -3,6 +3,7 @@
 | ADR | Status | Decision |
 |---|---|---|
 | [0001](0001-hybrid-testing-policy.md) | Accepted | Classical/London hybrid testing policy |
+| [0002](0002-adopt-microsoft-testing-platform.md) | Accepted | .NET 10 testの既定platformにMTPを採用 |
 
 ## 運用
 

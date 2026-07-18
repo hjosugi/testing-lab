@@ -58,8 +58,14 @@ jobs:
         run: |
           dotnet restore tests/NUnitTests/NUnitTests.csproj --locked-mode
           dotnet restore tests/MSTestTests/MSTestTests.csproj --locked-mode
+          dotnet restore tests/NUnitVSTestTests/NUnitVSTestTests.csproj --locked-mode
+          dotnet restore tests/MSTestVSTestTests/MSTestVSTestTests.csproj --locked-mode
       - name: Run Windows lane
         shell: pwsh
         run: |
           dotnet test --project tests/NUnitTests/NUnitTests.csproj --no-restore
           dotnet test --project tests/MSTestTests/MSTestTests.csproj --no-restore
+          Push-Location vstest
+          dotnet test ../tests/NUnitVSTestTests/NUnitVSTestTests.csproj --no-restore
+          dotnet test ../tests/MSTestVSTestTests/MSTestVSTestTests.csproj --no-restore
+          Pop-Location

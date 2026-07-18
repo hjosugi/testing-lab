@@ -35,7 +35,7 @@ def test_workflow_checks_out_before_sending_the_confirmation():
 
     assert result == order
     assert timeline.mock_calls == [
-        call.checkout("order-1", items, "token-1"),
+        call.checkout.checkout("order-1", items, "token-1"),
         call.notifications.send_confirmation(order),
     ]
 

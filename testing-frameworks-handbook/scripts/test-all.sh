@@ -53,6 +53,9 @@ run_test Go-generated go labs/go ./scripts/verify-generated.sh
 run_test Go-benchmark go labs/go ./scripts/verify-benchmark.sh
 run_test Go-intentional-failures go labs/go ./scripts/verify-intentional-failures.sh
 run_test Rust cargo labs/rust cargo test --locked
+run_test Rust-boundaries cargo labs/rust ./scripts/verify-test-boundaries.sh
+run_test Rust-quality cargo labs/rust ./scripts/verify-quality.sh
+run_test Rust-mutation cargo-mutants labs/rust ./scripts/run-mutation.sh
 run_test PHP composer labs/php composer test
 
 echo "summary: failures=$failures skips=$skips"

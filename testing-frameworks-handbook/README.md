@@ -74,7 +74,7 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 | C# | NUnit 4、MSTest 4／MTP | yes | yes | constraints、runner と framework の分離 |
 | C++ | Catch2 3 | yes | yes | SECTION/GENERATE、ASan/UBSan/TSan、benchmark noise、CTest shard |
 | Go | 標準 `testing` | yes | yes | table/subtest isolation、race、fuzz corpus、goleak、allocation |
-| Rust | `cargo test`、rstest | yes | yes | ownership、trait、unit/integration 境界 |
+| Rust | `cargo test`、rstest | yes | yes | unit/integration/doc境界、proptest、mutation、Send/Sync |
 | PHP | PHPUnit 13 | yes | yes | MockObject、Infection |
 
 [labs/README.md](labs/README.md) から各ラボに進めます。

@@ -114,6 +114,8 @@ Go labでは同じconsumer-owned interfaceをhandwritten spyとpinned GoMock生�
 
 型で証明できることをruntime testで重複せず、unsafe boundaryとsemantic invariantへ集中します。
 
+Rust labではprivate helperのin-module unit、crate外からのintegration、public doctest/compile-failを明示的に分離し、rstest fixture/case、proptestのvalue strategy、targeted cargo-mutants、`Rc<RefCell<_>>`対`Arc<Mutex<_>>`のownership・`Send`・`Sync`差を実測します。詳細は[Rust lab](../labs/rust/README.md)を参照してください。
+
 ## PHP / PHPUnit
 
 - request/process lifecycle、global/static state、autoload、framework containerに注意

@@ -5,5 +5,5 @@ edition = "2024"
 rust-version = "1.85"
 
 [dev-dependencies]
+proptest = { version = "1.11.0", default-features = false, features = ["std"] }
 rstest = "0.26.1"
-

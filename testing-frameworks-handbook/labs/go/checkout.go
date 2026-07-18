@@ -2,7 +2,11 @@ package checkout
 
 import "errors"
 
-var ErrEmptyCart = errors.New("cart must not be empty")
+var (
+	ErrEmptyCart     = errors.New("cart must not be empty")
+	ErrInvalidItem   = errors.New("invalid item")
+	ErrTotalOverflow = errors.New("cart total overflows int")
+)
 
 type Item struct {
 	SKU       string
@@ -17,6 +21,7 @@ type Order struct {
 	PaymentID string
 }
 
+//go:generate go tool mockgen -destination=mock_payment_gateway_test.go -package=checkout . PaymentGateway
 type PaymentGateway interface {
 	Capture(amount int, token string) (string, error)
 }
@@ -38,23 +43,37 @@ func Total(items []Item) (int, error) {
 	if len(items) == 0 {
 		return 0, ErrEmptyCart
 	}
+
+	maxInt := int(^uint(0) >> 1)
 	total := 0
 	for _, item := range items {
 		if item.Quantity <= 0 || item.UnitPrice < 0 {
-			return 0, errors.New("invalid item")
+			return 0, ErrInvalidItem
 		}
-		total += item.Quantity * item.UnitPrice
+		if item.UnitPrice != 0 && item.Quantity > maxInt/item.UnitPrice {
+			return 0, ErrTotalOverflow
+		}
+		subtotal := item.Quantity * item.UnitPrice
+		if total > maxInt-subtotal {
+			return 0, ErrTotalOverflow
+		}
+		total += subtotal
 	}
 	return total, nil
 }
 
 func (s *Service) Checkout(id string, items []Item, token string) (Order, error) {
 	total, err := Total(items)
-	if err != nil { return Order{}, err }
+	if err != nil {
+		return Order{}, err
+	}
 	paymentID, err := s.payments.Capture(total, token)
-	if err != nil { return Order{}, err }
+	if err != nil {
+		return Order{}, err
+	}
 	order := Order{ID: id, Total: total, Status: "CONFIRMED", PaymentID: paymentID}
-	if err := s.orders.Save(order); err != nil { return Order{}, err }
+	if err := s.orders.Save(order); err != nil {
+		return Order{}, err
+	}
 	return order, nil
 }
-

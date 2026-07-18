@@ -101,6 +101,8 @@ Catch2のSECTION/GENERATE、3 sanitizer defect fixtures、benchmark noise、手�
 
 mock frameworkを先に入れるより、小さいinterfaceとin-memory fakeを検討します。
 
+Go labでは同じconsumer-owned interfaceをhandwritten spyとpinned GoMock生成物で比較し、`t.TempDir`によるparallel resource ownership、committed fuzz regression、package終了時のgoroutine leak、`-shuffle`で露出するorder dependence、`ReportAllocs`を実測します。通常suiteをgreenに保ったままrace/leak/orderのnon-zero exitと固有diagnosticを検査する方法は[Go lab](../labs/go/README.md)を参照してください。
+
 ## Rust / cargo test・rstest
 
 - ownership/type systemが多くの不正状態をcompile時に排除する

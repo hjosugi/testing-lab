@@ -5,7 +5,7 @@
 
   outputs = { self, nixpkgs }:
     let
-      systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+      systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f (import nixpkgs { inherit system; }));
       mkShell = pkgs: packages: pkgs.mkShell {
         inherit packages;
@@ -23,7 +23,7 @@
           nodePkgs = [ pkgs.nodejs_24 ];
           jvmPkgs = [ pkgs.jdk21 pkgs.gradle ];
           dotnetPkgs = [ pkgs.dotnet-sdk_10 ];
-          cppPkgs = [ pkgs.clang pkgs.cmake pkgs.ninja pkgs.catch2 pkgs.llvmPackages.llvm ];
+          cppPkgs = [ pkgs.clang pkgs.cmake pkgs.ninja pkgs.catch2_3 pkgs.llvmPackages.llvm ];
           goPkgs = [ pkgs.go ];
           rustPkgs = [ pkgs.cargo pkgs.rustc pkgs.rustfmt pkgs.clippy ];
           phpPkgs = [ pkgs.php84 pkgs.php84Packages.composer ];
@@ -41,4 +41,3 @@
         });
     };
 }
-

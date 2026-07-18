@@ -9,7 +9,8 @@
     "test:http-adapter": "node --test test/checkout-http-adapter.test.js",
     "test:contract": "node --test test/contract.test.js",
     "test:property": "node --test test/property.test.js",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "verify:browser-lock": "node scripts/verify-browser-lock.js"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",

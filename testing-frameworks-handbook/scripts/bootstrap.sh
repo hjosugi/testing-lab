@@ -13,20 +13,25 @@ run_if() {
     (cd "$root/$directory" && "$@") || failures=$((failures + 1))
   else
     echo "skip: $directory ($command_name is unavailable)"
+    if [[ "${STRICT:-0}" == "1" ]]; then
+      failures=$((failures + 1))
+    fi
   fi
 }
 
-run_if npm labs/node npm install
-run_if npm labs/system npm install
-run_if gradle labs/java gradle dependencies
-run_if dotnet labs/dotnet dotnet restore tests/NUnitTests/NUnitTests.csproj
-run_if dotnet labs/dotnet dotnet restore tests/MSTestTests/MSTestTests.csproj
-run_if cargo labs/rust cargo fetch
-run_if composer labs/php composer install
+run_if npm labs/node npm ci
+run_if npm labs/advanced npm ci
+run_if npm labs/system npm ci
+run_if npm labs/system npm exec -- playwright install chromium
+run_if npm labs/system npm run verify:browser-lock
+run_if gradle labs/java gradle dependencies --no-daemon
+run_if dotnet labs/dotnet dotnet restore tests/NUnitTests/NUnitTests.csproj --locked-mode
+run_if dotnet labs/dotnet dotnet restore tests/MSTestTests/MSTestTests.csproj --locked-mode
+run_if cargo labs/rust cargo fetch --locked
+run_if composer labs/php composer install --no-interaction --no-progress
 
 if (( failures > 0 )); then
   echo "bootstrap completed with $failures failure(s)" >&2
   exit 1
 fi
 echo "bootstrap completed"
-

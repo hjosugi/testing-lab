@@ -32,13 +32,14 @@ else
 fi
 run_test Node npm labs/node npm test
 run_test System npm labs/system npm test
+run_test Playwright npm labs/system npm run test:e2e
 run_test Advanced npm labs/advanced npm test
-run_test Java gradle labs/java gradle test
-run_test NUnit dotnet labs/dotnet dotnet test tests/NUnitTests/NUnitTests.csproj
-run_test MSTest dotnet labs/dotnet dotnet test tests/MSTestTests/MSTestTests.csproj
-run_test C++ cmake . bash -c 'cmake -S labs/cpp -B labs/cpp/build -G Ninja && cmake --build labs/cpp/build && ctest --test-dir labs/cpp/build --output-on-failure'
-run_test Go go labs/go go test ./...
-run_test Rust cargo labs/rust cargo test
+run_test Java gradle labs/java gradle test --no-daemon
+run_test NUnit dotnet labs/dotnet dotnet test --project tests/NUnitTests/NUnitTests.csproj
+run_test MSTest dotnet labs/dotnet dotnet test --project tests/MSTestTests/MSTestTests.csproj
+run_test C++ cmake . bash -c 'cmake --fresh -S labs/cpp -B labs/cpp/build -G Ninja -DCMAKE_CXX_COMPILER=clang++ && cmake --build labs/cpp/build && ctest --test-dir labs/cpp/build --output-on-failure'
+run_test Go go labs/go go test -mod=readonly ./...
+run_test Rust cargo labs/rust cargo test --locked
 run_test PHP composer labs/php composer test
 
 echo "summary: failures=$failures skips=$skips"

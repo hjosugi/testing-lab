@@ -12,6 +12,10 @@ java {
     }
 }
 
+dependencyLocking {
+    lockAllConfigurations()
+}
+
 dependencies {
     testImplementation(platform("org.junit:junit-bom:6.1.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -26,4 +30,3 @@ tasks.test {
         events("passed", "skipped", "failed")
     }
 }
-

@@ -4,10 +4,11 @@
 
 ```bash
 npm ci
+npm exec -- playwright install chromium
+npm run verify:browser-lock
 npm run test:http-adapter
 npm run test:contract
 npm run test:property
-npx playwright install chromium
 npm run test:e2e
 ```
 
@@ -19,4 +20,4 @@ npm run test:e2e
 | E2E | server + Chromium + DOM | payment/repository |
 | accessibility | browser DOM + axe rules | 同上 |
 
-Playwright browserのdownloadはNix packageとnpm packageのversion一致が必要です。このlabでは明示installを採用し、CIではbrowser imageまたは固定Nix packageへ置き換えてください。
+Playwright browserはNix側の別packageを混ぜず、`package-lock.json`で固定した`@playwright/test`自身にdownloadさせます。`verify:browser-lock`は`@playwright/test`、`playwright`、`playwright-core`のversion一致、`browsers.json`のChromium revision、実行binaryの存在を検証します。

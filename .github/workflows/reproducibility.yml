@@ -1,0 +1,65 @@
+name: Reproducibility
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  strict:
+    name: strict (${{ matrix.nix-system }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            nix-system: x86_64-linux
+          - runner: macos-14
+            nix-system: aarch64-darwin
+    runs-on: ${{ matrix.runner }}
+    defaults:
+      run:
+        working-directory: testing-frameworks-handbook
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: DeterminateSystems/determinate-nix-action@2a0be2498974c2b6327e19780488744384637d88 # v3.21.7
+      - name: Verify runner architecture
+        run: |
+          actual="$(nix eval --raw --impure --expr builtins.currentSystem)"
+          test "$actual" = "${{ matrix.nix-system }}"
+      - name: Evaluate every flake system
+        run: nix flake check --all-systems --no-build
+      - name: Bootstrap only from committed locks
+        run: nix develop --command env STRICT=1 ./scripts/bootstrap.sh
+      - name: Verify lock coverage
+        run: nix develop --command ./scripts/check-lockfiles.sh
+      - name: Run every available test without skips
+        run: nix develop --command env STRICT=1 ./scripts/test-all.sh
+      - name: Reject generated lock drift
+        run: test -z "$(git status --porcelain)"
+
+  windows:
+    name: Windows-specific .NET lane
+    runs-on: windows-2025
+    defaults:
+      run:
+        working-directory: testing-frameworks-handbook/labs/dotnet
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 10.0.301
+      - name: Restore locked dependencies
+        shell: pwsh
+        run: |
+          dotnet restore tests/NUnitTests/NUnitTests.csproj --locked-mode
+          dotnet restore tests/MSTestTests/MSTestTests.csproj --locked-mode
+      - name: Run Windows lane
+        shell: pwsh
+        run: |
+          dotnet test --project tests/NUnitTests/NUnitTests.csproj --no-restore
+          dotnet test --project tests/MSTestTests/MSTestTests.csproj --no-restore

@@ -1,4 +1,4 @@
-.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-node-semantics test-node-unawaited test-advanced test-java test-dotnet test-cpp test-go test-rust test-php issues-dry-run notebooklm
+.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-node-semantics test-node-unawaited test-advanced test-java test-java-agent-matrix test-dotnet test-cpp test-go test-rust test-php issues-dry-run notebooklm
 
 bootstrap:
 	./scripts/bootstrap.sh
@@ -35,6 +35,9 @@ test-advanced:
 
 test-java:
 	cd labs/java && gradle test --no-daemon
+
+test-java-agent-matrix:
+	./labs/java/scripts/verify-mockito-agent-matrix.sh
 
 test-dotnet:
 	cd labs/dotnet && dotnet test --project tests/NUnitTests/NUnitTests.csproj

@@ -41,10 +41,10 @@ class ClassicalCheckoutTest {
 
         Order result = service.checkout("o-1", items, "t-1");
 
-        assertThat(result.total()).isEqualTo(expected);
-        assertThat(result.status()).isEqualTo(Order.Status.CONFIRMED);
+        OrderSubject.assertThat(result).hasTotal(expected);
+        OrderSubject.assertThat(result).isConfirmed();
+        OrderSubject.assertThat(result).hasPaymentId("pay-1");
         assertThat(orders.byId).containsEntry("o-1", result);
         assertThat(payments.captures).containsExactly(expected);
     }
 }
-

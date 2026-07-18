@@ -591,6 +591,8 @@ JUnitは単なるannotation集ではありません。
 
 Java/Kotlinではcompile-time type safetyが強い一方、reflection、serialization、DI container、ORM mappingをintegrationで確かめる必要があります。Mockitoはinteractionを表現しやすいですが、全classをmockするとLondonの悪い側面が出ます。Truth/AssertJのfailure messageとdomain assertionを活用します。
 
+JUnit 6.1.1のparameterized/dynamic/extension、Truth custom Subject、Jupiter/Vintage engine gate、Mockito agentのJDK 21/25 matrix、Kotlin coroutine testとの差分は[`labs/java/JVM-LAB.md`](../labs/java/JVM-LAB.md)にあります。
+
 ## C# / .NET
 
 - test framework（NUnit/MSTest/xUnit）とtest platform/adapterを分けて考える

@@ -34,6 +34,7 @@ else
 fi
 run_test Node npm labs/node npm test
 run_test System npm labs/system npm test
+run_test System-HTTP-stability npm labs/system npm run test:http-stability
 run_test Playwright npm labs/system npm run test:e2e
 run_test Advanced npm labs/advanced npm test
 run_test Java gradle labs/java gradle test --no-daemon

@@ -13,6 +13,8 @@
 ## JavaScript／TypeScript
 
 - Node.js v26 test runner: https://nodejs.org/api/test.html
+- Node.js HTTP: https://nodejs.org/api/http.html
+- Node.js AbortController / AbortSignal: https://nodejs.org/api/globals.html#class-abortcontroller
 - Mocha docs: https://mochajs.org/
 - Mocha parallel mode: https://mochajs.org/#parallel-tests
 - AVA: https://avajs.dev/
@@ -82,6 +84,7 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 
 ## Contract／specialized
 
+- RFC 9457, Problem Details for HTTP APIs: https://www.rfc-editor.org/rfc/rfc9457
 - Pact introduction: https://docs.pact.io/
 - How Pact works: https://docs.pact.io/getting_started/how_pact_works
 - Pact consumer tests: https://docs.pact.io/consumer

@@ -5,8 +5,11 @@
   "type": "module",
   "engines": { "node": ">=24" },
   "scripts": {
-    "test": "npm run test:http-adapter && npm run test:contract && npm run test:property",
-    "test:http-adapter": "node --test test/checkout-http-adapter.test.js",
+    "test": "npm run test:component && npm run test:http-integration && npm run test:contract && npm run test:property",
+    "test:component": "node --test test/component/*.test.js",
+    "test:http-adapter": "npm run test:http-integration",
+    "test:http-integration": "node --test test/http/*.test.js",
+    "test:http-stability": "node scripts/verify-http-stability.mjs",
     "test:contract": "node --test test/contract.test.js",
     "test:property": "node --test test/property.test.js",
     "test:e2e": "playwright test",

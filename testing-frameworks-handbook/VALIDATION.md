@@ -22,6 +22,7 @@
 | Go execution matrix | PASS | 通常/race、parallel 60 executions、fuzz 100 executions、generated drift、benchmark、3 intentional failures |
 | Rust execution matrix | PASS | private unit 2、public integration 6、property 256 cases、trait 1、doctest 2、mutants 7/7 |
 | PHP execution matrix | PASS | PHP 8.4、PHPUnit 12.5.31→13.2.4、high-risk mutants 14/14、equivalent mutant 1 classified |
+| System HTTP vertical slice | PASS | component 2、real HTTP integration 6、contract 2、property 1、HTTP integration 100/100連続green |
 | NotebookLM build | PASS | 6 bundleを再生成 |
 
 実行command:
@@ -41,8 +42,8 @@ nix develop --command env STRICT=1 ./scripts/test-all.sh
 |---|---|---|
 | pytest | PASS | 33 tests、branch coverage 100% |
 | Node built-in / module mock / Mocha / AVA | PASS | 6 + 1 + 5 + 2 tests |
-| HTTP adapter / contract / property | PASS | 3 tests |
-| Playwright E2E / accessibility | PASS | 2 browser tests |
+| System component / HTTP integration / contract / property | PASS | 2 + 6 + 2 + 1 tests、HTTP integration suite 100回連続green |
+| Playwright E2E / accessibility / CSS tokens | PASS | 3 browser tests |
 | Advanced techniques | PASS | 11 tests |
 | JUnit / Mockito / Truth | PASS | 13 tests、Jupiter 6.1.1 present、Vintage absent |
 | NUnit 4 | PASS | 6 tests、MTP 2.1.0 / VSTest、cancel・async failure |

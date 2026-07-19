@@ -1,23 +1,105 @@
 # System vertical slice lab
 
-1つのWeb appに複数のtest layerを当て、責務の違いを確認します。
+1つのcheckout Web applicationへcomponent、real HTTP integration、API
+contract、property、browser E2E、accessibilityの各test layerを当てます。
+test名の`[component/in-process]`、`[integration/real-http]`、
+`[contract/real-http]`、`[system/browser-*]`が実際に通る境界を示します。
+
+## Quick start
 
 ```bash
 npm ci
 npm exec -- playwright install chromium
 npm run verify:browser-lock
-npm run test:http-adapter
-npm run test:contract
-npm run test:property
+
+npm test
+npm run test:http-stability
 npm run test:e2e
 ```
 
-| Test | 実物 | 置換 |
-|---|---|---|
-| HTTP adapter | Node HTTP server、router、JSON | payment/repository |
-| contract | OpenAPIで公開したresponse shape | external infrastructure |
-| property | checkout total function | なし |
-| E2E | server + Chromium + DOM | payment/repository |
-| accessibility | browser DOM + axe rules | 同上 |
+`npm test`はcomponent、HTTP integration、contract、propertyを順に実行します。
+個別に確認するときは次を使います。
 
-Playwright browserはNix側の別packageを混ぜず、`package-lock.json`で固定した`@playwright/test`自身にdownloadさせます。`verify:browser-lock`は`@playwright/test`、`playwright`、`playwright-core`のversion一致、`browsers.json`のChromium revision、実行binaryの存在を検証します。
+```bash
+npm run test:component
+npm run test:http-integration
+npm run test:contract
+npm run test:property
+```
+
+従来名の`npm run test:http-adapter`は`test:http-integration`への互換aliasです。
+
+## Scope、boundary、double、oracle
+
+| Test layer | Scope / real boundary | Double | Oracle |
+|---|---|---|---|
+| component | `createCheckout`を同一processで直接呼ぶ。HTTP、JSON、socketは通さない | payment captureとrepository saveのin-memory port | returned order、capture→saveの順序、invalid commandでportを呼ばないこと |
+| real HTTP integration | ephemeral TCP port上のNode HTTP server、router、request stream、JSON、response serializer、real HTTP client | componentの外側にあるpayment/repository portだけ | status、content type、body、trace ID、abort reason、save有無、unique port |
+| provider contract | `openapi.yaml`で公開するsuccess/problem responseをreal HTTP stackから取得 | external infrastructure | field集合と型、media type、`X-Trace-Id`とbody `traceId`の一致 |
+| property | pureな`totalOf`をgenerated itemsで呼ぶ | なし | valid itemを追加してtotalが減らないinvariant |
+| browser E2E | application server、Chromium、DOM、fetch、real HTTP | payment/repository port | role経由で観測する`CONFIRMED: 1200` |
+| accessibility | application serverとChromium DOM | payment/repository port | axeが自動検出するviolation集合が空 |
+| CSS token contract | application serverとChromium CSSOM | payment/repository port | typography・layoutの主要declarationが`:root` custom propertiesを参照 |
+
+component testのfailureはcheckout ruleまたはport orchestrationへ局所化できます。
+HTTP integrationはそれに加えてwire format、stream lifecycle、timeout、
+client disconnect、body limit、port isolationを検出します。browser testへ同じ
+edge caseを重複させず、user journeyだけを最上位に残します。
+
+## HTTP failure contract
+
+`POST /orders`は成功時も失敗時も`X-Trace-Id`を返します。安全な
+request trace IDがあれば引き継ぎ、なければUUIDを生成します。error responseは
+`application/problem+json`で、`type`、`title`、`status`、`detail`、
+`instance`、`traceId`を持ちます。
+
+| Condition | HTTP | Component side effect |
+|---|---:|---|
+| invalid JSON | 400 | componentを呼ばない |
+| body limit超過 | 413 | componentを呼ばない |
+| checkout validation error | 422 | invalid位置より後のportを呼ばない |
+| deadline超過 | 504 | signalをabortし、saveしない |
+| unexpected failure | 500 | internal detailを公開しない |
+| client disconnect | responseなし | signalをabortし、saveしない |
+
+Node request streamの正常なcloseをclient cancellationと誤認しないよう、
+responseの`close`と`writableEnded`を組み合わせてdisconnectだけを
+`AbortController`へ伝えます。
+
+## Parallel and stability gate
+
+serverは固定portを使わず`127.0.0.1:0`でlistenします。integration suiteは
+8 serverを並列起動し、OSが割り当てたportがすべて異なることと、各serverが
+同時に201を返すことを確認します。
+
+```bash
+npm run test:http-stability
+```
+
+このgateは6-caseのreal HTTP integration suiteを新しいNode test processで
+100回連続実行します。途中で失敗するとrun番号とstdout/stderrを残します。
+調査時だけ`HTTP_STABILITY_RUNS=10`のように回数を上書きできますが、CIと
+acceptance criterionはdefaultの100回です。
+
+## Shared CSS tokens
+
+checkout pageのstyleは`:root`のCSS custom propertiesをsource of truthにします。
+font family/size/line height、spacing、content width、border/radius、colorを
+token化し、selector内へ同種のliteralを散在させません。見た目を変更するときは
+まず`--font-*`、`--space-*`、`--color-*`などのtokenを更新します。
+`[system/browser-css]` testは主要tokenの存在とselectorからの参照をCSSOMで
+検証します。
+
+## Browser reproducibility
+
+Playwright browserはNix側の別packageを混ぜず、`package-lock.json`で固定した
+`@playwright/test`自身にdownloadさせます。`verify:browser-lock`は
+`@playwright/test`、`playwright`、`playwright-core`のversion一致、
+`browsers.json`のChromium revision、実行binaryの存在を検証します。
+
+## Primary references
+
+- [Node.js HTTP](https://nodejs.org/api/http.html)
+- [Node.js test runner](https://nodejs.org/api/test.html)
+- [Node.js AbortController and AbortSignal](https://nodejs.org/api/globals.html#class-abortcontroller)
+- [RFC 9457: Problem Details for HTTP APIs](https://www.rfc-editor.org/rfc/rfc9457)

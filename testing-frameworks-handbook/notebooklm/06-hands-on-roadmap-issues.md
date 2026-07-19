@@ -65,6 +65,8 @@ I classify the cause: time, concurrency, shared state, network, UI waiting, rand
 ## JavaScript／TypeScript
 
 - Node.js v26 test runner: https://nodejs.org/api/test.html
+- Node.js HTTP: https://nodejs.org/api/http.html
+- Node.js AbortController / AbortSignal: https://nodejs.org/api/globals.html#class-abortcontroller
 - Mocha docs: https://mochajs.org/
 - Mocha parallel mode: https://mochajs.org/#parallel-tests
 - AVA: https://avajs.dev/
@@ -116,18 +118,25 @@ NUnit 4.6.0は2026-05-04公開。MTP資料は2026-04-27更新。
 - Rust Book, testing: https://doc.rust-lang.org/book/ch11-00-testing.html
 - test execution: https://doc.rust-lang.org/book/ch11-02-running-tests.html
 - test organization: https://doc.rust-lang.org/book/ch11-03-test-organization.html
-- Rust rstest crate: https://crates.io/crates/rstest
+- Rust rstest crate: https://docs.rs/rstest/0.26.1/rstest/
+- Proptest book: https://proptest-rs.github.io/proptest/
+- cargo-mutants guide: https://mutants.rs/
 
 ## PHP
 
 - PHPUnit 13 announcement: https://phpunit.de/announcements/phpunit-13.html
+- PHPUnit 13.2 announcement: https://phpunit.de/announcements/phpunit-13.2.html
+- PHPUnit 12.5 manual: https://docs.phpunit.de/en/12.5/
 - supported versions: https://phpunit.de/supported-versions.html
 - Infection guide: https://infection.github.io/guide/
+- Infection metrics: https://infection.github.io/guide/#Metrics
+- Infection command-line options: https://infection.github.io/guide/command-line-options.html
 
 PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開。InfectionはPHP 8.3以上。
 
 ## Contract／specialized
 
+- RFC 9457, Problem Details for HTTP APIs: https://www.rfc-editor.org/rfc/rfc9457
 - Pact introduction: https://docs.pact.io/
 - How Pact works: https://docs.pact.io/getting_started/how_pact_works
 - Pact consumer tests: https://docs.pact.io/consumer
@@ -191,13 +200,13 @@ bootstrapはnpmの`npm ci`、Gradle dependency locking、NuGet locked restore、
 | Playwright/system | `labs/system/package-lock.json` | `npm ci` + `verify:browser-lock` |
 | JVM | `labs/java/gradle.lockfile` | Gradle dependency locking |
 | .NET | 各projectの`packages.lock.json` + `global.json` | `dotnet restore --locked-mode` |
-| Rust | `labs/rust/Cargo.lock` | `cargo fetch --locked` |
-| PHP | `labs/php/composer.lock` | `composer install` |
-| C++ fallback | Catch2 releaseの40桁commit SHA | CMake `FetchContent` |
-| Go | standard libraryのみのため`go.mod`のみ | `go test`。dependency追加時は`go.sum`もcommit |
+| Rust | `labs/rust/Cargo.lock`、Nixのcargo-mutants | `cargo fetch/test --locked`、targeted mutation |
+| PHP | `labs/php/composer.lock`、PHPUnit 12.5.31 PHARのSHA-256 | `composer install`、12.5→13 migration、PCOV mutation |
+| C++ fallback | Catch2/Trompeloeil releaseの40桁commit SHA | CMake `FetchContent` |
+| Go | `labs/go/go.mod` + `go.sum`、mockgen tool directive | `go mod download`、`-mod=readonly`、generated mock drift check |
 | Python | test dependencyはNix側で固定 | pinned nixpkgsからpytest、pytest-cov、pytest-xdist、Hypothesisを供給 |
 
-`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落と、CMake fallbackのmutable tagを検出します。
+`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tagを検出します。
 
 ## CI matrix
 
@@ -250,6 +259,8 @@ nix develop .#jvm --command gradle -p labs/java dependencies --write-locks --no-
 nix develop .#dotnet --command dotnet restore labs/dotnet/src/Checkout/Checkout.csproj --force-evaluate -p:RestoreLockedMode=false
 nix develop .#dotnet --command dotnet restore labs/dotnet/tests/NUnitTests/NUnitTests.csproj --force-evaluate -p:RestoreLockedMode=false
 nix develop .#dotnet --command dotnet restore labs/dotnet/tests/MSTestTests/MSTestTests.csproj --force-evaluate -p:RestoreLockedMode=false
+nix develop .#dotnet --command dotnet restore labs/dotnet/tests/NUnitVSTestTests/NUnitVSTestTests.csproj --force-evaluate -p:RestoreLockedMode=false
+nix develop .#dotnet --command dotnet restore labs/dotnet/tests/MSTestVSTestTests/MSTestVSTestTests.csproj --force-evaluate -p:RestoreLockedMode=false
 ```
 
 Playwrightを更新した場合はbrowserも再取得して`verify:browser-lock`を実行します。CMake fallbackを更新するときはrelease tagではなく、そのtagが指す40桁commit SHAを記録します。

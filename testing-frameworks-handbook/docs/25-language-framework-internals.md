@@ -57,6 +57,8 @@ frameworkを選ぶときはsyntaxより、isolation、parallel scheduling、exte
 
 `await`漏れ、fake timerとreal I/O混在、global mock、shared portを重点的にreviewします。
 
+System labは同じcheckoutをin-process componentとreal HTTP integrationへ分離し、後者だけがephemeral TCP、request stream、JSON、timeout、client disconnect、body limitを通ります。8 portのparallel isolationと6-case suiteの100連続実行まで含む実測は[`labs/system/README.md`](../labs/system/README.md)にあります。
+
 ## Java / Kotlin・JUnit Platform
 
 JUnitは単なるannotation集ではありません。

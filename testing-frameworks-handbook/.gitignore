@@ -20,5 +20,6 @@ result
 
 playwright-report/
 test-results/
+storybook-static/
 schemathesis-report/
 .pact-artifacts/

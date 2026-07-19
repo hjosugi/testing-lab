@@ -18,6 +18,7 @@ import {
   writeProblem,
 } from './http-support.js';
 import { createInMemoryOrderStore } from './order-store.js';
+import { writeStaticAsset } from './static-assets.js';
 
 export {
   CheckoutValidationError,
@@ -67,6 +68,13 @@ export function createApp({
         'x-trace-id': traceId,
       });
       res.end(CHECKOUT_PAGE);
+      return;
+    }
+
+    if (
+      req.method === 'GET'
+      && writeStaticAsset(res, url.pathname, traceId)
+    ) {
       return;
     }
 

@@ -1,6 +1,6 @@
 # NotebookLM knowledge base
 
-ハンドブック全体（docs 32章 + issues 52件）を、NotebookLMへそのまま取り込める6つの「観点別バンドル」にまとめたものです。`../scripts/build-notebooklm.sh` で再生成できます。
+ハンドブック全体（docs 33章 + issues 52件）を、NotebookLMへそのまま取り込める6つの「観点別バンドル」にまとめたものです。`../scripts/build-notebooklm.sh` で再生成できます。
 
 ## 取り込み手順
 

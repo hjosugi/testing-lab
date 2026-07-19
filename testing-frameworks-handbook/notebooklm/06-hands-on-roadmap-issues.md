@@ -71,6 +71,7 @@ I classify the cause: time, concurrency, shared state, network, UI waiting, rand
 - Mocha parallel mode: https://mochajs.org/#parallel-tests
 - AVA: https://avajs.dev/
 - Playwright Test: https://playwright.dev/docs/test-intro
+- Vitest browser mode: https://vitest.dev/guide/browser/
 - TestCafe architecture: https://testcafe.io/documentation/402631/guides/overview/why-testcafe
 
 確認したnpm version: Node docs 26.5.0、Mocha 11.7.6、AVA 8.0.1、Sinon 22.0.0、TypeScript 7.0.2（2026-07-12 registry）。
@@ -178,9 +179,14 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 - PostgreSQL 18.4 release: https://www.postgresql.org/docs/release/18.4/
 - Storybook testing: https://storybook.js.org/docs/writing-tests
 - Storybook Vitest addon: https://storybook.js.org/docs/writing-tests/integrations/vitest-addon
+- Storybook interaction testing: https://storybook.js.org/docs/writing-tests/interaction-testing
+- Storybook accessibility testing: https://storybook.js.org/docs/writing-tests/accessibility-testing
+- Storybook test-runner migration guide: https://storybook.js.org/docs/writing-tests/integrations/vitest-addon/migration-guide
+- Storybook for Web Components with Vite: https://storybook.js.org/docs/get-started/frameworks/web-components-vite
 - Schemathesis: https://schemathesis.readthedocs.io/
 - Appium 3 architecture: https://appium.io/docs/en/3.5/intro/appium/
 - Testing Library guiding principles: https://testing-library.com/docs/guiding-principles
+- Testing Library query priority: https://testing-library.com/docs/queries/about#priority
 - Playwright best practices: https://playwright.dev/docs/best-practices
 
 ## 研究論文
@@ -220,7 +226,7 @@ bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、
 | Nix/toolchain | `flake.lock` | `nix flake check --all-systems --no-build` |
 | Node/Mocha/AVA | `labs/node/package-lock.json` | `npm ci` |
 | Node advanced | `labs/advanced/package-lock.json` | `npm ci` |
-| Pact/Playwright/system | `labs/system/package-lock.json` | `npm ci` + Pact 17.0.1 provider verification + `verify:browser-lock` |
+| Pact/Storybook/Vitest/Playwright/system | `labs/system/package-lock.json` | `npm ci` + Pact 17.0.1 provider verification + Storybook 10.5.2/Vitest 4.1.10 browser test + `verify:browser-lock` |
 | OpenAPI/Schemathesis | `labs/system/api-tests/uv.lock` | NixのPython 3.13/uv + `uv sync --frozen`、Schemathesis 4.23.0 |
 | JVM | `labs/java/gradle.lockfile` | Gradle dependency locking |
 | .NET | 各projectの`packages.lock.json` + `global.json` | `dotnet restore --locked-mode` |
@@ -230,7 +236,7 @@ bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、
 | Go | `labs/go/go.mod` + `go.sum`、mockgen tool directive | `go mod download`、`-mod=readonly`、generated mock drift check |
 | Python/Postgres | dependencyはNix、containerはdigestで固定 | pytest、Hypothesis、Psycopg 3.3.4、Testcontainers 4.14.2、Docker CLIをNixから供給し、Postgres/Ryuk image pinを検査 |
 
-`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digest、Schemathesis/Pactのexact pinとNixのuvの欠落を検出します。
+`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digest、Schemathesis/Pact/Storybook/Vitest/Viteのexact pin、deprecated Storybook test-runnerの再導入、Nixのuvの欠落を検出します。
 
 ## CI matrix
 
@@ -287,6 +293,21 @@ nix develop .#node --command make test-system-pact
 local verificationにPact Broker、Docker、global npm packageは不要です。
 Brokerを使うbranch/pending/WIP/deploy policyは
 [`labs/system/README.md`](../labs/system/README.md)に記録しています。
+
+## Storybook/Vitest browser componentの1 command実行
+
+同じ`node` shellと`labs/system/package-lock.json`からStorybook 10.5.2、
+Vitest 4.1.10、Vite 8.1.5、Web Components renderer、accessibility addonを
+復元します。bootstrapが取得・照合するPlaywright ChromiumをVitest browser
+providerでも使うため、system browserやglobal packageは不要です。
+
+```bash
+nix develop .#node --command make test-system-storybook
+```
+
+このtargetは5-storyのstate matrix、role/name interaction、addon-a11yを
+headless Chromiumで実行します。Storybookのproduction bundleも確認するときは
+同じshellで`npm --prefix labs/system run build-storybook`を実行します。
 
 ## Playwright browserの固定
 
@@ -783,17 +804,16 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] storyをstate/variant matrixとして作成
-- [ ] Vitest addon browser modeでinteraction test
-- [ ] Testing Libraryのrole/name queryを使用
-- [ ] accessibility addonをCI gateへ追加
-- [ ] deprecated Storybook test-runnerからの移行要否を確認
+- [x] storyをstate/variant matrixとして作成
+- [x] Vitest addon browser modeでinteraction test
+- [x] Testing Libraryのrole/name queryを使用
+- [x] accessibility addonをCI gateへ追加
+- [x] deprecated Storybook test-runnerからの移行要否を確認
 
 ## Acceptance criteria
 
-- [ ] component testがreal browserでgreen
-- [ ] DOM class/component instanceへの不必要なcouplingがない
-
+- [x] component testがreal browserでgreen
+- [x] DOM class/component instanceへの不必要なcouplingがない
 
 ---
 

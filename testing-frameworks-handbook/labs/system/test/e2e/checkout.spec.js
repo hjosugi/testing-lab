@@ -21,6 +21,16 @@ test('[system/browser-css] shared custom properties drive typography and layout'
       .flatMap(styleSheet => Array.from(styleSheet.cssRules))
       .filter(rule => rule instanceof CSSStyleRule);
     const styleFor = selector => rules.find(rule => rule.selectorText === selector)?.style;
+    const selectors = {
+      main: 'checkout-panel main',
+      title: 'checkout-panel h1',
+      button: 'checkout-panel button',
+      disabledButton: 'checkout-panel button:disabled',
+      status: 'checkout-panel :is([role="status"], [role="alert"])',
+      confirmedStatus:
+        'checkout-panel [role="status"][data-phase="confirmed"]',
+      errorStatus: 'checkout-panel [role="alert"]',
+    };
     const rootStyle = styleFor(':root');
     const requiredTokens = [
       '--font-family-body',
@@ -36,12 +46,15 @@ test('[system/browser-css] shared custom properties drive typography and layout'
       '--status-min-height',
       '--border-width',
       '--radius-control',
+      '--opacity-disabled',
       '--color-background',
       '--color-surface',
       '--color-text',
       '--color-accent',
       '--color-accent-contrast',
       '--color-border',
+      '--color-success',
+      '--color-error',
     ];
 
     return {
@@ -52,14 +65,24 @@ test('[system/browser-css] shared custom properties drive typography and layout'
         bodyFontFamily: styleFor('body')?.getPropertyValue('font-family'),
         bodyFontSize: styleFor('body')?.getPropertyValue('font-size'),
         bodyLineHeight: styleFor('body')?.getPropertyValue('line-height'),
-        mainWidth: styleFor('main')?.getPropertyValue('width'),
-        mainBorder: styleFor('main')?.getPropertyValue('border'),
-        titleFontSize: styleFor('h1')?.getPropertyValue('font-size'),
-        titleLineHeight: styleFor('h1')?.getPropertyValue('line-height'),
-        buttonPadding: styleFor('button')?.getPropertyValue('padding'),
-        buttonRadius: styleFor('button')?.getPropertyValue('border-radius'),
-        statusFontSize: styleFor('[role="status"]')?.getPropertyValue('font-size'),
-        statusMinHeight: styleFor('[role="status"]')?.getPropertyValue('min-height'),
+        mainWidth: styleFor(selectors.main)?.getPropertyValue('width'),
+        mainBorder: styleFor(selectors.main)?.getPropertyValue('border'),
+        titleFontSize: styleFor(selectors.title)?.getPropertyValue('font-size'),
+        titleLineHeight: styleFor(selectors.title)
+          ?.getPropertyValue('line-height'),
+        buttonPadding: styleFor(selectors.button)?.getPropertyValue('padding'),
+        buttonRadius: styleFor(selectors.button)
+          ?.getPropertyValue('border-radius'),
+        disabledOpacity: styleFor(selectors.disabledButton)
+          ?.getPropertyValue('opacity'),
+        statusFontSize: styleFor(selectors.status)
+          ?.getPropertyValue('font-size'),
+        statusMinHeight: styleFor(selectors.status)
+          ?.getPropertyValue('min-height'),
+        confirmedColor: styleFor(selectors.confirmedStatus)
+          ?.getPropertyValue('color'),
+        errorColor: styleFor(selectors.errorStatus)
+          ?.getPropertyValue('color'),
       },
     };
   });
@@ -75,7 +98,10 @@ test('[system/browser-css] shared custom properties drive typography and layout'
     titleLineHeight: 'var(--line-height-title)',
     buttonPadding: 'var(--space-2) var(--space-3)',
     buttonRadius: 'var(--radius-control)',
+    disabledOpacity: 'var(--opacity-disabled)',
     statusFontSize: 'var(--font-size-status)',
     statusMinHeight: 'var(--status-min-height)',
+    confirmedColor: 'var(--color-success)',
+    errorColor: 'var(--color-error)',
   });
 });

@@ -75,7 +75,7 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 | C++ | Catch2 3 | yes | yes | SECTION/GENERATE、ASan/UBSan/TSan、benchmark noise、CTest shard |
 | Go | 標準 `testing` | yes | yes | table/subtest isolation、race、fuzz corpus、goleak、allocation |
 | Rust | `cargo test`、rstest | yes | yes | unit/integration/doc境界、proptest、mutation、Send/Sync |
-| PHP | PHPUnit 13 | yes | yes | MockObject、Infection |
+| PHP | PHPUnit 13、Infection | yes | yes | 12.5→13 migration、MSI、equivalent mutant |
 
 [labs/README.md](labs/README.md) から各ラボに進めます。
 

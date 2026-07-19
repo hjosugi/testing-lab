@@ -1,4 +1,4 @@
-.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-node-semantics test-node-unawaited test-advanced test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-cpp-ctest test-cpp-benchmark test-cpp-compile-time test-cpp-sanitizers test-go test-go-race test-go-parallel test-go-fuzz test-go-generated test-go-benchmark test-go-failures test-rust test-rust-boundaries test-rust-quality test-rust-mutation test-php issues-dry-run notebooklm
+.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-node-semantics test-node-unawaited test-advanced test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-cpp-ctest test-cpp-benchmark test-cpp-compile-time test-cpp-sanitizers test-go test-go-race test-go-parallel test-go-fuzz test-go-generated test-go-benchmark test-go-failures test-rust test-rust-boundaries test-rust-quality test-rust-mutation test-php test-php-migration test-php-mutation test-php-equivalent issues-dry-run notebooklm
 
 bootstrap:
 	./scripts/bootstrap.sh
@@ -101,6 +101,15 @@ test-rust-mutation:
 
 test-php:
 	cd labs/php && composer test
+
+test-php-migration:
+	cd labs/php && ./scripts/verify-phpunit-migration.sh
+
+test-php-mutation:
+	cd labs/php && ./scripts/run-mutation.sh
+
+test-php-equivalent:
+	cd labs/php && ./scripts/verify-equivalent-mutant.sh
 
 issues-dry-run:
 	./scripts/create-issues.sh --dry-run

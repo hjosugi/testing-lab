@@ -124,6 +124,8 @@ Rust labではprivate helperのin-module unit、crate外からのintegration、p
 - dynamic value/array shapeはstatic analysisとruntime validationを併用する
 - Infectionでmutation adequacyを確認する
 
+PHP labは公式PHPUnit 12.5.31 PHARをNixでhash pinし、同じ10-test suiteを`--fail-on-all-issues`付きで12.5から13.2.4へ通します。Infection 0.34.0とPCOVでcheckoutの14 mutantsを全てkillし、別fixtureのcovered escaped `CastBool`はbool入力域の意味論からequivalentと分類します。詳細は[PHP lab](../labs/php/README.md)と[classification](../labs/php/MUTATION_CLASSIFICATION.md)を参照してください。
+
 ## 言語機能が変えるテスト量
 
 | 言語特性 | 減らせるruntime test | 依然必要なtest |

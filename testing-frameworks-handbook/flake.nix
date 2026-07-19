@@ -26,7 +26,24 @@
           cppPkgs = [ pkgs.clang pkgs.cmake pkgs.ninja pkgs.catch2_3 pkgs.trompeloeil pkgs.llvmPackages.llvm ];
           goPkgs = [ pkgs.go ];
           rustPkgs = [ pkgs.cargo pkgs.rustc pkgs.rustfmt pkgs.clippy pkgs.cargo-mutants ];
-          phpPkgs = [ pkgs.php84 pkgs.php84Packages.composer ];
+          phpWithPcov = pkgs.php84.withExtensions ({ enabled, all }: enabled ++ [ all.pcov ]);
+          composerWithPcov = pkgs.php84Packages.composer.override { php = phpWithPcov; };
+          phpunit12 = pkgs.stdenvNoCC.mkDerivation {
+            pname = "phpunit";
+            version = "12.5.31";
+            src = pkgs.fetchurl {
+              url = "https://phar.phpunit.de/phpunit-12.5.31.phar";
+              hash = "sha256-GU/LZiGGa1QvEwTg2o3Hq8sV1vnRhRiTrsQIlrz1u0Q=";
+            };
+            dontUnpack = true;
+            nativeBuildInputs = [ pkgs.makeWrapper ];
+            installPhase = ''
+              install -Dm644 "$src" "$out/share/phpunit/phpunit-12.5.31.phar"
+              makeWrapper ${phpWithPcov}/bin/php "$out/bin/phpunit-12" \
+                --add-flags "$out/share/phpunit/phpunit-12.5.31.phar"
+            '';
+          };
+          phpPkgs = [ phpWithPcov composerWithPcov phpunit12 ];
           commonPkgs = [ pkgs.git pkgs.gnumake pkgs.jq pkgs.zip pkgs.unzip ];
         in {
           default = mkShell pkgs (commonPkgs ++ pythonPkgs ++ nodePkgs ++ jvmPkgs ++ dotnetPkgs ++ cppPkgs ++ goPkgs ++ rustPkgs ++ phpPkgs);

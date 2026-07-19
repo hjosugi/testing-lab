@@ -53,7 +53,9 @@ final readonly class CheckoutService
     /** @param list<CartItem> $items */
     public function checkout(string $id, array $items, string $token): Order
     {
-        if ($items === []) throw new InvalidArgumentException('cart must not be empty');
+        if ($items === []) {
+            throw new InvalidArgumentException('cart must not be empty');
+        }
         $total = array_sum(array_map(static fn(CartItem $item): int => $item->subtotal(), $items));
         $paymentId = $this->payments->capture($total, $token);
         $order = new Order($id, $total, 'CONFIRMED', $paymentId);
@@ -61,4 +63,3 @@ final readonly class CheckoutService
         return $order;
     }
 }
-

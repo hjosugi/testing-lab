@@ -6,6 +6,7 @@ from .application import (
 from .domain import (
     CartItem,
     CheckoutService,
+    DuplicateOrderError,
     NoDiscount,
     Order,
     PaymentError,
@@ -17,6 +18,7 @@ __all__ = [
     "CheckoutPort",
     "CheckoutService",
     "CheckoutWorkflow",
+    "DuplicateOrderError",
     "NoDiscount",
     "Order",
     "OrderConfirmationNotifier",

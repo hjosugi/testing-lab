@@ -1,4 +1,4 @@
-.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-node test-node-semantics test-node-unawaited test-system-http-stability test-advanced test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-cpp-ctest test-cpp-benchmark test-cpp-compile-time test-cpp-sanitizers test-go test-go-race test-go-parallel test-go-fuzz test-go-generated test-go-benchmark test-go-failures test-rust test-rust-boundaries test-rust-quality test-rust-mutation test-php test-php-migration test-php-mutation test-php-equivalent issues-dry-run notebooklm
+.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-python-postgres test-python-postgres-unavailable test-node test-node-semantics test-node-unawaited test-system-http-stability test-advanced test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-cpp-ctest test-cpp-benchmark test-cpp-compile-time test-cpp-sanitizers test-go test-go-race test-go-parallel test-go-fuzz test-go-generated test-go-benchmark test-go-failures test-rust test-rust-boundaries test-rust-quality test-rust-mutation test-php test-php-migration test-php-mutation test-php-equivalent issues-dry-run notebooklm
 
 bootstrap:
 	./scripts/bootstrap.sh
@@ -20,6 +20,12 @@ test-python-parallel:
 
 test-python-mutation:
 	cd labs/python && python scripts/mutation_demo.py --require-all-killed
+
+test-python-postgres:
+	./labs/python/scripts/run-postgres-integration.sh
+
+test-python-postgres-unavailable:
+	./labs/python/scripts/verify-postgres-unavailable.sh
 
 test-node:
 	cd labs/node && npm test

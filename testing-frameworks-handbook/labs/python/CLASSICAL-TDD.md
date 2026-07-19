@@ -40,20 +40,25 @@ green後に計算をprivate `_price`と`_PriceBreakdown`へ抽出しました。
 
 ## fakeとreal adapterの同一contract
 
-`tests/repository_contract.py`は次のbehaviorを再利用可能なsuiteとして定義します。
+`test_support/order_repository_contract.py`は次のbehaviorを再利用可能なsuiteとして定義します。
 
 - 保存したOrderを同じ内容で取得できる
 - 未登録IDは`None`
+- duplicate IDは`DuplicateOrderError`となり、元のOrderを置換しない
 
-現在は`TestInMemoryOrderRepository`がこのcontractを実行します。real adapterを追加するときは、同じsuiteを次の形で継承します。
+`TestInMemoryOrderRepository`と`TestPostgresOrderRepository`が同じclassを継承し、fakeとreal adapterのdriftを検出します。
 
 ```python
 class TestPostgresOrderRepository(OrderRepositoryContract):
+    @pytest.fixture(autouse=True)
+    def _use_postgres(self, postgres_url):
+        self._postgres_url = postgres_url
+
     def make_repository(self):
-        return PostgresOrderRepository(clean_database_url())
+        return PostgresOrderRepository(self._postgres_url)
 ```
 
-real adapter側では各testへclean schema/transactionを供給します。duplicate ID、optimistic locking、money precision、transaction rollbackなどengine依存のcontractはdatabase integration Issueで追加します。fakeだけを便利な別実装にせず、real adapterと共有するbehaviorを増やす方針です。
+real adapter側はdigest固定したPostgres 18.4 containerへproduction migration commandを適用し、各test前にtableをcleanにします。共有behaviorとは別に、transaction rollback、row lock、unique constraint、timezone、readiness、container/volume cleanupを`postgres_tests/postgres_engine_semantics.py`で検証します。fakeを便利な別実装にせず、consumerが依存するbehaviorだけを共有contractへ置く方針です。
 
 ## state testのfailure局所性
 
@@ -64,12 +69,13 @@ component testで`expected 1080, got 1200`となった場合、候補はdiscount
 1. `test_discount_rule.py`で閾値、丸め、invalid rangeを局所化
 2. `test_classical.py`でreal object graphのobservable outcomeを確認
 3. `test_repository_contract.py`でfake/adapterの保存契約を分離
-4. real DB固有riskはintegration suiteへ置く
+4. `postgres_tests/`でreal DB固有riskを専用integration suiteへ置く
 
 focused rule testがgreenでcomponent testだけredなら、rule計算よりwiring/集約を先に調べられます。Classical testの広い現実性と、focused testの診断性を組み合わせるのが対策です。
 
 ## 実行
 
 ```bash
-nix develop .#python --command pytest -q labs/python
+nix develop .#python --command make test-python
+nix develop .#python --command make test-python-postgres
 ```

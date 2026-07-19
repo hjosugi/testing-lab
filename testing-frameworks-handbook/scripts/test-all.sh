@@ -24,12 +24,13 @@ run_test() {
   fi
 }
 
-if command -v python3 >/dev/null 2>&1 && python3 -c 'import hypothesis, pytest, pytest_cov, xdist' >/dev/null 2>&1; then
+if command -v python3 >/dev/null 2>&1 && python3 -c 'import hypothesis, psycopg, pytest, pytest_cov, testcontainers, xdist' >/dev/null 2>&1; then
   run_test Python python3 labs/python python3 -m pytest -q --cov=checkout --cov-branch --cov-fail-under=100
   run_test Python-parallel python3 labs/python python3 -m pytest -q -n 2
   run_test Python-mutation python3 labs/python python3 scripts/mutation_demo.py --require-all-killed
+  run_test Python-Postgres-unavailable docker . ./labs/python/scripts/verify-postgres-unavailable.sh
 else
-  echo "SKIP  Python: python3/pytest/pytest-cov/pytest-xdist/Hypothesis is unavailable"
+  echo "SKIP  Python: Python test or Postgres integration dependencies are unavailable"
   skips=$((skips + 1))
 fi
 run_test Node npm labs/node npm test

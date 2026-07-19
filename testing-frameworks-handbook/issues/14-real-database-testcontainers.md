@@ -7,14 +7,13 @@
 
 ## Tasks
 
-- [ ] immutable digestのPostgres imageを指定
-- [ ] migrationを本番と同じ経路で適用
-- [ ] transaction、locking、unique constraint、timezoneを検証
-- [ ] in-memory repositoryと同じcontract suiteを実行
-- [ ] container readinessとcleanupを検証
+- [x] immutable digestのPostgres imageを指定
+- [x] migrationを本番と同じ経路で適用
+- [x] transaction、locking、unique constraint、timezoneを検証
+- [x] in-memory repositoryと同じcontract suiteを実行
+- [x] container readinessとcleanupを検証
 
 ## Acceptance criteria
 
-- [ ] Docker-compatible runtimeのclean CIでgreen
-- [ ] container unavailable時はsilent skipせず明示failure
-
+- [x] Docker-compatible runtimeのclean CIでgreen
+- [x] container unavailable時はsilent skipせず明示failure

@@ -1,4 +1,4 @@
-from checkout.domain import Order, PaymentError
+from checkout.domain import DuplicateOrderError, Order, PaymentError
 
 
 class FakePaymentGateway:
@@ -18,6 +18,10 @@ class InMemoryOrderRepository:
         self.orders: dict[str, Order] = {}
 
     def save(self, order: Order) -> None:
+        if order.order_id in self.orders:
+            raise DuplicateOrderError(
+                f"order already exists: {order.order_id}"
+            )
         self.orders[order.order_id] = order
 
     def find(self, order_id: str) -> Order | None:

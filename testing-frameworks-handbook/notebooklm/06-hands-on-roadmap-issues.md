@@ -52,7 +52,7 @@ I classify the cause: time, concurrency, shared state, network, UI waiting, rand
 
 # 公式情報源と確認日
 
-確認日: 2026-07-12
+確認日: 2026-07-19
 
 可能な限り公式documentation、official repository、project siteを参照しています。versionは教材生成時点のものであり、実行前にlockfileとrelease noteを再確認してください。
 
@@ -80,6 +80,12 @@ I classify the cause: time, concurrency, shared state, network, UI waiting, rand
 - pytest stable docs: https://docs.pytest.org/en/stable/
 - fixtures: https://docs.pytest.org/en/stable/explanation/fixtures.html
 - parametrization: https://docs.pytest.org/en/stable/how-to/parametrize.html
+- Psycopg 3 docs: https://www.psycopg.org/psycopg3/docs/
+- Psycopg package: https://pypi.org/project/psycopg/
+- Testcontainers Python: https://testcontainers-python.readthedocs.io/
+- Testcontainers Python package: https://pypi.org/project/testcontainers/
+
+確認したPython integration version: Psycopg 3.3.4、Testcontainers 4.14.2（2026-07-19 PyPI）。
 
 ## JVM
 
@@ -153,6 +159,8 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 ## Integration／UI／mobile
 
 - Testcontainers: https://java.testcontainers.org/
+- Docker Official Image for Postgres: https://hub.docker.com/_/postgres
+- PostgreSQL 18.4 release: https://www.postgresql.org/docs/release/18.4/
 - Storybook testing: https://storybook.js.org/docs/writing-tests
 - Storybook Vitest addon: https://storybook.js.org/docs/writing-tests/integrations/vitest-addon
 - Schemathesis: https://schemathesis.readthedocs.io/
@@ -204,9 +212,9 @@ bootstrapはnpmの`npm ci`、Gradle dependency locking、NuGet locked restore、
 | PHP | `labs/php/composer.lock`、PHPUnit 12.5.31 PHARのSHA-256 | `composer install`、12.5→13 migration、PCOV mutation |
 | C++ fallback | Catch2/Trompeloeil releaseの40桁commit SHA | CMake `FetchContent` |
 | Go | `labs/go/go.mod` + `go.sum`、mockgen tool directive | `go mod download`、`-mod=readonly`、generated mock drift check |
-| Python | test dependencyはNix側で固定 | pinned nixpkgsからpytest、pytest-cov、pytest-xdist、Hypothesisを供給 |
+| Python/Postgres | dependencyはNix、containerはdigestで固定 | pytest、Hypothesis、Psycopg 3.3.4、Testcontainers 4.14.2、Docker CLIをNixから供給し、Postgres/Ryuk image pinを検査 |
 
-`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tagを検出します。
+`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digestの欠落を検出します。
 
 ## CI matrix
 
@@ -215,10 +223,25 @@ bootstrapはnpmの`npm ci`、Gradle dependency locking、NuGet locked restore、
 - `ubuntu-24.04`で`x86_64-linux`
 - `macos-14`で`aarch64-darwin`
 - `windows-2025`でWindows固有の.NET lane
+- `ubuntu-24.04`のclean Docker daemonでreal Postgres integration
 
 GitHubのstandard `macos-14`はApple Silicon arm64 runnerです。runner labelのarchitectureは[GitHub-hosted runners reference](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)を正とし、job内でも`builtins.currentSystem`を照合します。
 
-Linux/macOS laneはflake全systemの評価、lockだけを使うbootstrap、`STRICT=1 ./scripts/test-all.sh`、生成差分0をgateにします。Windows laneはNixの代替ではなく、path、filesystem、native SDKなどWindowsでしか検出できないriskを担当します。
+Linux/macOS laneはflake全systemの評価、lockだけを使うbootstrap、`STRICT=1 ./scripts/test-all.sh`、生成差分0をgateにします。通常laneはDocker不在時の明示failure契約だけをcontainerなしで確認し、real PostgresはDockerを持つLinux専用laneでrequiredにします。Windows laneはNixの代替ではなく、path、filesystem、native SDKなどWindowsでしか検出できないriskを担当します。
+
+## Python/Postgresの1 command実行
+
+Nix shellがPython、Psycopg、Testcontainers、Docker CLIをすべて供給します。Docker daemonはhost/runtime機能なので、Linux hostまたはCI runner側で利用可能にします。
+
+```bash
+nix develop .#python --command make test-python-postgres
+```
+
+`labs/python/container-images.env`はPostgresとRyukのversion/tag/digestを一元管理します。runnerはdaemon、pin形式、readiness、production migration、test result、container/volume cleanupを順に検証します。daemon不在をsilent skipしないことは次でcontainerなしに自己テストできます。
+
+```bash
+nix develop .#python --command make test-python-postgres-unavailable
+```
 
 ## Playwright browserの固定
 
@@ -272,6 +295,7 @@ nix flake check --all-systems --no-build
 nix develop --command env STRICT=1 ./scripts/bootstrap.sh
 nix develop --command ./scripts/check-lockfiles.sh
 nix develop --command env STRICT=1 ./scripts/test-all.sh
+nix develop .#python --command make test-python-postgres
 git diff --check
 ```
 
@@ -309,7 +333,7 @@ Nix shellだけでは次を固定しません。
 - timezone/locale/CPU scheduling
 - npm/Maven/NuGet/Composer/Cargo dependency（各lockfileで固定）
 
-したがって、lockfileに加えてremote service、container digest、timezone、locale、architectureをtest design cardへ記録します。
+したがって、lockfileに加えてremote service、container digest、timezone、locale、architectureをtest design cardへ記録します。このrepositoryのPostgres labはimage digestとUTCを明示し、Docker daemon自体はhost側の前提として起動時に検査します。
 
 ---
 
@@ -652,17 +676,16 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] immutable digestのPostgres imageを指定
-- [ ] migrationを本番と同じ経路で適用
-- [ ] transaction、locking、unique constraint、timezoneを検証
-- [ ] in-memory repositoryと同じcontract suiteを実行
-- [ ] container readinessとcleanupを検証
+- [x] immutable digestのPostgres imageを指定
+- [x] migrationを本番と同じ経路で適用
+- [x] transaction、locking、unique constraint、timezoneを検証
+- [x] in-memory repositoryと同じcontract suiteを実行
+- [x] container readinessとcleanupを検証
 
 ## Acceptance criteria
 
-- [ ] Docker-compatible runtimeのclean CIでgreen
-- [ ] container unavailable時はsilent skipせず明示failure
-
+- [x] Docker-compatible runtimeのclean CIでgreen
+- [x] container unavailable時はsilent skipせず明示failure
 
 ---
 

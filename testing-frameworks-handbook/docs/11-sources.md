@@ -1,6 +1,6 @@
 # 公式情報源と確認日
 
-確認日: 2026-07-12
+確認日: 2026-07-19
 
 可能な限り公式documentation、official repository、project siteを参照しています。versionは教材生成時点のものであり、実行前にlockfileとrelease noteを再確認してください。
 
@@ -28,6 +28,12 @@
 - pytest stable docs: https://docs.pytest.org/en/stable/
 - fixtures: https://docs.pytest.org/en/stable/explanation/fixtures.html
 - parametrization: https://docs.pytest.org/en/stable/how-to/parametrize.html
+- Psycopg 3 docs: https://www.psycopg.org/psycopg3/docs/
+- Psycopg package: https://pypi.org/project/psycopg/
+- Testcontainers Python: https://testcontainers-python.readthedocs.io/
+- Testcontainers Python package: https://pypi.org/project/testcontainers/
+
+確認したPython integration version: Psycopg 3.3.4、Testcontainers 4.14.2（2026-07-19 PyPI）。
 
 ## JVM
 
@@ -101,6 +107,8 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 ## Integration／UI／mobile
 
 - Testcontainers: https://java.testcontainers.org/
+- Docker Official Image for Postgres: https://hub.docker.com/_/postgres
+- PostgreSQL 18.4 release: https://www.postgresql.org/docs/release/18.4/
 - Storybook testing: https://storybook.js.org/docs/writing-tests
 - Storybook Vitest addon: https://storybook.js.org/docs/writing-tests/integrations/vitest-addon
 - Schemathesis: https://schemathesis.readthedocs.io/

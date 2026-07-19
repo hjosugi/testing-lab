@@ -917,7 +917,7 @@ stateful fakeをproduction adapterの代替としてrequired testへ使う場合
 
 real adapterがまだない段階ではfakeをTDD/fast feedbackに使えますが、release保証の代替にはしません。real adapter contractを追加するIssueと期限を作るか、下記の例外ADRを承認します。
 
-現在のPython repository fakeはfast feedback用途です。real Postgres adapterと共通contractのrequired化は[`issues/14-real-database-testcontainers.md`](../../issues/14-real-database-testcontainers.md)で追跡します。
+Python repositoryはfast feedback用in-memory fakeとreal Postgres adapterへ同じcontract suiteを実行します。Postgres固有のtransaction、locking、constraint、timezone、migration、container lifecycleは専用integration suiteで補完し、Linux CI laneでrequiredにします。実装記録は[`issues/14-real-database-testcontainers.md`](../../issues/14-real-database-testcontainers.md)です。
 
 ## CI mapping
 
@@ -962,7 +962,8 @@ defaultから外れる場合は[`templates/testing-policy-exception-adr.md`](../
 
 - Classical discount: [`labs/python/CLASSICAL-TDD.md`](../../labs/python/CLASSICAL-TDD.md)
 - London notification workflow: [`labs/python/LONDON-TDD.md`](../../labs/python/LONDON-TDD.md)
-- Fake contract: [`labs/python/tests/repository_contract.py`](../../labs/python/tests/repository_contract.py)
+- Shared fake/real contract: [`labs/python/test_support/order_repository_contract.py`](../../labs/python/test_support/order_repository_contract.py)
+- Real Postgres semantics: [`labs/python/postgres_tests/postgres_engine_semantics.py`](../../labs/python/postgres_tests/postgres_engine_semantics.py)
 - Component wiring: [`labs/python/tests/test_checkout_workflow_component.py`](../../labs/python/tests/test_checkout_workflow_component.py)
 
 ---

@@ -1,5 +1,5 @@
 from fakes import InMemoryOrderRepository
-from repository_contract import OrderRepositoryContract
+from test_support.order_repository_contract import OrderRepositoryContract
 
 
 class TestInMemoryOrderRepository(OrderRepositoryContract):

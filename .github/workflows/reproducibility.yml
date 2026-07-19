@@ -70,6 +70,33 @@ jobs:
           dotnet test ../tests/MSTestVSTestTests/MSTestVSTestTests.csproj --no-restore
           Pop-Location
 
+  postgres-integration:
+    name: Real Postgres integration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: testing-frameworks-handbook
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: DeterminateSystems/determinate-nix-action@2a0be2498974c2b6327e19780488744384637d88 # v3.21.7
+      - name: Require the Docker-compatible runtime
+        run: docker info
+      - name: Run pinned Testcontainers Postgres suite
+        run: nix develop .#python --command ./labs/python/scripts/run-postgres-integration.sh
+      - name: Reject leaked integration containers
+        if: always()
+        run: |
+          leaked_lab="$(docker ps -aq --filter label=testing-lab.issue=15)"
+          leaked_ryuk="$(docker ps -aq --filter label=org.testcontainers.ryuk=true)"
+          if test -n "$leaked_lab$leaked_ryuk"; then
+            docker ps -a --no-trunc --filter label=testing-lab.issue=15
+            docker ps -a --no-trunc --filter label=org.testcontainers.ryuk=true
+            exit 1
+          fi
+      - name: Reject generated repository drift
+        run: test -z "$(git status --porcelain)"
+
   cpp-sanitizer:
     name: C++ sanitizer (${{ matrix.sanitizer }})
     strategy:

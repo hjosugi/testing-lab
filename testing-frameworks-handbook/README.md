@@ -68,7 +68,7 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 | 言語 | 主な runner／framework | Classical | London | 追加テーマ |
 |---|---|---:|---:|---|
-| Python | pytest 9 | yes | yes | fixture、parametrize、unittest.mock、Hypothesis、xdist |
+| Python | pytest 9 | yes | yes | fixture、Hypothesis、xdist、共有repository contract、Testcontainers/Postgres |
 | JavaScript | Node test、Mocha 11、AVA 8 | yes | yes | execution semantics、process/thread isolation、Sinon、ESM mock |
 | Java | JUnit 6 | yes | yes | dynamic/extension、Truth Subject、Mockito agent、coroutine差分 |
 | C# | NUnit 4、MSTest 4／MTP | yes | yes | constraints、runner と framework の分離 |
@@ -80,6 +80,8 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 [labs/README.md](labs/README.md) から各ラボに進めます。
 
 `labs/system` には、同じWeb applicationに対するcomponent、real HTTP integration、API contract、acceptance、Playwright E2E、accessibilityの縦断例があります。
+
+`labs/python`には、in-memory fakeとreal Postgres adapterへ同じcontract suiteを実行し、transaction、locking、constraint、timezone、migration、container lifecycleを分離して検証する例があります。
 
 `labs/advanced` には、同じproduction codeに対してexample、property、metamorphic、differential、model-based、concurrency、fault-injection、characterization、snapshot、performanceを当てる比較実験があります。
 

@@ -42,7 +42,7 @@ frameworkを選ぶときはsyntaxより、isolation、parallel scheduling、exte
 
 良い形は、pure domainは小さなfunction test、I/O adapterはfixtureでreal resource、process boundaryはcontract/integrationに分けることです。
 
-実行可能なfixture scope、xdist、Hypothesis、lookup-site patch、coverage/mutation比較は[`labs/python/PYTEST-LAB.md`](../labs/python/PYTEST-LAB.md)にあります。
+実行可能なfixture scope、xdist、Hypothesis、lookup-site patch、coverage/mutation比較は[`labs/python/PYTEST-LAB.md`](../labs/python/PYTEST-LAB.md)にあります。session fixture、production migration subprocess、共有contract inheritance、Testcontainers cleanupを組み合わせたreal Postgres例は[`labs/python/README.md`](../labs/python/README.md#real-postgres-integration)を参照してください。
 
 ## JavaScript / TypeScript
 

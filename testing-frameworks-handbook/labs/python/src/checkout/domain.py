@@ -6,6 +6,10 @@ class PaymentError(RuntimeError):
     pass
 
 
+class DuplicateOrderError(RuntimeError):
+    pass
+
+
 @dataclass(frozen=True)
 class CartItem:
     sku: str

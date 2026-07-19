@@ -44,6 +44,35 @@ if ! grep -Eq '^tool go\.uber\.org/mock/mockgen$' "$root/labs/go/go.mod"; then
   failures=$((failures + 1))
 fi
 
+container_config="$root/labs/python/container-images.env"
+config_value() {
+  local key="$1"
+  sed -n "s/^${key}=//p" "$container_config"
+}
+
+postgres_version="$(config_value POSTGRES_VERSION)"
+postgres_image="$(config_value POSTGRES_IMAGE)"
+ryuk_version="$(config_value RYUK_VERSION)"
+ryuk_image="$(config_value RYUK_CONTAINER_IMAGE)"
+digest_pattern='[0-9a-f]{64}'
+
+if [[ ! "$postgres_image" =~ ^postgres:${postgres_version}-bookworm@sha256:${digest_pattern}$ ]]; then
+  echo "MISSING  immutable Postgres image digest matching POSTGRES_VERSION" >&2
+  failures=$((failures + 1))
+fi
+if [[ ! "$ryuk_image" =~ ^testcontainers/ryuk:${ryuk_version}@sha256:${digest_pattern}$ ]]; then
+  echo "MISSING  immutable Testcontainers Ryuk image digest matching RYUK_VERSION" >&2
+  failures=$((failures + 1))
+fi
+if ! grep -Fq 'dependencies = ["psycopg==3.3.4"]' "$root/labs/python/pyproject.toml"; then
+  echo "MISSING  exact Psycopg dependency pin in labs/python/pyproject.toml" >&2
+  failures=$((failures + 1))
+fi
+if ! grep -Fq 'postgres-test = ["testcontainers==4.14.2"]' "$root/labs/python/pyproject.toml"; then
+  echo "MISSING  exact Testcontainers dependency pin in labs/python/pyproject.toml" >&2
+  failures=$((failures + 1))
+fi
+
 if (( failures > 0 )); then
   echo "lockfile check failed: $failures problem(s)" >&2
   exit 1

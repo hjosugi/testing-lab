@@ -19,7 +19,16 @@
     in {
       devShells = forAllSystems (pkgs:
         let
-          pythonPkgs = with pkgs.python313Packages; [ python pytest pytest-cov pytest-xdist hypothesis ];
+          pythonPkgs = with pkgs.python313Packages; [
+            python
+            pytest
+            pytest-cov
+            pytest-xdist
+            hypothesis
+            psycopg
+            testcontainers
+          ];
+          containerPkgs = [ pkgs.docker-client ];
           nodePkgs = [ pkgs.nodejs_24 ];
           jvmPkgs = [ pkgs.jdk21 pkgs.gradle ];
           dotnetPkgs = [ pkgs.dotnet-sdk_10 ];
@@ -46,8 +55,8 @@
           phpPkgs = [ phpWithPcov composerWithPcov phpunit12 ];
           commonPkgs = [ pkgs.git pkgs.gnumake pkgs.jq pkgs.zip pkgs.unzip ];
         in {
-          default = mkShell pkgs (commonPkgs ++ pythonPkgs ++ nodePkgs ++ jvmPkgs ++ dotnetPkgs ++ cppPkgs ++ goPkgs ++ rustPkgs ++ phpPkgs);
-          python = mkShell pkgs (commonPkgs ++ pythonPkgs);
+          default = mkShell pkgs (commonPkgs ++ containerPkgs ++ pythonPkgs ++ nodePkgs ++ jvmPkgs ++ dotnetPkgs ++ cppPkgs ++ goPkgs ++ rustPkgs ++ phpPkgs);
+          python = mkShell pkgs (commonPkgs ++ containerPkgs ++ pythonPkgs);
           node = mkShell pkgs (commonPkgs ++ nodePkgs);
           jvm = mkShell pkgs (commonPkgs ++ jvmPkgs);
           dotnet = mkShell pkgs (commonPkgs ++ dotnetPkgs);

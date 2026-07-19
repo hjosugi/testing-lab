@@ -10,10 +10,12 @@
 
 ```bash
 cd testing-frameworks-handbook
-cat README.md          # 学習順ガイド
-make test-node         # まず動くものを見る（要 Node 22+）
-make notebooklm        # NotebookLM用バンドルを再生成
+cat README.md
+nix develop --command env STRICT=1 ./scripts/bootstrap.sh
+nix develop --command env STRICT=1 ./scripts/test-all.sh
 ```
+
+real Postgres integrationを含む個別labもNix shellから実行できます。Docker daemonだけはhost側で利用可能にしてください。
 
 最先端テストの全体像を先に掴みたい場合は [docs/31-frontier-multi-perspective.md](testing-frameworks-handbook/docs/31-frontier-multi-perspective.md)（7つの観点マップ）から。
 

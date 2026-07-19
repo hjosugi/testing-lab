@@ -96,6 +96,8 @@ pagination ordering stable
 
 fakeがcontractを満たしても性能/query planは保証しません。
 
+実行例は[Python real Postgres lab](../labs/python/README.md#real-postgres-integration)にあります。同じ3-case contractをin-memory/real adapterへ流し、engine固有のrollback、row lock、unique constraint、UTC、readiness、cleanupは別suiteに分けています。
+
 ### Migration test
 
 ```text
@@ -335,4 +337,3 @@ mockへ置き換えるだけでintegration coverageを失わないようにし�
 - [ ] cleanup/leak detection
 - [ ] fake/emulator/real serviceのgapを記録
 - [ ] failure時のlogs/tracesを保存
-

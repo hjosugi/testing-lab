@@ -22,6 +22,7 @@ run_if() {
 run_if npm labs/node npm ci
 run_if npm labs/advanced npm ci
 run_if npm labs/system npm ci
+run_if uv labs/system/api-tests uv sync --frozen
 run_if npm labs/system npm exec -- playwright install chromium
 run_if npm labs/system npm run verify:browser-lock
 run_if gradle labs/java gradle dependencies --no-daemon

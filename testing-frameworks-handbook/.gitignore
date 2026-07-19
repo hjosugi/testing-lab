@@ -1,4 +1,6 @@
 .direnv/
+.venv/
+.schemathesis/
 .pytest_cache/
 .hypothesis/
 __pycache__/
@@ -18,3 +20,4 @@ result
 
 playwright-report/
 test-results/
+schemathesis-report/

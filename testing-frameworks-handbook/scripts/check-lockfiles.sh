@@ -20,6 +20,7 @@ require_lock labs/go/go.mod labs/go/go.sum
 require_lock labs/rust/Cargo.toml labs/rust/Cargo.lock
 require_lock labs/php/composer.json labs/php/composer.lock
 require_lock labs/java/build.gradle.kts labs/java/gradle.lockfile
+require_lock labs/system/api-tests/pyproject.toml labs/system/api-tests/uv.lock
 
 while IFS= read -r manifest; do
   directory="${manifest%/*}"
@@ -70,6 +71,14 @@ if ! grep -Fq 'dependencies = ["psycopg==3.3.4"]' "$root/labs/python/pyproject.t
 fi
 if ! grep -Fq 'postgres-test = ["testcontainers==4.14.2"]' "$root/labs/python/pyproject.toml"; then
   echo "MISSING  exact Testcontainers dependency pin in labs/python/pyproject.toml" >&2
+  failures=$((failures + 1))
+fi
+if ! grep -Fq '"schemathesis==4.23.0"' "$root/labs/system/api-tests/pyproject.toml"; then
+  echo "MISSING  exact Schemathesis dependency pin in labs/system/api-tests/pyproject.toml" >&2
+  failures=$((failures + 1))
+fi
+if ! grep -Fq 'pkgs.uv' "$root/flake.nix"; then
+  echo "MISSING  uv in flake.nix" >&2
   failures=$((failures + 1))
 fi
 

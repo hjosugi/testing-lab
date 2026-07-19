@@ -13,6 +13,7 @@
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
           export TZ=UTC
+          export UV_PYTHON_DOWNLOADS=never
           echo "Testing handbook shell: $(basename $PWD)"
         '';
       };
@@ -54,8 +55,10 @@
           };
           phpPkgs = [ phpWithPcov composerWithPcov phpunit12 ];
           commonPkgs = [ pkgs.git pkgs.gnumake pkgs.jq pkgs.zip pkgs.unzip ];
+          apiPkgs = [ pkgs.python313 pkgs.uv ] ++ nodePkgs;
         in {
-          default = mkShell pkgs (commonPkgs ++ containerPkgs ++ pythonPkgs ++ nodePkgs ++ jvmPkgs ++ dotnetPkgs ++ cppPkgs ++ goPkgs ++ rustPkgs ++ phpPkgs);
+          default = mkShell pkgs (commonPkgs ++ containerPkgs ++ pythonPkgs ++ nodePkgs ++ [ pkgs.uv ] ++ jvmPkgs ++ dotnetPkgs ++ cppPkgs ++ goPkgs ++ rustPkgs ++ phpPkgs);
+          api = mkShell pkgs (commonPkgs ++ apiPkgs);
           python = mkShell pkgs (commonPkgs ++ containerPkgs ++ pythonPkgs);
           node = mkShell pkgs (commonPkgs ++ nodePkgs);
           jvm = mkShell pkgs (commonPkgs ++ jvmPkgs);

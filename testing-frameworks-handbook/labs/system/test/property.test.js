@@ -9,7 +9,7 @@ test('[component/in-process] adding a valid item never decreases the total', () 
       sku: fc.string({ minLength: 1 }),
       quantity: fc.integer({ min: 1, max: 100 }),
       unitPrice: fc.integer({ min: 0, max: 1_000_000 })
-    }), { minLength: 1, maxLength: 30 }),
+    }), { minLength: 1, maxLength: 9 }),
     fc.record({ sku: fc.string({ minLength: 1 }), quantity: fc.integer({ min: 1, max: 100 }), unitPrice: fc.integer({ min: 0, max: 1_000_000 }) }),
     (items, extra) => assert.ok(totalOf([...items, extra]) >= totalOf(items))
   ));

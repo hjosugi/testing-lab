@@ -7,7 +7,7 @@
 - 32章の解説Markdown（初学者向けから研究・実運用まで）
 - 100種類のtest design card
 - 8言語のClassical/London比較ラボ
-- HTTP integration、API contract、property、Playwright/a11yラボ
+- HTTP integration、OpenAPI/Pact contract、property、Playwright/a11yラボ
 - dependency-free advanced techniqueラボ11件
 - Nix flakeとtoolchain別development shell
 - GitHub Issue本文51件
@@ -19,6 +19,7 @@
 - `node_modules`、`vendor`
 - `build`、`target`、`.gradle`
 - Playwright report/test results
+- `.pact-artifacts`
 - Python bytecode
 
 依存物を同梱せずlock fileとNix定義を同梱することで、archiveを小さくし、取得元とversionをreview可能にします。

@@ -35,6 +35,7 @@ npm run test:http-integration
 npm run test:contract
 npm run test:property
 npm run test:api-schema
+npm run test:pact
 ```
 
 従来名の`npm run test:http-adapter`は`test:http-integration`への互換aliasです。
@@ -49,6 +50,7 @@ uvによるPython downloadは無効です。
 | component | `createCheckout`を同一processで直接呼ぶ。HTTP、JSON、socketは通さない | payment captureとrepository saveのin-memory port | returned order、capture→saveの順序、invalid commandでportを呼ばないこと |
 | real HTTP integration | ephemeral TCP port上のNode HTTP server、router、request stream、JSON、response serializer、real HTTP client | componentの外側にあるpayment/repository portだけ | status、content type、body、trace ID、abort reason、save有無、unique port |
 | provider contract | `openapi.yaml`で公開するsuccess/problem responseをreal HTTP stackから取得 | external infrastructure | field集合と型、media type、`X-Trace-Id`とbody `traceId`の一致 |
+| consumer contract | real `createOrderClient`でPact mockを呼び、生成したPact V4をreal HTTP providerへ再生 | paymentとrepositoryの外部infrastructure | consumerが使うfield、minimal matcher、provider state、互換性 |
 | schema property | OpenAPI 3.1からSchemathesisがpositive/negative requestを生成しreal HTTPへ送る | なし | status/content/header/response schema、4xx rejection、5xxなし |
 | stateful API | OpenAPI LinkをたどるPOST→GET→DELETE→GET | in-memory order store | create後の可用性、delete後の非可用性、response schema |
 | property | pureな`totalOf`をgenerated itemsで呼ぶ | なし | valid itemを追加してtotalが減らないinvariant |
@@ -61,6 +63,66 @@ HTTP integrationはそれに加えてwire format、stream lifecycle、timeout、
 client disconnect、body limit、port isolationを検出します。browser testへ同じ
 edge caseを重複させず、user journeyだけを最上位に残します。
 
+## Pact consumer/provider compatibility gate
+
+consumer testはproductionの`createOrderClient`をPact mock serverへ接続し、
+1 interactionのPact V4を`.pact-artifacts/`へ生成します。consumerが送信する
+request body、返却される`orderId`、確定状態`CONFIRMED`はexact valueです。
+cartごとに変化してよい`total`だけへinteger matcherを置き、body全体を
+緩いtype matcherにしません。
+
+provider verificationは生成したPactをephemeral port上のreal `createApp`へ
+再生します。provider state `checkout can be confirmed`のsetup handlerは
+in-memory storeをclearし、interactionごとに既知のstateを作ります。
+
+```bash
+nix develop .#node --command make test-system-pact
+```
+
+このtargetは次のacceptance oracleも実行します。
+
+- production providerはpassし、provider state handlerが1回実行される
+- `status: PENDING`へ変えたbreaking providerはverificationに失敗する
+- consumerが参照しない`auditId`をprovider responseへ加えてもpassする
+
+`createOrderClient`も`orderId`、`total`、`status`だけを返すため、providerの
+内部都合のfieldをconsumer modelへ漏らしません。生成directoryはGit管理外で、
+consumer testが対象Pactを毎回消してから再生成するためstale interactionを
+provider verificationへ混ぜません。
+
+### Pending/WIPとdeploy policy
+
+shared Pact Brokerを導入する場合は次をrequired policyにします。local fileだけを
+使うこのlabではbroker credentialやremote availabilityをtest前提にしません。
+
+| Stage | Broker metadata / selector | Gate |
+|---|---|---|
+| consumer CI | consumer version=`GIT_SHA`、branch、main branchを登録してgreen testのPactをpublish | feature branchの新contractはprovider成功前のcandidateとし、consumer deployを許可しない |
+| provider CI | provider version=`GIT_SHA`、branch、`mainBranch`と`deployedOrReleased` selector、`enablePending: true`、`includeWipPactsSince: 2026-07-19` | verification resultをpublish。新しいpending/WIP failureはprovider buildを保護して可視化し、一度成功したcontractのregressionはbuildをfail |
+| deploy前 | deployするparticipant/versionとtarget environmentを指定して`can-i-deploy` | consumer/providerのどちらもnon-zeroならdeploy禁止 |
+| deploy後 | participant/version/environmentのdeploymentをrecord | 次のprovider verificationと`can-i-deploy`が実際のdeploy matrixを参照 |
+
+`pending`はPact fileへ固定する属性ではなく、Broker上で「そのprovider branchが
+まだ成功検証していないconsumer version」から判定します。WIPはprovider selectorに
+まだ選ばれない新しいbranch Pactも上記の日付以降なら検証対象へ含めます。
+したがって新contractの失敗はproviderの既存変更を不必要に止めませんが、
+対応providerがgreenになるまでconsumer側の`can-i-deploy`は通りません。
+
+### OpenAPI conformanceとの境界
+
+| Risk | OpenAPI/Schemathesis | Pact |
+|---|---|---|
+| coverage source | providerが公開する全schemaとoperation | consumerが実際に呼ぶinteraction |
+| input exploration | positive/negative boundaryとstateful Linkを生成 | consumer testが選んだbusiness exampleを再生 |
+| response shape | `additionalProperties: false`を含む公開schema全体 | consumerが必要とするfieldだけ。追加fieldは互換 |
+| state | resource lifecycleをschema Linkから探索 | named provider state handlerでconsumer前提を構築 |
+| delivery decision | provider API descriptionとimplementationのconformance | participant version間の互換性と`can-i-deploy` |
+
+status、media type、共通response fieldの一部は両方が観測しますが、primary oracleは
+OpenAPIがprovider-wide schema、Pactがconsumer compatibilityです。このlabの
+`auditId`注入はPactでは互換ですが、公開APIへ実際に追加するなら
+`additionalProperties: false`のOpenAPIも先に更新します。
+
 ## OpenAPI property and stateful gate
 
 `openapi.yaml`はrequestとresponseのobjectを
@@ -71,8 +133,10 @@ order ID patternをproduction validationと同じ値へ揃えます。`201 Locat
 
 runnerはseed `20260719`、`PYTHONHASHSEED=0`、
 `--generation-database none`を使います。現在の固定runでは
-positive/negative 109 cases、stateful 147 cases（25 scenarios）、
-API Links 5/5を検証します。発見済みの最小入力5件は
+positive/negative 109 cases、100件以上のstateful cases、
+API Links 5/5を検証します。statefulのcase/scenario件数は観測値であり
+pass条件にはせず、seedと保存corpusをfailure再現の識別子にします。
+発見済みの最小入力5件は
 `api-tests/corpus/regressions.json`へ保存し、生成testより先に毎回再生します。
 runtime databaseへ書かないため、test後のGit差分は発生しません。
 
@@ -162,3 +226,7 @@ Playwright browserはNix側の別packageを混ぜず、`package-lock.json`で固
 - [Hurl manual](https://hurl.dev/docs/manual.html)
 - [PactumJS fuzz testing](https://pactumjs.github.io/guides/fuzz-testing.html)
 - [Karate documentation](https://docs.karatelabs.io/)
+- [Pact JS consumer tests](https://docs.pact.io/implementation_guides/javascript/docs/consumer)
+- [Pact JS provider verification](https://github.com/pact-foundation/pact-js/blob/master/docs/provider.md)
+- [Pending and WIP pacts](https://docs.pact.io/pact_broker/advanced_topics/pending_pacts)
+- [Pact Broker `can-i-deploy`](https://docs.pact.io/pact_broker/can_i_deploy)

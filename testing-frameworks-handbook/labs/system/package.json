@@ -13,11 +13,15 @@
     "test:contract": "node --test test/contract.test.js",
     "test:property": "node --test test/property.test.js",
     "test:api-schema": "node api-tests/run.mjs",
+    "test:pact": "npm run test:pact:consumer && npm run test:pact:provider",
+    "test:pact:consumer": "node --test test/pact/order-consumer.pact.test.js",
+    "test:pact:provider": "node --test test/pact/order-provider.pact.test.js",
     "test:e2e": "playwright test",
     "verify:browser-lock": "node scripts/verify-browser-lock.js"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",
+    "@pact-foundation/pact": "17.0.1",
     "@playwright/test": "1.61.1",
     "fast-check": "4.9.0"
   }

@@ -77,6 +77,10 @@ if ! grep -Fq '"schemathesis==4.23.0"' "$root/labs/system/api-tests/pyproject.to
   echo "MISSING  exact Schemathesis dependency pin in labs/system/api-tests/pyproject.toml" >&2
   failures=$((failures + 1))
 fi
+if ! grep -Fq '"@pact-foundation/pact": "17.0.1"' "$root/labs/system/package.json"; then
+  echo "MISSING  exact Pact JS dependency pin in labs/system/package.json" >&2
+  failures=$((failures + 1))
+fi
 if ! grep -Fq 'pkgs.uv' "$root/flake.nix"; then
   echo "MISSING  uv in flake.nix" >&2
   failures=$((failures + 1))

@@ -27,7 +27,7 @@ bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、
 | Nix/toolchain | `flake.lock` | `nix flake check --all-systems --no-build` |
 | Node/Mocha/AVA | `labs/node/package-lock.json` | `npm ci` |
 | Node advanced | `labs/advanced/package-lock.json` | `npm ci` |
-| Playwright/system | `labs/system/package-lock.json` | `npm ci` + `verify:browser-lock` |
+| Pact/Playwright/system | `labs/system/package-lock.json` | `npm ci` + Pact 17.0.1 provider verification + `verify:browser-lock` |
 | OpenAPI/Schemathesis | `labs/system/api-tests/uv.lock` | NixのPython 3.13/uv + `uv sync --frozen`、Schemathesis 4.23.0 |
 | JVM | `labs/java/gradle.lockfile` | Gradle dependency locking |
 | .NET | 各projectの`packages.lock.json` + `global.json` | `dotnet restore --locked-mode` |
@@ -37,7 +37,7 @@ bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、
 | Go | `labs/go/go.mod` + `go.sum`、mockgen tool directive | `go mod download`、`-mod=readonly`、generated mock drift check |
 | Python/Postgres | dependencyはNix、containerはdigestで固定 | pytest、Hypothesis、Psycopg 3.3.4、Testcontainers 4.14.2、Docker CLIをNixから供給し、Postgres/Ryuk image pinを検査 |
 
-`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digest、Schemathesis exact pinとNixのuvの欠落を検出します。
+`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digest、Schemathesis/Pactのexact pinとNixのuvの欠落を検出します。
 
 ## CI matrix
 
@@ -79,6 +79,21 @@ nix develop .#api --command make test-system-api
 seed付きpositive/negative generation、OpenAPI Linkによるstateful
 POST→GET→DELETE、保存済みfailure corpus、3種類のfault-injection oracleを
 一度に実行します。外部serviceやDocker daemonは不要です。
+
+## Pactの1 command実行
+
+Nixの`node` shellがNode 24を供給し、Pact JS 17.0.1とnative verifierは
+`labs/system/package-lock.json`から`npm ci`で復元します。consumer contract生成、
+real HTTP provider verification、破壊変更と互換な追加fieldのacceptance oracleを
+次の1 commandで実行できます。
+
+```bash
+nix develop .#node --command make test-system-pact
+```
+
+local verificationにPact Broker、Docker、global npm packageは不要です。
+Brokerを使うbranch/pending/WIP/deploy policyは
+[`labs/system/README.md`](../labs/system/README.md)に記録しています。
 
 ## Playwright browserの固定
 

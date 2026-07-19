@@ -10,5 +10,6 @@ export function createInMemoryOrderStore() {
       return order === undefined ? undefined : structuredClone(order);
     },
     delete: async orderId => orders.delete(orderId),
+    clear: async () => orders.clear(),
   };
 }

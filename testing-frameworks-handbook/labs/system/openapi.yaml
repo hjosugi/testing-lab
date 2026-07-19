@@ -1,11 +1,15 @@
 openapi: 3.1.0
 info:
   title: Checkout Lab API
-  version: 0.1.0
+  version: 0.2.0
+  description: |
+    A deliberately small order lifecycle used to demonstrate schema-based,
+    generative, and stateful API testing.
 paths:
   /orders:
     post:
       operationId: createOrder
+      summary: Confirm a checkout and create an order
       requestBody:
         required: true
         content:
@@ -16,12 +20,24 @@ paths:
         '201':
           description: Confirmed order
           headers:
+            Location:
+              description: Relative URL of the created order.
+              required: true
+              schema:
+                type: string
+                pattern: '^/orders/[A-Za-z0-9._~%:-]+$'
             X-Trace-Id:
               $ref: '#/components/headers/TraceId'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
+          links:
+            GetCreatedOrder:
+              operationId: getOrder
+              description: Read the order returned by this operation.
+              parameters:
+                orderId: '$response.body#/orderId'
         '400':
           $ref: '#/components/responses/InvalidJson'
         '413':
@@ -30,14 +46,62 @@ paths:
           $ref: '#/components/responses/InvalidCheckout'
         '504':
           $ref: '#/components/responses/CheckoutTimeout'
-        '500':
-          $ref: '#/components/responses/InternalError'
+  /orders/{orderId}:
+    parameters:
+      - $ref: '#/components/parameters/OrderId'
+    get:
+      operationId: getOrder
+      summary: Read an existing order
+      responses:
+        '200':
+          description: Existing order
+          headers:
+            X-Trace-Id:
+              $ref: '#/components/headers/TraceId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          links:
+            DeleteOrder:
+              operationId: deleteOrder
+              description: Delete the order returned by this operation.
+              parameters:
+                orderId: '$response.body#/orderId'
+        '404':
+          $ref: '#/components/responses/OrderNotFound'
+    delete:
+      operationId: deleteOrder
+      summary: Delete an existing order
+      responses:
+        '204':
+          description: Order deleted
+          headers:
+            X-Trace-Id:
+              $ref: '#/components/headers/TraceId'
+          links:
+            GetDeletedOrder:
+              operationId: getOrder
+              description: Verify that the deleted order is no longer available.
+              parameters:
+                orderId: '$request.path.orderId'
+        '404':
+          $ref: '#/components/responses/OrderNotFound'
 components:
+  parameters:
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/OrderId'
   headers:
     TraceId:
       description: Correlates the response with logs and problem details.
+      required: true
       schema:
         type: string
+        pattern: '^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$'
   responses:
     InvalidJson:
       description: The request body is not valid JSON.
@@ -75,8 +139,8 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Problem'
-    InternalError:
-      description: Checkout failed without exposing internal error details.
+    OrderNotFound:
+      description: No order exists for the supplied identifier.
       headers:
         X-Trace-Id:
           $ref: '#/components/headers/TraceId'
@@ -85,32 +149,59 @@ components:
           schema:
             $ref: '#/components/schemas/Problem'
   schemas:
+    OrderId:
+      type: string
+      pattern: '^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$'
     Item:
       type: object
+      additionalProperties: false
       required: [sku, quantity, unitPrice]
       properties:
-        sku: { type: string, minLength: 1 }
-        quantity: { type: integer, minimum: 1 }
-        unitPrice: { type: integer, minimum: 0 }
+        sku:
+          type: string
+          minLength: 1
+          maxLength: 64
+        quantity:
+          type: integer
+          minimum: 1
+          maximum: 10000
+        unitPrice:
+          type: integer
+          minimum: 0
+          maximum: 1000000
     CheckoutCommand:
       type: object
+      additionalProperties: false
       required: [orderId, token, items]
       properties:
-        orderId: { type: string, minLength: 1 }
-        token: { type: string, minLength: 1 }
+        orderId:
+          $ref: '#/components/schemas/OrderId'
+        token:
+          type: string
+          minLength: 1
+          maxLength: 128
         items:
           type: array
           minItems: 1
-          items: { $ref: '#/components/schemas/Item' }
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/Item'
     Order:
       type: object
       required: [orderId, total, status, paymentId]
       additionalProperties: false
       properties:
-        orderId: { type: string }
-        total: { type: integer, minimum: 0 }
-        status: { const: CONFIRMED }
-        paymentId: { type: string }
+        orderId:
+          $ref: '#/components/schemas/OrderId'
+        total:
+          type: integer
+          minimum: 0
+          maximum: 100000000000
+        status:
+          const: CONFIRMED
+        paymentId:
+          type: string
+          minLength: 1
     Problem:
       type: object
       required: [type, title, status, detail, instance, traceId]
@@ -118,15 +209,20 @@ components:
       properties:
         type:
           type: string
+          minLength: 1
         title:
           type: string
+          minLength: 1
         status:
           type: integer
           minimum: 400
           maximum: 599
         detail:
           type: string
+          minLength: 1
         instance:
           type: string
+          minLength: 1
         traceId:
           type: string
+          pattern: '^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$'

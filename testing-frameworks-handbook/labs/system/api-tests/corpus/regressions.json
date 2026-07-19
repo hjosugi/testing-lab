@@ -1,0 +1,104 @@
+{
+  "formatVersion": 1,
+  "seed": 20260719,
+  "description": "Minimized API inputs retained after schema and implementation drift was found.",
+  "cases": [
+    {
+      "name": "checkout command with an unexpected field",
+      "method": "POST",
+      "path": "/orders",
+      "body": {
+        "orderId": "corpus-extra-command",
+        "token": "token-1",
+        "items": [
+          {
+            "sku": "book",
+            "quantity": 1,
+            "unitPrice": 100
+          }
+        ],
+        "debug": true
+      },
+      "expected": {
+        "status": 422,
+        "problemType": "/problems/invalid-checkout"
+      }
+    },
+    {
+      "name": "item with an unexpected field",
+      "method": "POST",
+      "path": "/orders",
+      "body": {
+        "orderId": "corpus-extra-item",
+        "token": "token-1",
+        "items": [
+          {
+            "sku": "book",
+            "quantity": 1,
+            "unitPrice": 100,
+            "discount": 1
+          }
+        ]
+      },
+      "expected": {
+        "status": 422,
+        "problemType": "/problems/invalid-checkout"
+      }
+    },
+    {
+      "name": "empty item SKU",
+      "method": "POST",
+      "path": "/orders",
+      "body": {
+        "orderId": "corpus-empty-sku",
+        "token": "token-1",
+        "items": [
+          {
+            "sku": "",
+            "quantity": 1,
+            "unitPrice": 100
+          }
+        ]
+      },
+      "expected": {
+        "status": 422,
+        "problemType": "/problems/invalid-checkout"
+      }
+    },
+    {
+      "name": "cart above the schema item limit",
+      "method": "POST",
+      "path": "/orders",
+      "body": {
+        "orderId": "corpus-too-many-items",
+        "token": "token-1",
+        "items": [
+          { "sku": "item-1", "quantity": 1, "unitPrice": 1 },
+          { "sku": "item-2", "quantity": 1, "unitPrice": 1 },
+          { "sku": "item-3", "quantity": 1, "unitPrice": 1 },
+          { "sku": "item-4", "quantity": 1, "unitPrice": 1 },
+          { "sku": "item-5", "quantity": 1, "unitPrice": 1 },
+          { "sku": "item-6", "quantity": 1, "unitPrice": 1 },
+          { "sku": "item-7", "quantity": 1, "unitPrice": 1 },
+          { "sku": "item-8", "quantity": 1, "unitPrice": 1 },
+          { "sku": "item-9", "quantity": 1, "unitPrice": 1 },
+          { "sku": "item-10", "quantity": 1, "unitPrice": 1 },
+          { "sku": "item-11", "quantity": 1, "unitPrice": 1 }
+        ]
+      },
+      "expected": {
+        "status": 422,
+        "problemType": "/problems/invalid-checkout"
+      }
+    },
+    {
+      "name": "unknown order lookup",
+      "method": "GET",
+      "path": "/orders/corpus-missing",
+      "expected": {
+        "status": 404,
+        "problemType": "/problems/order-not-found"
+      }
+    }
+  ]
+}

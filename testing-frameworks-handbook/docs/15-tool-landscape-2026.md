@@ -44,14 +44,14 @@ Storybookの旧test runnerは、Vite-powered setupではVitest addonへ置き換
 |---|---|---|
 | Testcontainers | dependency lifecycle | throwaway real DB/broker/browser/container |
 | Pact | consumer-driven contract | consumer testからcontract-by-exampleを生成 |
-| Schemathesis | schema property test | OpenAPI/GraphQLからedge/stateful case生成 |
-| Dredd | schema conformance | OpenAPI/API Blueprintとimplementation検証 |
-| Pactum | API functional DSL | pyramid各層のREST test/mocking |
+| Schemathesis | schema property test | OpenAPI/GraphQLからpositive/negative edgeとstateful sequenceを生成 |
+| Dredd | schema conformance | API Blueprint/OpenAPI 2のexampleとimplementationを検証。OpenAPI 3.1用途と混同しない |
+| Pactum | API functional DSL | pyramid各層のREST test/mocking。OpenAPI fuzzはexperimentalかつSwagger v2部分対応 |
 | Karate | JVM test DSL | API/mock/browser/loadをBDD styleで統合 |
 | REST Assured | JVM API DSL | Java/GroovyからHTTP response assertion |
-| Hurl | text HTTP test | plain text request/assertion、CLI/CI |
+| Hurl | text HTTP test | plain text request/assertion/captureによる明示的なHTTP sequence、CLI/CI |
 | Frisby | Jest REST API | Jest ecosystemでAPI test |
-| Prism | schema mock/proxy | OpenAPIからmock/validation |
+| Prism | schema mock/proxy | OpenAPI 2/3.xからmock、request validation、implementation proxy |
 | mountebank | service virtualization | over-the-wire multi-protocol imposters |
 | WireMock/MockServer | HTTP virtualization | programmable remote service double |
 | Keploy | capture/replay/sandbox | production-like API interactionからtest/double |
@@ -60,6 +60,12 @@ Storybookの旧test runnerは、Vite-powered setupではVitest addonへ置き換
 | Parlel等real-protocol emulator | agent verification | AI coding agent向けservice emulator。実service gap要評価 |
 
 「real container」は「productionと同じ」を意味しません。image、config、network、managed service extensionの差を明記します。
+
+OpenAPI 3.1のschema探索はSchemathesis、design-first mock/proxyはPrism、
+人が選んだHTTP journeyはHurl/Pactum/Karate、consumer needの契約はPactと
+役割を分けます。Dreddはexample-basedで、公式に記載されたOpenAPI対応範囲が
+2までのため、3.1 schemaのprimary gateとして扱いません。実行例と検出oracleは
+[`labs/system/README.md`](../labs/system/README.md)にまとめています。
 
 ## Mobile／native
 
@@ -126,4 +132,3 @@ Storybookの旧test runnerは、Vite-powered setupではVitest addonへ置き換
 7. copied boilerplateではなくfailure diagnosticsを学べる
 
 更新が止まったrepositoryも歴史的designを学ぶ価値はありますが、starter templateとしては使いません。
-

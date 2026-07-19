@@ -91,6 +91,17 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 ## Contract／specialized
 
 - RFC 9457, Problem Details for HTTP APIs: https://www.rfc-editor.org/rfc/rfc9457
+- Schemathesis CLI: https://schemathesis.readthedocs.io/en/stable/reference/cli/
+- Schemathesis checks: https://schemathesis.readthedocs.io/en/stable/reference/checks/
+- Schemathesis stateful testing: https://schemathesis.readthedocs.io/en/latest/guides/stateful-testing/
+- Schemathesis 4.23.0: https://pypi.org/project/schemathesis/
+- Dredd: https://dredd.org/
+- Dredd supported description formats: https://dredd.org/en/latest/quickstart.html
+- Prism: https://github.com/stoplightio/prism
+- Hurl manual: https://hurl.dev/docs/manual.html
+- PactumJS API testing: https://pactumjs.github.io/api/requests/spec.html
+- PactumJS fuzz testing: https://pactumjs.github.io/guides/fuzz-testing.html
+- Karate: https://docs.karatelabs.io/
 - Pact introduction: https://docs.pact.io/
 - How Pact works: https://docs.pact.io/getting_started/how_pact_works
 - Pact consumer tests: https://docs.pact.io/consumer

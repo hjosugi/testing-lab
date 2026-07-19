@@ -22,6 +22,7 @@ test('[contract/real-http] POST /orders success preserves the published consumer
 
   assert.equal(response.headers.get('content-type'), 'application/json');
   assert.equal(response.headers.get('x-trace-id'), 'trace-contract-success');
+  assert.equal(response.headers.get('location'), '/orders/o-9');
   assert.deepEqual(Object.keys(body).sort(), ['orderId', 'paymentId', 'status', 'total']);
   assert.equal(typeof body.orderId, 'string');
   assert.equal(typeof body.paymentId, 'string');

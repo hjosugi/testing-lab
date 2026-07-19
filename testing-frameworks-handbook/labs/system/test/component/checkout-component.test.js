@@ -53,3 +53,73 @@ test('[component/in-process] checkout rejects invalid commands before invoking p
   );
   assert.equal(portCalls, 0);
 });
+
+test('[component/in-process] checkout rejects commands outside the OpenAPI schema', async () => {
+  let portCalls = 0;
+  const checkout = createCheckout({
+    capture: async () => {
+      portCalls += 1;
+    },
+    save: async () => {
+      portCalls += 1;
+    },
+  });
+  const invalidCommands = [
+    {
+      orderId: 'unexpected-field',
+      token: 'token-1',
+      items: [{ sku: 'book', quantity: 1, unitPrice: 100 }],
+      debug: true,
+    },
+    {
+      orderId: 'invalid-item',
+      token: 'token-1',
+      items: [{ sku: '', quantity: 1, unitPrice: 100 }],
+    },
+    {
+      orderId: 'too-many-items',
+      token: 'token-1',
+      items: Array.from(
+        { length: 11 },
+        (_, index) => ({ sku: `item-${index}`, quantity: 1, unitPrice: 1 }),
+      ),
+    },
+  ];
+
+  for (const command of invalidCommands) {
+    await assert.rejects(
+      checkout(command),
+      error => error instanceof CheckoutValidationError,
+    );
+  }
+  assert.equal(portCalls, 0);
+});
+
+test('[component/in-process] string limits follow JSON Schema Unicode code points', async () => {
+  const checkout = createCheckout();
+  const astralCharacter = '𠮷';
+  const command = {
+    orderId: 'unicode-boundary',
+    token: astralCharacter.repeat(128),
+    items: [{
+      sku: astralCharacter.repeat(64),
+      quantity: 1,
+      unitPrice: 100,
+    }],
+  };
+
+  await assert.doesNotReject(checkout(command));
+  await assert.rejects(
+    checkout({ ...command, token: astralCharacter.repeat(129) }),
+    error => error instanceof CheckoutValidationError
+      && error.message === 'invalid token',
+  );
+  await assert.rejects(
+    checkout({
+      ...command,
+      items: [{ ...command.items[0], sku: astralCharacter.repeat(65) }],
+    }),
+    error => error instanceof CheckoutValidationError
+      && error.message === 'invalid sku',
+  );
+});

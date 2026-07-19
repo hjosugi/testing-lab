@@ -143,6 +143,17 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 ## Contract／specialized
 
 - RFC 9457, Problem Details for HTTP APIs: https://www.rfc-editor.org/rfc/rfc9457
+- Schemathesis CLI: https://schemathesis.readthedocs.io/en/stable/reference/cli/
+- Schemathesis checks: https://schemathesis.readthedocs.io/en/stable/reference/checks/
+- Schemathesis stateful testing: https://schemathesis.readthedocs.io/en/latest/guides/stateful-testing/
+- Schemathesis 4.23.0: https://pypi.org/project/schemathesis/
+- Dredd: https://dredd.org/
+- Dredd supported description formats: https://dredd.org/en/latest/quickstart.html
+- Prism: https://github.com/stoplightio/prism
+- Hurl manual: https://hurl.dev/docs/manual.html
+- PactumJS API testing: https://pactumjs.github.io/api/requests/spec.html
+- PactumJS fuzz testing: https://pactumjs.github.io/guides/fuzz-testing.html
+- Karate: https://docs.karatelabs.io/
 - Pact introduction: https://docs.pact.io/
 - How Pact works: https://docs.pact.io/getting_started/how_pact_works
 - Pact consumer tests: https://docs.pact.io/consumer
@@ -196,7 +207,7 @@ handbook directory内では短い形も使えます。
 make bootstrap-locked
 ```
 
-bootstrapはnpmの`npm ci`、Gradle dependency locking、NuGet locked restore、Cargo `--locked`、Composer installを使います。Playwrightはlockされたnpm package自身からChromiumを取得し、versionとrevisionを検証します。`STRICT=1`ではtoolchain不足をskipせず失敗にします。
+bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、NuGet locked restore、Cargo `--locked`、Composer installを使います。Playwrightはlockされたnpm package自身からChromiumを取得し、versionとrevisionを検証します。`STRICT=1`ではtoolchain不足をskipせず失敗にします。
 
 ## Lock inventory
 
@@ -206,6 +217,7 @@ bootstrapはnpmの`npm ci`、Gradle dependency locking、NuGet locked restore、
 | Node/Mocha/AVA | `labs/node/package-lock.json` | `npm ci` |
 | Node advanced | `labs/advanced/package-lock.json` | `npm ci` |
 | Playwright/system | `labs/system/package-lock.json` | `npm ci` + `verify:browser-lock` |
+| OpenAPI/Schemathesis | `labs/system/api-tests/uv.lock` | NixのPython 3.13/uv + `uv sync --frozen`、Schemathesis 4.23.0 |
 | JVM | `labs/java/gradle.lockfile` | Gradle dependency locking |
 | .NET | 各projectの`packages.lock.json` + `global.json` | `dotnet restore --locked-mode` |
 | Rust | `labs/rust/Cargo.lock`、Nixのcargo-mutants | `cargo fetch/test --locked`、targeted mutation |
@@ -214,7 +226,7 @@ bootstrapはnpmの`npm ci`、Gradle dependency locking、NuGet locked restore、
 | Go | `labs/go/go.mod` + `go.sum`、mockgen tool directive | `go mod download`、`-mod=readonly`、generated mock drift check |
 | Python/Postgres | dependencyはNix、containerはdigestで固定 | pytest、Hypothesis、Psycopg 3.3.4、Testcontainers 4.14.2、Docker CLIをNixから供給し、Postgres/Ryuk image pinを検査 |
 
-`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digestの欠落を検出します。
+`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digest、Schemathesis exact pinとNixのuvの欠落を検出します。
 
 ## CI matrix
 
@@ -243,6 +255,20 @@ nix develop .#python --command make test-python-postgres
 nix develop .#python --command make test-python-postgres-unavailable
 ```
 
+## OpenAPI/Schemathesisの1 command実行
+
+Nixの`api` shellがNode 24、Python 3.13、uvを供給し、uvは
+`api-tests/uv.lock`だけからSchemathesisを復元します。host Pythonや
+global npm packageは使いません。
+
+```bash
+nix develop .#api --command make test-system-api
+```
+
+seed付きpositive/negative generation、OpenAPI Linkによるstateful
+POST→GET→DELETE、保存済みfailure corpus、3種類のfault-injection oracleを
+一度に実行します。外部serviceやDocker daemonは不要です。
+
 ## Playwright browserの固定
 
 `@playwright/test`、`playwright`、`playwright-core`は`package-lock.json`で同じversionへ固定します。
@@ -268,6 +294,7 @@ nix flake update
 (cd labs/node && npm install --package-lock-only)
 (cd labs/advanced && npm install --package-lock-only)
 (cd labs/system && npm install --package-lock-only)
+(cd labs/system/api-tests && uv lock --upgrade)
 
 # Rust
 (cd labs/rust && cargo update)
@@ -314,6 +341,7 @@ default shellは全言語を含み重いので、日常作業では個別shell�
 
 ```bash
 nix develop .#python
+nix develop .#api
 nix develop .#node
 nix develop .#jvm
 nix develop .#dotnet
@@ -696,16 +724,15 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] OpenAPI 3.1をimplementationと同期
-- [ ] Schemathesisでpositive/negative generation
-- [ ] stateful POST→GET→DELETE chainを追加
-- [ ] deterministic seedとfailure corpusを保存
-- [ ] Dredd/Prism/Hurl/Pactum/Karateの役割差を比較
+- [x] OpenAPI 3.1をimplementationと同期
+- [x] Schemathesisでpositive/negative generation
+- [x] stateful POST→GET→DELETE chainを追加
+- [x] deterministic seedとfailure corpusを保存
+- [x] Dredd/Prism/Hurl/Pactum/Karateの役割差を比較
 
 ## Acceptance criteria
 
-- [ ] undocumented 5xx、schema mismatch、unexpected fieldを検出
-
+- [x] undocumented 5xx、schema mismatch、unexpected fieldを検出
 
 ---
 

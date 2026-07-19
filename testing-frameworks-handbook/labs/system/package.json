@@ -12,6 +12,7 @@
     "test:http-stability": "node scripts/verify-http-stability.mjs",
     "test:contract": "node --test test/contract.test.js",
     "test:property": "node --test test/property.test.js",
+    "test:api-schema": "node api-tests/run.mjs",
     "test:e2e": "playwright test",
     "verify:browser-lock": "node scripts/verify-browser-lock.js"
   },

@@ -3,13 +3,12 @@
 
 ## Tasks
 
-- [ ] OpenAPI 3.1をimplementationと同期
-- [ ] Schemathesisでpositive/negative generation
-- [ ] stateful POST→GET→DELETE chainを追加
-- [ ] deterministic seedとfailure corpusを保存
-- [ ] Dredd/Prism/Hurl/Pactum/Karateの役割差を比較
+- [x] OpenAPI 3.1をimplementationと同期
+- [x] Schemathesisでpositive/negative generation
+- [x] stateful POST→GET→DELETE chainを追加
+- [x] deterministic seedとfailure corpusを保存
+- [x] Dredd/Prism/Hurl/Pactum/Karateの役割差を比較
 
 ## Acceptance criteria
 
-- [ ] undocumented 5xx、schema mismatch、unexpected fieldを検出
-
+- [x] undocumented 5xx、schema mismatch、unexpected fieldを検出

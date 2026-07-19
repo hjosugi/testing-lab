@@ -157,6 +157,10 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 - Pact introduction: https://docs.pact.io/
 - How Pact works: https://docs.pact.io/getting_started/how_pact_works
 - Pact consumer tests: https://docs.pact.io/consumer
+- Pact JS consumer API: https://docs.pact.io/implementation_guides/javascript/docs/consumer
+- Pact JS provider verification: https://github.com/pact-foundation/pact-js/blob/master/docs/provider.md
+- Pending pacts and WIP pacts: https://docs.pact.io/pact_broker/advanced_topics/pending_pacts
+- `can-i-deploy`: https://docs.pact.io/pact_broker/can_i_deploy
 - Airtest docs: https://airtest.doc.io.netease.com/en/
 - EarlGrey repository: https://github.com/google/EarlGrey
 - mountebank docs: https://www.mbtest.org/docs/gettingStarted
@@ -216,7 +220,7 @@ bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、
 | Nix/toolchain | `flake.lock` | `nix flake check --all-systems --no-build` |
 | Node/Mocha/AVA | `labs/node/package-lock.json` | `npm ci` |
 | Node advanced | `labs/advanced/package-lock.json` | `npm ci` |
-| Playwright/system | `labs/system/package-lock.json` | `npm ci` + `verify:browser-lock` |
+| Pact/Playwright/system | `labs/system/package-lock.json` | `npm ci` + Pact 17.0.1 provider verification + `verify:browser-lock` |
 | OpenAPI/Schemathesis | `labs/system/api-tests/uv.lock` | NixのPython 3.13/uv + `uv sync --frozen`、Schemathesis 4.23.0 |
 | JVM | `labs/java/gradle.lockfile` | Gradle dependency locking |
 | .NET | 各projectの`packages.lock.json` + `global.json` | `dotnet restore --locked-mode` |
@@ -226,7 +230,7 @@ bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、
 | Go | `labs/go/go.mod` + `go.sum`、mockgen tool directive | `go mod download`、`-mod=readonly`、generated mock drift check |
 | Python/Postgres | dependencyはNix、containerはdigestで固定 | pytest、Hypothesis、Psycopg 3.3.4、Testcontainers 4.14.2、Docker CLIをNixから供給し、Postgres/Ryuk image pinを検査 |
 
-`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digest、Schemathesis exact pinとNixのuvの欠落を検出します。
+`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digest、Schemathesis/Pactのexact pinとNixのuvの欠落を検出します。
 
 ## CI matrix
 
@@ -268,6 +272,21 @@ nix develop .#api --command make test-system-api
 seed付きpositive/negative generation、OpenAPI Linkによるstateful
 POST→GET→DELETE、保存済みfailure corpus、3種類のfault-injection oracleを
 一度に実行します。外部serviceやDocker daemonは不要です。
+
+## Pactの1 command実行
+
+Nixの`node` shellがNode 24を供給し、Pact JS 17.0.1とnative verifierは
+`labs/system/package-lock.json`から`npm ci`で復元します。consumer contract生成、
+real HTTP provider verification、破壊変更と互換な追加fieldのacceptance oracleを
+次の1 commandで実行できます。
+
+```bash
+nix develop .#node --command make test-system-pact
+```
+
+local verificationにPact Broker、Docker、global npm packageは不要です。
+Brokerを使うbranch/pending/WIP/deploy policyは
+[`labs/system/README.md`](../labs/system/README.md)に記録しています。
 
 ## Playwright browserの固定
 
@@ -743,18 +762,17 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] consumer client unit testからPactを生成
-- [ ] minimal matching ruleを使用
-- [ ] provider stateを明示
-- [ ] provider verificationをCIへ追加
-- [ ] pending/WIP pactとcan-i-deploy policyを設計
-- [ ] OpenAPI conformanceとの重複/差分を記録
+- [x] consumer client unit testからPactを生成
+- [x] minimal matching ruleを使用
+- [x] provider stateを明示
+- [x] provider verificationをCIへ追加
+- [x] pending/WIP pactとcan-i-deploy policyを設計
+- [x] OpenAPI conformanceとの重複/差分を記録
 
 ## Acceptance criteria
 
-- [ ] breaking provider changeでprovider verificationがfail
-- [ ] irrelevant provider field追加ではconsumer testが壊れない
-
+- [x] breaking provider changeでprovider verificationがfail
+- [x] irrelevant provider field追加ではconsumer testが壊れない
 
 ---
 

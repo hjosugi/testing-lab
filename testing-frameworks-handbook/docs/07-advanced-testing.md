@@ -34,6 +34,11 @@ Pactではconsumer testが実際に必要とするrequest/response例からcontr
 - schema: 可能なAPI surfaceの静的記述
 - consumer contract: 現在のconsumerが依存するconcrete interaction
 
+matching ruleは「変化してよい意味」だけへ局所的に置きます。response object全体を
+type matcherにすると、consumerが必要とする固定statusまで緩める危険があります。
+provider stateはfixtureの説明ではなく、verification直前に再現可能なstateを作る
+handlerとして実装します。
+
 contract testはnetwork、service discovery、auth infrastructure全体のE2Eを置き換えません。compatibilityを速く検証する層です。
 
 ## Service virtualization
@@ -59,4 +64,3 @@ Playwrightはbrowser context isolation、locator、web-first assertion、auto-wa
 ## Mobile/game UI
 
 EarlGreyはiOS UIのsynchronization、Airtestはimage recognition、Pocoはengine UI hierarchy inspectionを中心にします。Web E2E frameworkと同じ比較表に押し込まず、対象surfaceと観測方法から選びます。
-

@@ -105,6 +105,10 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 - Pact introduction: https://docs.pact.io/
 - How Pact works: https://docs.pact.io/getting_started/how_pact_works
 - Pact consumer tests: https://docs.pact.io/consumer
+- Pact JS consumer API: https://docs.pact.io/implementation_guides/javascript/docs/consumer
+- Pact JS provider verification: https://github.com/pact-foundation/pact-js/blob/master/docs/provider.md
+- Pending pacts and WIP pacts: https://docs.pact.io/pact_broker/advanced_topics/pending_pacts
+- `can-i-deploy`: https://docs.pact.io/pact_broker/can_i_deploy
 - Airtest docs: https://airtest.doc.io.netease.com/en/
 - EarlGrey repository: https://github.com/google/EarlGrey
 - mountebank docs: https://www.mbtest.org/docs/gettingStarted

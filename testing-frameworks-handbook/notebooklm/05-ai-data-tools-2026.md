@@ -433,7 +433,7 @@ Storybookの旧test runnerは、Vite-powered setupではVitest addonへ置き換
 | Tool | Category | Design center |
 |---|---|---|
 | Testcontainers | dependency lifecycle | throwaway real DB/broker/browser/container |
-| Pact | consumer-driven contract | consumer testからcontract-by-exampleを生成 |
+| Pact JS 17.0.1 | consumer-driven contract | consumer testからPact V4を生成し、provider state付きでreal providerを検証 |
 | Schemathesis | schema property test | OpenAPI/GraphQLからpositive/negative edgeとstateful sequenceを生成 |
 | Dredd | schema conformance | API Blueprint/OpenAPI 2のexampleとimplementationを検証。OpenAPI 3.1用途と混同しない |
 | Pactum | API functional DSL | pyramid各層のREST test/mocking。OpenAPI fuzzはexperimentalかつSwagger v2部分対応 |

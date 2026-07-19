@@ -581,6 +581,8 @@ frameworkを選ぶときはsyntaxより、isolation、parallel scheduling、exte
 
 `await`漏れ、fake timerとreal I/O混在、global mock、shared portを重点的にreviewします。
 
+System labは同じcheckoutをin-process componentとreal HTTP integrationへ分離し、後者だけがephemeral TCP、request stream、JSON、timeout、client disconnect、body limitを通ります。8 portのparallel isolationと6-case suiteの100連続実行まで含む実測は[`labs/system/README.md`](../labs/system/README.md)にあります。
+
 ## Java / Kotlin・JUnit Platform
 
 JUnitは単なるannotation集ではありません。
@@ -601,7 +603,7 @@ JUnit 6.1.1のparameterized/dynamic/extension、Truth custom Subject、Jupiter/V
 - fixture lifecycleとparallelizable属性がshared stateへ影響する
 - ASP.NETのin-process test hostはsubcutaneous/component testに向く
 
-MTPは実行platform、MSTestはframework/adapterという層の違いを理解すると選定しやすくなります。
+MTPは実行platform、MSTestはframework/adapterという層の違いを理解すると選定しやすくなります。NUnit/MSTest × MTP/VSTestの実測matrix、TRX option、failure diagnostic、採用判断は[.NET lab](../labs/dotnet/README.md)と[ADR-0002](adr/0002-adopt-microsoft-testing-platform.md)を参照してください。
 
 ## C++ / Catch2・doctest・GoogleTest
 
@@ -613,6 +615,8 @@ MTPは実行platform、MSTestはframework/adapterという層の違いを理解�
 
 single-headerの使いやすさ、compile time、registration、death test、mock supportを用途で比較します。
 
+Catch2のSECTION/GENERATE、3 sanitizer defect fixtures、benchmark noise、手書きspy対Trompeloeilのclean compile cost、CTest shard/random seedの実測は[C++ lab](../labs/cpp/README.md)を参照してください。
+
 ## Go / 標準testing
 
 - standard library中心でtable-driven testが自然
@@ -622,6 +626,8 @@ single-headerの使いやすさ、compile time、registration、death test、moc
 - goroutine leak、channel close、context cancellationを検証対象にする
 
 mock frameworkを先に入れるより、小さいinterfaceとin-memory fakeを検討します。
+
+Go labでは同じconsumer-owned interfaceをhandwritten spyとpinned GoMock生成物で比較し、`t.TempDir`によるparallel resource ownership、committed fuzz regression、package終了時のgoroutine leak、`-shuffle`で露出するorder dependence、`ReportAllocs`を実測します。通常suiteをgreenに保ったままrace/leak/orderのnon-zero exitと固有diagnosticを検査する方法は[Go lab](../labs/go/README.md)を参照してください。
 
 ## Rust / cargo test・rstest
 
@@ -634,6 +640,8 @@ mock frameworkを先に入れるより、小さいinterfaceとin-memory fakeを�
 
 型で証明できることをruntime testで重複せず、unsafe boundaryとsemantic invariantへ集中します。
 
+Rust labではprivate helperのin-module unit、crate外からのintegration、public doctest/compile-failを明示的に分離し、rstest fixture/case、proptestのvalue strategy、targeted cargo-mutants、`Rc<RefCell<_>>`対`Arc<Mutex<_>>`のownership・`Send`・`Sync`差を実測します。詳細は[Rust lab](../labs/rust/README.md)を参照してください。
+
 ## PHP / PHPUnit
 
 - request/process lifecycle、global/static state、autoload、framework containerに注意
@@ -641,6 +649,8 @@ mock frameworkを先に入れるより、小さいinterfaceとin-memory fakeを�
 - PHPUnit MockObjectはboundary interactionに限定する
 - dynamic value/array shapeはstatic analysisとruntime validationを併用する
 - Infectionでmutation adequacyを確認する
+
+PHP labは公式PHPUnit 12.5.31 PHARをNixでhash pinし、同じ10-test suiteを`--fail-on-all-issues`付きで12.5から13.2.4へ通します。Infection 0.34.0とPCOVでcheckoutの14 mutantsを全てkillし、別fixtureのcovered escaped `CastBool`はbool入力域の意味論からequivalentと分類します。詳細は[PHP lab](../labs/php/README.md)と[classification](../labs/php/MUTATION_CLASSIFICATION.md)を参照してください。
 
 ## 言語機能が変えるテスト量
 

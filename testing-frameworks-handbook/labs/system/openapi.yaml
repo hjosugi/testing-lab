@@ -15,11 +15,75 @@ paths:
       responses:
         '201':
           description: Confirmed order
+          headers:
+            X-Trace-Id:
+              $ref: '#/components/headers/TraceId'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
+        '400':
+          $ref: '#/components/responses/InvalidJson'
+        '413':
+          $ref: '#/components/responses/BodyTooLarge'
+        '422':
+          $ref: '#/components/responses/InvalidCheckout'
+        '504':
+          $ref: '#/components/responses/CheckoutTimeout'
+        '500':
+          $ref: '#/components/responses/InternalError'
 components:
+  headers:
+    TraceId:
+      description: Correlates the response with logs and problem details.
+      schema:
+        type: string
+  responses:
+    InvalidJson:
+      description: The request body is not valid JSON.
+      headers:
+        X-Trace-Id:
+          $ref: '#/components/headers/TraceId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    BodyTooLarge:
+      description: The request body exceeds the configured byte limit.
+      headers:
+        X-Trace-Id:
+          $ref: '#/components/headers/TraceId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    InvalidCheckout:
+      description: The parsed checkout command violates domain rules.
+      headers:
+        X-Trace-Id:
+          $ref: '#/components/headers/TraceId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    CheckoutTimeout:
+      description: Checkout exceeded the adapter deadline.
+      headers:
+        X-Trace-Id:
+          $ref: '#/components/headers/TraceId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    InternalError:
+      description: Checkout failed without exposing internal error details.
+      headers:
+        X-Trace-Id:
+          $ref: '#/components/headers/TraceId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
   schemas:
     Item:
       type: object
@@ -32,8 +96,8 @@ components:
       type: object
       required: [orderId, token, items]
       properties:
-        orderId: { type: string }
-        token: { type: string }
+        orderId: { type: string, minLength: 1 }
+        token: { type: string, minLength: 1 }
         items:
           type: array
           minItems: 1
@@ -47,4 +111,22 @@ components:
         total: { type: integer, minimum: 0 }
         status: { const: CONFIRMED }
         paymentId: { type: string }
-
+    Problem:
+      type: object
+      required: [type, title, status, detail, instance, traceId]
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+        detail:
+          type: string
+        instance:
+          type: string
+        traceId:
+          type: string

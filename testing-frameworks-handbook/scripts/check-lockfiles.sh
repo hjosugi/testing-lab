@@ -15,6 +15,16 @@ require_lock() {
   fi
 }
 
+require_exact_npm_pin() {
+  local package="$1"
+  local version="$2"
+  local manifest="$root/labs/system/package.json"
+  if ! grep -Fq "\"$package\": \"$version\"" "$manifest"; then
+    echo "MISSING  exact $package $version pin in labs/system/package.json" >&2
+    failures=$((failures + 1))
+  fi
+}
+
 require_lock flake.nix flake.lock
 require_lock labs/go/go.mod labs/go/go.sum
 require_lock labs/rust/Cargo.toml labs/rust/Cargo.lock
@@ -77,8 +87,16 @@ if ! grep -Fq '"schemathesis==4.23.0"' "$root/labs/system/api-tests/pyproject.to
   echo "MISSING  exact Schemathesis dependency pin in labs/system/api-tests/pyproject.toml" >&2
   failures=$((failures + 1))
 fi
-if ! grep -Fq '"@pact-foundation/pact": "17.0.1"' "$root/labs/system/package.json"; then
-  echo "MISSING  exact Pact JS dependency pin in labs/system/package.json" >&2
+require_exact_npm_pin "@pact-foundation/pact" "17.0.1"
+require_exact_npm_pin "@storybook/addon-a11y" "10.5.2"
+require_exact_npm_pin "@storybook/addon-vitest" "10.5.2"
+require_exact_npm_pin "@storybook/web-components-vite" "10.5.2"
+require_exact_npm_pin "@vitest/browser-playwright" "4.1.10"
+require_exact_npm_pin "storybook" "10.5.2"
+require_exact_npm_pin "vite" "8.1.5"
+require_exact_npm_pin "vitest" "4.1.10"
+if grep -Fq '"@storybook/test-runner"' "$root/labs/system/package.json"; then
+  echo "DEPRECATED  remove @storybook/test-runner from labs/system/package.json" >&2
   failures=$((failures + 1))
 fi
 if ! grep -Fq 'pkgs.uv' "$root/flake.nix"; then

@@ -19,6 +19,7 @@
 - Mocha parallel mode: https://mochajs.org/#parallel-tests
 - AVA: https://avajs.dev/
 - Playwright Test: https://playwright.dev/docs/test-intro
+- Vitest browser mode: https://vitest.dev/guide/browser/
 - TestCafe architecture: https://testcafe.io/documentation/402631/guides/overview/why-testcafe
 
 確認したnpm version: Node docs 26.5.0、Mocha 11.7.6、AVA 8.0.1、Sinon 22.0.0、TypeScript 7.0.2（2026-07-12 registry）。
@@ -126,9 +127,14 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 - PostgreSQL 18.4 release: https://www.postgresql.org/docs/release/18.4/
 - Storybook testing: https://storybook.js.org/docs/writing-tests
 - Storybook Vitest addon: https://storybook.js.org/docs/writing-tests/integrations/vitest-addon
+- Storybook interaction testing: https://storybook.js.org/docs/writing-tests/interaction-testing
+- Storybook accessibility testing: https://storybook.js.org/docs/writing-tests/accessibility-testing
+- Storybook test-runner migration guide: https://storybook.js.org/docs/writing-tests/integrations/vitest-addon/migration-guide
+- Storybook for Web Components with Vite: https://storybook.js.org/docs/get-started/frameworks/web-components-vite
 - Schemathesis: https://schemathesis.readthedocs.io/
 - Appium 3 architecture: https://appium.io/docs/en/3.5/intro/appium/
 - Testing Library guiding principles: https://testing-library.com/docs/guiding-principles
+- Testing Library query priority: https://testing-library.com/docs/queries/about#priority
 - Playwright best practices: https://playwright.dev/docs/best-practices
 
 ## 研究論文

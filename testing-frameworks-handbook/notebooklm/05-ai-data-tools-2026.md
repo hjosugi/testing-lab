@@ -390,7 +390,7 @@ real serviceの前にdeterministic tool simulatorで次を注入します。
 
 # 2026 tool landscape
 
-確認日: 2026-07-12
+確認日: 2026-07-19
 
 この表は「全部導入する一覧」ではありません。各riskに対して最小のtool setを選ぶための地図です。GitHub topicの更新時刻はactivity signalにすぎず、品質・互換性・security supportを保証しません。
 
@@ -417,7 +417,7 @@ real serviceの前にdeterministic tool simulatorで次を注入します。
 | Tool | Category | Design center |
 |---|---|---|
 | Testing Library | UI test utility | userに近いrole/name/query、implementation detailを避ける |
-| Storybook 10.5 + Vitest addon | component workshop/test | storyをbrowser modeのinteraction/a11y/visual testへ変換 |
+| Storybook 10.5.2 + Vitest addon 10.5.2 | component workshop/test | storyをVitest 4.1.10 browser modeのinteraction/a11y testへ変換 |
 | Playwright 1.61 | browser E2E | browser context、locator、auto-wait、trace、3 engine |
 | Cypress 15.18 | browser/component E2E | in-browser command model、time-travel diagnostics |
 | TestCafe | browser E2E | hybrid native/proxy automation、sandbox、auto-wait |
@@ -426,7 +426,9 @@ real serviceの前にdeterministic tool simulatorで次を注入します。
 | axe-core | accessibility rules | automatically detectable violations、manual testを補完 |
 | visual service/local diff | visual regression | reviewed baseline、render determinism |
 
-Storybookの旧test runnerは、Vite-powered setupではVitest addonへ置き換えることが公式に推奨されています。
+Storybookの旧Jest-based test runnerは、Vite-powered setupではVitest addonへ
+置き換えることが公式に推奨されています。accessibilityをCI gateにするときは
+addonを入れるだけでなく、projectまたはstoryの`a11y.test`を`error`にします。
 
 ## API／integration／service boundary
 

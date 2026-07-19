@@ -16,13 +16,24 @@
     "test:pact": "npm run test:pact:consumer && npm run test:pact:provider",
     "test:pact:consumer": "node --test test/pact/order-consumer.pact.test.js",
     "test:pact:provider": "node --test test/pact/order-provider.pact.test.js",
+    "test:storybook": "vitest run --project=storybook",
     "test:e2e": "playwright test",
+    "storybook": "storybook dev --port 6006 --no-open --disable-telemetry",
+    "build-storybook": "storybook build --quiet --disable-telemetry",
     "verify:browser-lock": "node scripts/verify-browser-lock.js"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",
     "@pact-foundation/pact": "17.0.1",
     "@playwright/test": "1.61.1",
-    "fast-check": "4.9.0"
+    "@storybook/addon-a11y": "10.5.2",
+    "@storybook/addon-vitest": "10.5.2",
+    "@storybook/web-components-vite": "10.5.2",
+    "@vitest/browser-playwright": "4.1.10",
+    "fast-check": "4.9.0",
+    "lit": "3.3.3",
+    "storybook": "10.5.2",
+    "vite": "8.1.5",
+    "vitest": "4.1.10"
   }
 }

@@ -1,9 +1,11 @@
 # System vertical slice lab
 
 1つのcheckout Web applicationへcomponent、real HTTP integration、API
-contract、property、browser E2E、accessibilityの各test layerを当てます。
+contract、property、Storybook browser component、browser E2E、
+accessibilityの各test layerを当てます。
 test名の`[component/in-process]`、`[integration/real-http]`、
-`[contract/real-http]`、`[system/browser-*]`が実際に通る境界を示します。
+`[contract/real-http]`、Storybook project、`[system/browser-*]`が実際に
+通る境界を示します。
 
 ## Quick start
 
@@ -12,6 +14,7 @@ handbook rootからNix shellだけでtoolchainとdependencyを揃えられます
 ```bash
 nix develop .#api --command uv sync --frozen --project labs/system/api-tests
 nix develop .#api --command make test-system-api
+nix develop .#node --command make test-system-storybook
 ```
 
 全labのbootstrapを先に済ませた場合は、system lab内の個別commandも使えます。
@@ -23,7 +26,9 @@ npm run verify:browser-lock
 
 npm test
 npm run test:http-stability
+npm run test:storybook
 npm run test:e2e
+npm run build-storybook
 ```
 
 `npm test`はcomponent、HTTP integration、contract、propertyを順に実行します。
@@ -54,6 +59,7 @@ uvによるPython downloadは無効です。
 | schema property | OpenAPI 3.1からSchemathesisがpositive/negative requestを生成しreal HTTPへ送る | なし | status/content/header/response schema、4xx rejection、5xxなし |
 | stateful API | OpenAPI LinkをたどるPOST→GET→DELETE→GET | in-memory order store | create後の可用性、delete後の非可用性、response schema |
 | property | pureな`totalOf`をgenerated itemsで呼ぶ | なし | valid itemを追加してtotalが減らないinvariant |
+| browser component | Storybook 10.5.2、Vitest browser mode、Playwright Chromium、production Web Component | order clientだけ | state matrix、role/name interaction、addon-a11y violation |
 | browser E2E | application server、Chromium、DOM、fetch、real HTTP | payment/repository port | role経由で観測する`CONFIRMED: 1200` |
 | accessibility | application serverとChromium DOM | payment/repository port | axeが自動検出するviolation集合が空 |
 | CSS token contract | application serverとChromium CSSOM | payment/repository port | typography・layoutの主要declarationが`:root` custom propertiesを参照 |
@@ -62,6 +68,36 @@ component testのfailureはcheckout ruleまたはport orchestrationへ局所化�
 HTTP integrationはそれに加えてwire format、stream lifecycle、timeout、
 client disconnect、body limit、port isolationを検出します。browser testへ同じ
 edge caseを重複させず、user journeyだけを最上位に残します。
+
+## Storybook browser component gate
+
+`checkout-panel.stories.js`はproduction Web Componentを次のstate matrixで
+表示します。CSSはstory専用に複製せず、productionの`checkout.css`を読み込みます。
+
+| Story | Phase | Primary oracle |
+|---|---|---|
+| `Ready` | ready | 購入操作が可能 |
+| `Submitting` | submitting | buttonがdisabledでbusy状態 |
+| `Confirmed` | confirmed | 確定statusとtotal |
+| `Failed` | failed | alert roleと安全なerror message |
+| `InteractiveCheckout` | ready → confirmed | accessible nameでbuttonを操作しstatusを待つ |
+
+```bash
+nix develop .#node --command make test-system-storybook
+```
+
+`@storybook/addon-vitest`はstoryをVitest testへ変換し、
+`@vitest/browser-playwright`のheadless Chromiumで5件を実行します。
+interactionは`getByRole('button', { name: 'Buy two books' })`と
+`getByRole('status')`だけを使い、CSS class、test ID、component instanceへ
+coupleしません。`addon-a11y`の`a11y.test = 'error'`をpreview全体へ設定しているため、
+自動検出されたaccessibility violationは同じCI targetをfailさせます。
+
+旧Jest-based `@storybook/test-runner`は導入しません。Viteを使えるこのlabでは
+公式migration guideが後継として示すVitest addonへ直接移行済みで、
+lock検査もdeprecated packageの再導入を拒否します。Visual regressionは
+reviewed baselineとrender determinismが別途必要なため、このgateのoracleへ
+暗黙に混ぜません。
 
 ## Pact consumer/provider compatibility gate
 
@@ -230,3 +266,7 @@ Playwright browserはNix側の別packageを混ぜず、`package-lock.json`で固
 - [Pact JS provider verification](https://github.com/pact-foundation/pact-js/blob/master/docs/provider.md)
 - [Pending and WIP pacts](https://docs.pact.io/pact_broker/advanced_topics/pending_pacts)
 - [Pact Broker `can-i-deploy`](https://docs.pact.io/pact_broker/can_i_deploy)
+- [Storybook Vitest addon](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon)
+- [Storybook interaction testing](https://storybook.js.org/docs/writing-tests/interaction-testing)
+- [Storybook accessibility testing](https://storybook.js.org/docs/writing-tests/accessibility-testing)
+- [Migrating from the Storybook test-runner](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon/migration-guide)

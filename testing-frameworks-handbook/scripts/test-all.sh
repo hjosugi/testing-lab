@@ -37,6 +37,7 @@ run_test Node npm labs/node npm test
 run_test System npm labs/system npm test
 run_test System-Pact npm labs/system npm run test:pact
 run_test System-API uv labs/system npm run test:api-schema
+run_test System-Storybook npm labs/system npm run test:storybook
 run_test System-HTTP-stability npm labs/system npm run test:http-stability
 run_test Playwright npm labs/system npm run test:e2e
 run_test Advanced npm labs/advanced npm test

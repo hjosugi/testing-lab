@@ -1,16 +1,16 @@
 # Release manifest
 
-生成日: 2026-07-12
+生成日: 2026-07-19
 
 ## 内容
 
-- 32章の解説Markdown（初学者向けから研究・実運用まで）
+- 33章の解説Markdown（初学者向けから研究・実運用まで）
 - 100種類のtest design card
 - 8言語のClassical/London比較ラボ
-- HTTP integration、OpenAPI/Pact contract、property、Playwright/a11yラボ
+- HTTP integration、OpenAPI/Pact contract、property、Storybook/Vitest browser component、Playwright/a11yラボ
 - dependency-free advanced techniqueラボ11件
 - Nix flakeとtoolchain別development shell
-- GitHub Issue本文51件
+- GitHub Issue本文52件
 - test design、strategy、research reproduction、testing policy exception ADR template
 - source/research links、validation report、license
 
@@ -19,6 +19,7 @@
 - `node_modules`、`vendor`
 - `build`、`target`、`.gradle`
 - Playwright report/test results
+- Storybook static build
 - `.pact-artifacts`
 - Python bytecode
 

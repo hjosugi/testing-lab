@@ -9,7 +9,7 @@
 - unit／integration／contract／E2E の責務分担
 - Python、JavaScript／TypeScript、Java／Kotlin、C#、C++、Go、Rust、PHP の言語差
 - Mocha、AVA、Node test runner、pytest、JUnit 6、Truth、NUnit、MSTest/MTP、Catch2、Go `testing`、Rust `cargo test`／`rstest`、PHPUnit／Infection
-- Pact、TestCafe、Playwright、Airtest、EarlGrey、mountebank など専門ツールの位置づけ
+- Pact、Storybook/Vitest browser mode、TestCafe、Playwright、Airtest、EarlGrey、mountebank など専門ツールの位置づけ
 - Nix による再現可能な開発環境
 
 ## 最短ルート
@@ -79,7 +79,7 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 [labs/README.md](labs/README.md) から各ラボに進めます。
 
-`labs/system` には、同じWeb applicationに対するcomponent、real HTTP integration、OpenAPI 3.1 positive/negative/stateful schema test、Pact V4 consumer/provider contract、acceptance、Playwright E2E、accessibilityの縦断例があります。
+`labs/system` には、同じWeb applicationに対するcomponent、real HTTP integration、OpenAPI 3.1 positive/negative/stateful schema test、Pact V4 consumer/provider contract、Storybook/Vitest real-browser component test、Playwright E2E、accessibilityの縦断例があります。
 
 `labs/python`には、in-memory fakeとreal Postgres adapterへ同じcontract suiteを実行し、transaction、locking、constraint、timezone、migration、container lifecycleを分離して検証する例があります。
 

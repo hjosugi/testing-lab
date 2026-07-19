@@ -17,6 +17,7 @@ find "$name" -type f \
   ! -path '*/node_modules/*' \
   ! -path '*/playwright-report/*' \
   ! -path '*/test-results/*' \
+  ! -path '*/storybook-static/*' \
   ! -path '*/.pact-artifacts/*' \
   ! -path '*/build/*' \
   ! -path '*/target/*' \

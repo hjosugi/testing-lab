@@ -10,7 +10,7 @@
 |---|---|---|
 | Flake evaluation | PASS | `x86_64-linux`、`aarch64-linux`、`aarch64-darwin`の全dev shellを`--all-systems --no-build`で評価 |
 | Clean bootstrap | PASS | npm、Gradle、NuGet、Cargo、Composerをcommit済みlockから復元 |
-| Lock coverage | PASS | Nix、npm 3 project、Gradle、NuGet 5 project、Go module/tool、Cargo+proptest、Composer、Catch2/Trompeloeil commit pin |
+| Lock coverage | PASS | Nix、npm 3 project、Gradle、NuGet 5 project、Go module/tool、Cargo+proptest、Composer、PHPUnit 12.5 PHAR hash、Catch2/Trompeloeil commit pin |
 | Playwright lock | PASS | Playwright 1.61.1とChromium revision 1228および実行binaryを照合 |
 | Workflow lint | PASS | `.github/workflows/reproducibility.yml`を`actionlint`で検証 |
 | Hybrid policy links | PASS | ADR/index/template/entrypointを`lychee --offline`で検証、error 0 |
@@ -21,6 +21,7 @@
 | C++ sanitizer matrix | PASS | ASan heap-use-after-free、UBSan signed overflow、TSan data raceを別laneで検出 |
 | Go execution matrix | PASS | 通常/race、parallel 60 executions、fuzz 100 executions、generated drift、benchmark、3 intentional failures |
 | Rust execution matrix | PASS | private unit 2、public integration 6、property 256 cases、trait 1、doctest 2、mutants 7/7 |
+| PHP execution matrix | PASS | PHP 8.4、PHPUnit 12.5.31→13.2.4、high-risk mutants 14/14、equivalent mutant 1 classified |
 | NotebookLM build | PASS | 6 bundleを再生成 |
 
 実行command:
@@ -50,7 +51,7 @@ nix develop --command env STRICT=1 ./scripts/test-all.sh
 | C++ benchmark / compile cost | PASS | 3 noise trials、handwritten spy対Trompeloeil clean build |
 | Go | PASS | `-mod=readonly`、`-race`、goleak、parallel isolation、overflow corpus、GoMock drift、0 alloc benchmark |
 | Rust / rstest / proptest | PASS | unit/integration/doc境界、10 runtime tests、2 doctests、7/7 targeted mutants、fmt/Clippy |
-| PHPUnit | PASS | 3 tests、9 assertions |
+| PHPUnit / Infection | PASS | 10 tests、28 assertions、12.5/13.2 deprecation-free、MSI/covered MSI 100% |
 
 ## CI runtime matrix
 

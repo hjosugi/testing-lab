@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php" cacheDirectory=".phpunit.cache" colors="true">
+<phpunit
+  bootstrap="tests/bootstrap.php"
+  cacheDirectory=".phpunit.cache"
+  colors="true"
+  displayDetailsOnAllIssues="true"
+  failOnAllIssues="true"
+>
   <testsuites>
     <testsuite name="checkout"><directory>tests</directory></testsuite>
   </testsuites>
-  <source><include><directory>src</directory></include></source>
+  <source>
+    <include>
+      <directory>src</directory>
+      <directory>mutation-fixtures</directory>
+    </include>
+  </source>
 </phpunit>
-

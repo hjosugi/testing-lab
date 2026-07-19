@@ -57,6 +57,9 @@ run_test Rust-boundaries cargo labs/rust ./scripts/verify-test-boundaries.sh
 run_test Rust-quality cargo labs/rust ./scripts/verify-quality.sh
 run_test Rust-mutation cargo-mutants labs/rust ./scripts/run-mutation.sh
 run_test PHP composer labs/php composer test
+run_test PHP-migration phpunit-12 labs/php ./scripts/verify-phpunit-migration.sh
+run_test PHP-mutation composer labs/php ./scripts/run-mutation.sh
+run_test PHP-equivalent composer labs/php ./scripts/verify-equivalent-mutant.sh
 
 echo "summary: failures=$failures skips=$skips"
 if (( failures > 0 )); then exit 1; fi

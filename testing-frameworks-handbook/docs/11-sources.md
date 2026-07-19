@@ -71,8 +71,12 @@ NUnit 4.6.0は2026-05-04公開。MTP資料は2026-04-27更新。
 ## PHP
 
 - PHPUnit 13 announcement: https://phpunit.de/announcements/phpunit-13.html
+- PHPUnit 13.2 announcement: https://phpunit.de/announcements/phpunit-13.2.html
+- PHPUnit 12.5 manual: https://docs.phpunit.de/en/12.5/
 - supported versions: https://phpunit.de/supported-versions.html
 - Infection guide: https://infection.github.io/guide/
+- Infection metrics: https://infection.github.io/guide/#Metrics
+- Infection command-line options: https://infection.github.io/guide/command-line-options.html
 
 PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開。InfectionはPHP 8.3以上。
 

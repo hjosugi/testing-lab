@@ -53,7 +53,8 @@ bundle 04-integration-e2e-operations.md \
   "観点4 integration・E2E・運用" \
   docs/20-integration-testing-deep-dive.md docs/21-e2e-and-acceptance-deep-dive.md \
   docs/22-performance-security-resilience.md docs/24-ci-flakiness-economics.md \
-  docs/09-production-strategy.md docs/28-case-study-commerce.md
+  docs/09-production-strategy.md docs/28-case-study-commerce.md \
+  docs/32-mobile-desktop-game-device-matrix.md
 
 bundle 05-ai-data-tools-2026.md \
   "観点5 AI・データ・2026ツール地図" \

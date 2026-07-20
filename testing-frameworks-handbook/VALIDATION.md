@@ -29,6 +29,7 @@
 | System OpenAPI schema | PASS | OpenAPI 3.1、corpus 5、positive/negative 109、stateful 100+、API Links 5/5、fault oracle 3/3 |
 | System Storybook component | PASS | Storybook 10.5.2、Vitest browser mode、real Chromium、state matrix 5、role/name interaction、既知のimage-alt defectをaddon-a11yが5/5でreject |
 | System Playwright E2E | PASS | success/failure 2 journeys × Chromium/Firefox/WebKit、2 shards、100 repeats、600 attempts、first-attempt failure 0、retry 0 |
+| Device matrix contract | PASS | 1764 Cartesian cellsからrisk-based 12 cellsを選択。9 tool、4 substrate、6 owned/reserved hardware scenarios、artifact/video/device logを検証 |
 | NotebookLM build | PASS | 6 bundleを再生成 |
 
 実行command:
@@ -41,6 +42,7 @@ nix develop --command env STRICT=1 ./scripts/test-all.sh
 nix develop .#node --command make test-system-pact
 nix develop .#node --command make test-system-storybook
 nix develop .#node --command make test-system-e2e-stability
+nix develop --command make verify-device-matrix
 nix develop .#python --command make test-python-postgres
 ```
 
@@ -58,6 +60,7 @@ nix develop .#python --command make test-python-postgres
 | System OpenAPI / Schemathesis | PASS | seed 20260719、109 generated + 100+ stateful cases、5/5 links、保存corpus 5、5xx/schema/unexpected-field oracle |
 | Storybook/Vitest browser component | PASS | 5 stories、real Chromium、role/name interaction、addon-a11y、image-alt mutation 5/5 failed as expected |
 | Playwright E2E / stability | PASS | 2 journeys × 3 browsers = 6 tests、100-repeat 2-shard gateは600 attempts、flake 0。accessibilityはStorybook、CSS tokenはsource component testが担当 |
+| Mobile/device matrix validator | PASS | WebDriver/gray-box/image/hierarchy分類、simulator/emulator/real-device/HIL、dimension coverage、hardware owner/予約/artifact contract |
 | Advanced techniques | PASS | 11 tests |
 | JUnit / Mockito / Truth | PASS | 13 tests、Jupiter 6.1.1 present、Vintage absent |
 | NUnit 4 | PASS | 6 tests、MTP 2.1.0 / VSTest、cancel・async failure |

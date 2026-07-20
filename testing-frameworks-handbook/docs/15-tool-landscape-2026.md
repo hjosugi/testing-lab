@@ -88,6 +88,12 @@ OpenAPI 3.1のschema探索はSchemathesis、design-first mock/proxyはPrism、
 | Airtest/Poco | game/native UI | image recognition + engine hierarchy inspection |
 | SoloPi/HydraLab/device farm | mobile automation/platform | device orchestration/recording/cloud execution |
 
+WebDriver、native UI、gray-box、in-app hooks、hierarchy inspection、image
+recognitionはautomation mechanismです。simulator、emulator、real device、HILは
+execution substrateであり、同じ比較軸ではありません。surface別decision、
+risk-based 12-cell reference plan、artifact/owner/予約contractは
+[device matrix設計](32-mobile-desktop-game-device-matrix.md)にまとめています。
+
 ## .NET／JVM／native language
 
 | Ecosystem | Default | Complement |

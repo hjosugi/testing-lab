@@ -135,6 +135,15 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 - Appium 3 architecture: https://appium.io/docs/en/3.5/intro/appium/
 - Testing Library guiding principles: https://testing-library.com/docs/guiding-principles
 - Testing Library query priority: https://testing-library.com/docs/queries/about#priority
+- Playwright browsers: https://playwright.dev/docs/browsers
+- Playwright projects: https://playwright.dev/docs/api/class-testproject
+- Playwright browser-context isolation: https://playwright.dev/docs/browser-contexts
+- Playwright auto-retrying assertions: https://playwright.dev/docs/test-assertions
+- Playwright retries: https://playwright.dev/docs/test-retries
+- Playwright sharding: https://playwright.dev/docs/test-sharding
+- Playwright trace and screenshot options: https://playwright.dev/docs/test-use-options
+- Playwright video options: https://playwright.dev/docs/videos
+- Playwright custom reporter API: https://playwright.dev/docs/api/class-reporter
 - Playwright best practices: https://playwright.dev/docs/best-practices
 
 ## 研究論文

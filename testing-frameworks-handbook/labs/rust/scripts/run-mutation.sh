@@ -4,13 +4,15 @@ set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 output_parent="$root/build/mutation"
 outcomes="$output_parent/mutants.out/outcomes.json"
+cache_home="${XDG_CACHE_HOME:-$HOME/.cache}"
+tmp_root="${CARGO_MUTANTS_TMPDIR:-$cache_home/testing-frameworks-handbook/cargo-mutants}"
 
-mkdir -p "$root/build"
+mkdir -p "$root/build" "$tmp_root"
 rm -rf "$output_parent"
 
 (
   cd "$root"
-  cargo mutants \
+  TMPDIR="$tmp_root" cargo mutants \
     --file src/lib.rs \
     --re '(checked_subtotal|replace total)' \
     --cargo-arg=--locked \

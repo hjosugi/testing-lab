@@ -187,6 +187,15 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 - Appium 3 architecture: https://appium.io/docs/en/3.5/intro/appium/
 - Testing Library guiding principles: https://testing-library.com/docs/guiding-principles
 - Testing Library query priority: https://testing-library.com/docs/queries/about#priority
+- Playwright browsers: https://playwright.dev/docs/browsers
+- Playwright projects: https://playwright.dev/docs/api/class-testproject
+- Playwright browser-context isolation: https://playwright.dev/docs/browser-contexts
+- Playwright auto-retrying assertions: https://playwright.dev/docs/test-assertions
+- Playwright retries: https://playwright.dev/docs/test-retries
+- Playwright sharding: https://playwright.dev/docs/test-sharding
+- Playwright trace and screenshot options: https://playwright.dev/docs/test-use-options
+- Playwright video options: https://playwright.dev/docs/videos
+- Playwright custom reporter API: https://playwright.dev/docs/api/class-reporter
 - Playwright best practices: https://playwright.dev/docs/best-practices
 
 ## 研究論文
@@ -217,7 +226,7 @@ handbook directory内では短い形も使えます。
 make bootstrap-locked
 ```
 
-bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、NuGet locked restore、Cargo `--locked`、Composer installを使います。Playwrightはlockされたnpm package自身からChromiumを取得し、versionとrevisionを検証します。`STRICT=1`ではtoolchain不足をskipせず失敗にします。
+bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、NuGet locked restore、Cargo `--locked`、Composer installを使います。PlaywrightのChromium、Firefox、WebKitはpinned nixpkgsから供給し、npm package、Nix driver、browser revisionを照合します。`STRICT=1`ではtoolchain不足をskipせず失敗にします。
 
 ## Lock inventory
 
@@ -226,7 +235,7 @@ bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、
 | Nix/toolchain | `flake.lock` | `nix flake check --all-systems --no-build` |
 | Node/Mocha/AVA | `labs/node/package-lock.json` | `npm ci` |
 | Node advanced | `labs/advanced/package-lock.json` | `npm ci` |
-| Pact/Storybook/Vitest/Playwright/system | `labs/system/package-lock.json` | `npm ci` + Pact 17.0.1 provider verification + Storybook 10.5.2/Vitest 4.1.10 browser test + `verify:browser-lock` |
+| Pact/Storybook/Vitest/Playwright/system | `labs/system/package-lock.json` + `flake.lock`のPlaywright driver/browser | `npm ci` + Pact 17.0.1 provider verification + Storybook 10.5.2/Vitest 4.1.10 browser test + 3-engine E2E + `verify:browser-lock` |
 | OpenAPI/Schemathesis | `labs/system/api-tests/uv.lock` | NixのPython 3.13/uv + `uv sync --frozen`、Schemathesis 4.23.0 |
 | JVM | `labs/java/gradle.lockfile` | Gradle dependency locking |
 | .NET | 各projectの`packages.lock.json` + `global.json` | `dotnet restore --locked-mode` |
@@ -236,7 +245,7 @@ bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、
 | Go | `labs/go/go.mod` + `go.sum`、mockgen tool directive | `go mod download`、`-mod=readonly`、generated mock drift check |
 | Python/Postgres | dependencyはNix、containerはdigestで固定 | pytest、Hypothesis、Psycopg 3.3.4、Testcontainers 4.14.2、Docker CLIをNixから供給し、Postgres/Ryuk image pinを検査 |
 
-`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digest、Schemathesis/Pact/Storybook/Vitest/Viteのexact pin、deprecated Storybook test-runnerの再導入、Nixのuvの欠落を検出します。
+`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digest、Schemathesis/Pact/Playwright/Storybook/Vitest/Viteのexact pin、deprecated Storybook test-runnerやE2E用axe重複dependencyの再導入、Nixのuvの欠落を検出します。
 
 ## CI matrix
 
@@ -298,8 +307,8 @@ Brokerを使うbranch/pending/WIP/deploy policyは
 
 同じ`node` shellと`labs/system/package-lock.json`からStorybook 10.5.2、
 Vitest 4.1.10、Vite 8.1.5、Web Components renderer、accessibility addonを
-復元します。bootstrapが取得・照合するPlaywright ChromiumをVitest browser
-providerでも使うため、system browserやglobal packageは不要です。
+復元します。Nixが供給して`verify:browser-lock`で照合するPlaywright Chromiumを
+Vitest browser providerでも使うため、system browserやglobal packageは不要です。
 
 ```bash
 nix develop .#node --command make test-system-storybook
@@ -309,18 +318,29 @@ nix develop .#node --command make test-system-storybook
 headless Chromiumで実行します。Storybookのproduction bundleも確認するときは
 同じshellで`npm --prefix labs/system run build-storybook`を実行します。
 
-## Playwright browserの固定
+## Playwright 3 browserのNix固定
 
-`@playwright/test`、`playwright`、`playwright-core`は`package-lock.json`で同じversionへ固定します。
+`@playwright/test`、`playwright`、`playwright-core`は
+`package-lock.json`で1.61.1へ固定します。Nix側も同じversionの
+`playwright-driver.browsers`を使い、shellが
+`PLAYWRIGHT_BROWSERS_PATH`と`PLAYWRIGHT_NIX_DRIVER_VERSION`を設定します。
 
 ```bash
-cd labs/system
-npm ci
-npm exec -- playwright install chromium
-npm run verify:browser-lock
+nix develop .#node --command bash -lc \
+  'cd labs/system && npm ci && npm run verify:browser-lock && npm run test:e2e'
+nix develop .#node --command make test-system-e2e-stability
 ```
 
-`verify:browser-lock`は3 packageのversion、`playwright-core/browsers.json`のChromium revision、download済み実行binaryを照合します。別versionのNix browser packageやsystem browserへ暗黙fallbackしません。
+`verify:browser-lock`はnpm 3 packageとNix driverのversionが一致すること、
+`playwright-core/browsers.json`のChromium 1228、Firefox 1532、
+WebKit 2311、およびNix store内の各実行binaryを照合します。system browserや
+別versionへの暗黙fallbackはありません。Linux shellはNixのMesa EGL vendor、
+DRI driver、software renderingも固定するため、WebKit/WPEをhost GPU packageに
+依存させません。
+
+Nixを使わずに`./scripts/bootstrap.sh`を直接実行した場合だけ、
+`playwright install chromium firefox webkit`を同じnpm lockから実行します。
+Nix shell内ではbrowser downloadを行いません。
 
 ## Lockとtoolchainの更新手順
 
@@ -353,7 +373,10 @@ nix develop .#dotnet --command dotnet restore labs/dotnet/tests/NUnitVSTestTests
 nix develop .#dotnet --command dotnet restore labs/dotnet/tests/MSTestVSTestTests/MSTestVSTestTests.csproj --force-evaluate -p:RestoreLockedMode=false
 ```
 
-Playwrightを更新した場合はbrowserも再取得して`verify:browser-lock`を実行します。CMake fallbackを更新するときはrelease tagではなく、そのtagが指す40桁commit SHAを記録します。
+Playwrightを更新する場合はnpm exact pinと、同じversion/revisionを持つ
+`playwright-driver.browsers`を同時に更新して`verify:browser-lock`を実行します。
+CMake fallbackを更新するときはrelease tagではなく、そのtagが指す40桁commit
+SHAを記録します。
 
 更新後のgate:
 
@@ -396,7 +419,7 @@ nix develop .#php
 Nix shellだけでは次を固定しません。
 
 - remote test serviceのbehavior
-- browser binaryを別downloadするtool
+- managed browser/device serviceのruntime image
 - Docker image tagがmutableな場合
 - timezone/locale/CPU scheduling
 - npm/Maven/NuGet/Composer/Cargo dependency（各lockfileで固定）
@@ -824,18 +847,17 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] checkout success/failureの2 journeyを追加
-- [ ] Chromium/Firefox/WebKit matrix
-- [ ] per-test contextとtest data isolation
-- [ ] trace/video/screenshotをfailure時だけ保存
-- [ ] sleepを除去しweb-first assertionを使用
-- [ ] retry前failureをflake metricへ送る
+- [x] checkout success/failureの2 journeyを追加
+- [x] Chromium/Firefox/WebKit matrix
+- [x] per-test contextとtest data isolation
+- [x] trace/video/screenshotをfailure時だけ保存
+- [x] sleepを除去しweb-first assertionを使用
+- [x] retry前failureをflake metricへ送る
 
 ## Acceptance criteria
 
-- [ ] 100回shard実行でflake 0
-- [ ] 下位層で検出できる重複assertionを削除
-
+- [x] 100回shard実行でflake 0
+- [x] 下位層で検出できる重複assertionを削除
 
 ---
 

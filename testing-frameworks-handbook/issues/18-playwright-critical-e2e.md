@@ -3,15 +3,14 @@
 
 ## Tasks
 
-- [ ] checkout success/failureの2 journeyを追加
-- [ ] Chromium/Firefox/WebKit matrix
-- [ ] per-test contextとtest data isolation
-- [ ] trace/video/screenshotをfailure時だけ保存
-- [ ] sleepを除去しweb-first assertionを使用
-- [ ] retry前failureをflake metricへ送る
+- [x] checkout success/failureの2 journeyを追加
+- [x] Chromium/Firefox/WebKit matrix
+- [x] per-test contextとtest data isolation
+- [x] trace/video/screenshotをfailure時だけ保存
+- [x] sleepを除去しweb-first assertionを使用
+- [x] retry前failureをflake metricへ送る
 
 ## Acceptance criteria
 
-- [ ] 100回shard実行でflake 0
-- [ ] 下位層で検出できる重複assertionを削除
-
+- [x] 100回shard実行でflake 0
+- [x] 下位層で検出できる重複assertionを削除

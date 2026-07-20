@@ -88,6 +88,7 @@ if ! grep -Fq '"schemathesis==4.23.0"' "$root/labs/system/api-tests/pyproject.to
   failures=$((failures + 1))
 fi
 require_exact_npm_pin "@pact-foundation/pact" "17.0.1"
+require_exact_npm_pin "@playwright/test" "1.61.1"
 require_exact_npm_pin "@storybook/addon-a11y" "10.5.2"
 require_exact_npm_pin "@storybook/addon-vitest" "10.5.2"
 require_exact_npm_pin "@storybook/web-components-vite" "10.5.2"
@@ -97,6 +98,10 @@ require_exact_npm_pin "vite" "8.1.5"
 require_exact_npm_pin "vitest" "4.1.10"
 if grep -Fq '"@storybook/test-runner"' "$root/labs/system/package.json"; then
   echo "DEPRECATED  remove @storybook/test-runner from labs/system/package.json" >&2
+  failures=$((failures + 1))
+fi
+if grep -Fq '"@axe-core/playwright"' "$root/labs/system/package.json"; then
+  echo "DUPLICATE  keep automated accessibility in the Storybook component gate" >&2
   failures=$((failures + 1))
 fi
 if ! grep -Fq 'pkgs.uv' "$root/flake.nix"; then

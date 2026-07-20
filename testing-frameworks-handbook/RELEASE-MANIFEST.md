@@ -7,7 +7,7 @@
 - 33章の解説Markdown（初学者向けから研究・実運用まで）
 - 100種類のtest design card
 - 8言語のClassical/London比較ラボ
-- HTTP integration、OpenAPI/Pact contract、property、Storybook/Vitest browser component、Playwright/a11yラボ
+- HTTP integration、OpenAPI/Pact contract、property、Storybook/Vitest browser component/a11y、Playwright 3-engine critical journey/flakeラボ
 - dependency-free advanced techniqueラボ11件
 - Nix flakeとtoolchain別development shell
 - GitHub Issue本文52件

@@ -5,6 +5,7 @@ import { listen } from '../helpers.js';
 
 const ASSETS = [
   ['/assets/checkout.css', 'text/css; charset=utf-8'],
+  ['/assets/checkout-command.js', 'text/javascript; charset=utf-8'],
   ['/assets/checkout-panel.js', 'text/javascript; charset=utf-8'],
   ['/assets/order-client.js', 'text/javascript; charset=utf-8'],
 ];

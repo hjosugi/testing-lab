@@ -7,16 +7,27 @@
     let
       systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f (import nixpkgs { inherit system; }));
-      mkShell = pkgs: packages: pkgs.mkShell {
+      mkShellWithHook = pkgs: packages: extraShellHook: pkgs.mkShell {
         inherit packages;
         shellHook = ''
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
           export TZ=UTC
           export UV_PYTHON_DOWNLOADS=never
+          ${extraShellHook}
           echo "Testing handbook shell: $(basename $PWD)"
         '';
       };
+      mkShell = pkgs: packages: mkShellWithHook pkgs packages "";
+      mkBrowserShell = pkgs: packages: mkShellWithHook pkgs packages ''
+        export PLAYWRIGHT_BROWSERS_PATH="${pkgs.playwright-driver.browsers}"
+        export PLAYWRIGHT_NIX_DRIVER_VERSION="${pkgs.playwright-driver.version}"
+        ${pkgs.lib.optionalString pkgs.stdenv.isLinux ''
+          export __EGL_VENDOR_LIBRARY_DIRS="${pkgs.mesa}/share/glvnd/egl_vendor.d"
+          export LIBGL_DRIVERS_PATH="${pkgs.mesa}/lib/dri"
+          export LIBGL_ALWAYS_SOFTWARE=1
+        ''}
+      '';
     in {
       devShells = forAllSystems (pkgs:
         let
@@ -31,6 +42,8 @@
           ];
           containerPkgs = [ pkgs.docker-client ];
           nodePkgs = [ pkgs.nodejs_24 ];
+          browserPkgs = [ pkgs.playwright-driver.browsers ]
+            ++ pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.mesa ];
           jvmPkgs = [ pkgs.jdk21 pkgs.gradle ];
           dotnetPkgs = [ pkgs.dotnet-sdk_10 ];
           cppPkgs = [ pkgs.clang pkgs.cmake pkgs.ninja pkgs.catch2_3 pkgs.trompeloeil pkgs.llvmPackages.llvm ];
@@ -57,10 +70,10 @@
           commonPkgs = [ pkgs.git pkgs.gnumake pkgs.jq pkgs.zip pkgs.unzip ];
           apiPkgs = [ pkgs.python313 pkgs.uv ] ++ nodePkgs;
         in {
-          default = mkShell pkgs (commonPkgs ++ containerPkgs ++ pythonPkgs ++ nodePkgs ++ [ pkgs.uv ] ++ jvmPkgs ++ dotnetPkgs ++ cppPkgs ++ goPkgs ++ rustPkgs ++ phpPkgs);
+          default = mkBrowserShell pkgs (commonPkgs ++ containerPkgs ++ pythonPkgs ++ nodePkgs ++ browserPkgs ++ [ pkgs.uv ] ++ jvmPkgs ++ dotnetPkgs ++ cppPkgs ++ goPkgs ++ rustPkgs ++ phpPkgs);
           api = mkShell pkgs (commonPkgs ++ apiPkgs);
           python = mkShell pkgs (commonPkgs ++ containerPkgs ++ pythonPkgs);
-          node = mkShell pkgs (commonPkgs ++ nodePkgs);
+          node = mkBrowserShell pkgs (commonPkgs ++ nodePkgs ++ browserPkgs);
           jvm = mkShell pkgs (commonPkgs ++ jvmPkgs);
           dotnet = mkShell pkgs (commonPkgs ++ dotnetPkgs);
           cpp = mkShell pkgs (commonPkgs ++ cppPkgs);

@@ -11,7 +11,7 @@
 | Flake evaluation | PASS | `x86_64-linux`、`aarch64-linux`、`aarch64-darwin`の全dev shellを`--all-systems --no-build`で評価 |
 | Clean bootstrap | PASS | npm、Gradle、NuGet、Cargo、Composerをcommit済みlockから復元 |
 | Lock coverage | PASS | Nix、npm 3 project、Pact JS 17.0.1、Storybook 10.5.2/Vitest 4.1.10/Vite 8.1.5、Schemathesis 4.23.0 + uv.lock、Gradle、NuGet 5 project、Go module/tool、Cargo+proptest、Composer、PHPUnit PHAR、C++ commit pin、Psycopg/Testcontainers exact version、Postgres/Ryuk digest |
-| Playwright lock | PASS | Playwright 1.61.1とChromium revision 1228および実行binaryを照合 |
+| Playwright lock | PASS | npm/Nix Playwright 1.61.1、Chromium 1228、Firefox 1532、WebKit 2311と各Nix store実行binaryを照合 |
 | Workflow lint | PASS | `.github/workflows/reproducibility.yml`を`actionlint`で検証 |
 | Hybrid policy links | PASS | ADR/index/template/entrypointを`lychee --offline`で検証、error 0 |
 | Python parallel / mutation | PASS | pytest-xdist `-n 2`、targeted mutants 6/6 killed |
@@ -24,10 +24,11 @@
 | Go execution matrix | PASS | 通常/race、parallel 60 executions、fuzz 100 executions、generated drift、benchmark、3 intentional failures |
 | Rust execution matrix | PASS | private unit 2、public integration 6、property 256 cases、trait 1、doctest 2、mutants 7/7 |
 | PHP execution matrix | PASS | PHP 8.4、PHPUnit 12.5.31→13.2.4、high-risk mutants 14/14、equivalent mutant 1 classified |
-| System HTTP vertical slice | PASS | component 4、real HTTP integration 8、contract 2、property 1、HTTP integration 100/100連続green |
+| System HTTP vertical slice | PASS | component/source contract 8、real HTTP integration 8、contract 2、property 1、HTTP integration 100/100連続green |
 | System Pact contract | PASS | Pact V4 consumer 1、provider verification 3、provider state、breaking change検出、追加field互換 |
 | System OpenAPI schema | PASS | OpenAPI 3.1、corpus 5、positive/negative 109、stateful 100+、API Links 5/5、fault oracle 3/3 |
 | System Storybook component | PASS | Storybook 10.5.2、Vitest browser mode、real Chromium、state matrix 5、role/name interaction、既知のimage-alt defectをaddon-a11yが5/5でreject |
+| System Playwright E2E | PASS | success/failure 2 journeys × Chromium/Firefox/WebKit、2 shards、100 repeats、600 attempts、first-attempt failure 0、retry 0 |
 | NotebookLM build | PASS | 6 bundleを再生成 |
 
 実行command:
@@ -39,6 +40,7 @@ nix develop --command ./scripts/check-lockfiles.sh
 nix develop --command env STRICT=1 ./scripts/test-all.sh
 nix develop .#node --command make test-system-pact
 nix develop .#node --command make test-system-storybook
+nix develop .#node --command make test-system-e2e-stability
 nix develop .#python --command make test-python-postgres
 ```
 
@@ -51,11 +53,11 @@ nix develop .#python --command make test-python-postgres
 | pytest | PASS | 34 tests、branch coverage 100% |
 | pytest / real Postgres | PASS | Testcontainers 4.14.2、Postgres 18.4、9 tests、leak 0 |
 | Node built-in / module mock / Mocha / AVA | PASS | 6 + 1 + 5 + 2 tests |
-| System component / HTTP integration / contract / property | PASS | 4 + 8 + 2 + 1 tests、HTTP integration suite 100回連続green |
+| System component/source contract / HTTP integration / contract / property | PASS | 8 + 8 + 2 + 1 tests、HTTP integration suite 100回連続green |
 | System Pact consumer/provider | PASS | consumer 1 + provider 3 tests、Pact V4、minimal matcher、explicit provider state、breaking/compatible change oracle |
 | System OpenAPI / Schemathesis | PASS | seed 20260719、109 generated + 100+ stateful cases、5/5 links、保存corpus 5、5xx/schema/unexpected-field oracle |
 | Storybook/Vitest browser component | PASS | 5 stories、real Chromium、role/name interaction、addon-a11y、image-alt mutation 5/5 failed as expected |
-| Playwright E2E / accessibility / CSS tokens | PASS | 3 browser tests |
+| Playwright E2E / stability | PASS | 2 journeys × 3 browsers = 6 tests、100-repeat 2-shard gateは600 attempts、flake 0。accessibilityはStorybook、CSS tokenはsource component testが担当 |
 | Advanced techniques | PASS | 11 tests |
 | JUnit / Mockito / Truth | PASS | 13 tests、Jupiter 6.1.1 present、Vintage absent |
 | NUnit 4 | PASS | 6 tests、MTP 2.1.0 / VSTest、cancel・async failure |

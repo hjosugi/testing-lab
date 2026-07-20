@@ -40,6 +40,7 @@ run_test System-API uv labs/system npm run test:api-schema
 run_test System-Storybook npm labs/system npm run test:storybook
 run_test System-HTTP-stability npm labs/system npm run test:http-stability
 run_test Playwright npm labs/system npm run test:e2e
+run_test Playwright-stability npm labs/system npm run test:e2e:stability
 run_test Advanced npm labs/advanced npm test
 run_test Java gradle labs/java gradle test --no-daemon
 run_test NUnit dotnet labs/dotnet dotnet test --project tests/NUnitTests/NUnitTests.csproj

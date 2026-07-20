@@ -79,7 +79,7 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 [labs/README.md](labs/README.md) から各ラボに進めます。
 
-`labs/system` には、同じWeb applicationに対するcomponent、real HTTP integration、OpenAPI 3.1 positive/negative/stateful schema test、Pact V4 consumer/provider contract、Storybook/Vitest real-browser component test、Playwright E2E、accessibilityの縦断例があります。
+`labs/system` には、同じWeb applicationに対するcomponent、real HTTP integration、OpenAPI 3.1 positive/negative/stateful schema test、Pact V4 consumer/provider contract、Storybook/Vitest real-browser component/accessibility test、PlaywrightのChromium/Firefox/WebKit critical journeyとflake gateの縦断例があります。
 
 `labs/python`には、in-memory fakeとreal Postgres adapterへ同じcontract suiteを実行し、transaction、locking、constraint、timezone、migration、container lifecycleを分離して検証する例があります。
 

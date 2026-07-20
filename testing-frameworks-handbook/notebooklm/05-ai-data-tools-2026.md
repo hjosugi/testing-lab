@@ -418,7 +418,7 @@ real serviceの前にdeterministic tool simulatorで次を注入します。
 |---|---|---|
 | Testing Library | UI test utility | userに近いrole/name/query、implementation detailを避ける |
 | Storybook 10.5.2 + Vitest addon 10.5.2 | component workshop/test | storyをVitest 4.1.10 browser modeのinteraction/a11y testへ変換 |
-| Playwright 1.61 | browser E2E | browser context、locator、auto-wait、trace、3 engine |
+| Playwright 1.61.1 | browser E2E | per-test context、role locator、web-first assertion、failure-only artifact、sharding、Chromium/Firefox/WebKit |
 | Cypress 15.18 | browser/component E2E | in-browser command model、time-travel diagnostics |
 | TestCafe | browser E2E | hybrid native/proxy automation、sandbox、auto-wait |
 | Puppeteer | browser automation library | Chrome/Firefox automation primitive、runnerは別途 |
@@ -429,6 +429,11 @@ real serviceの前にdeterministic tool simulatorで次を注入します。
 Storybookの旧Jest-based test runnerは、Vite-powered setupではVitest addonへ
 置き換えることが公式に推奨されています。accessibilityをCI gateにするときは
 addonを入れるだけでなく、projectまたはstoryの`a11y.test`を`error`にします。
+system labのPlaywright gateはsuccess/failureの2 journeyだけを3 engineで実行し、
+retry前failureをcustom reporterで数えます。100-repeatを2 shardへ分けた
+600 attemptsでは、retryで回復してもflake 0とは扱いません。component stateと
+accessibilityはStorybook、CSS token参照はsource component testへ置き、
+下位層のassertionをE2Eへ複製しません。
 
 ## API／integration／service boundary
 

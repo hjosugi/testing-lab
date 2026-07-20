@@ -69,9 +69,11 @@
           phpPkgs = [ phpWithPcov composerWithPcov phpunit12 ];
           commonPkgs = [ pkgs.git pkgs.gnumake pkgs.jq pkgs.zip pkgs.unzip ];
           apiPkgs = [ pkgs.python313 pkgs.uv ] ++ nodePkgs;
+          generativePkgs = nodePkgs ++ goPkgs;
         in {
           default = mkBrowserShell pkgs (commonPkgs ++ containerPkgs ++ pythonPkgs ++ nodePkgs ++ browserPkgs ++ [ pkgs.uv ] ++ jvmPkgs ++ dotnetPkgs ++ cppPkgs ++ goPkgs ++ rustPkgs ++ phpPkgs);
           api = mkShell pkgs (commonPkgs ++ apiPkgs);
+          generative = mkShell pkgs (commonPkgs ++ generativePkgs);
           python = mkShell pkgs (commonPkgs ++ containerPkgs ++ pythonPkgs);
           node = mkBrowserShell pkgs (commonPkgs ++ nodePkgs ++ browserPkgs);
           jvm = mkShell pkgs (commonPkgs ++ jvmPkgs);

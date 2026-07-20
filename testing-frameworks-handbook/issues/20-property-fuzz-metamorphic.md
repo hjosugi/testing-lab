@@ -3,14 +3,13 @@
 
 ## Tasks
 
-- [ ] domain invariantを5件定義
-- [ ] generator distributionとshrinkerをreview
-- [ ] parser/APIへcoverage-guided fuzz
-- [ ] oracleが難しい機能へmetamorphic relation
-- [ ]旧版/別実装とのdifferential test
-- [ ] seeds/counterexamplesをregression corpusへ保存
+- [x] domain invariantを5件定義
+- [x] generator distributionとshrinkerをreview
+- [x] parser/APIへcoverage-guided fuzz
+- [x] oracleが難しい機能へmetamorphic relation
+- [x] 旧版/別実装とのdifferential test
+- [x] seeds/counterexamplesをregression corpusへ保存
 
 ## Acceptance criteria
 
-- [ ] example testでは見つからない1 defectを発見またはsynthetic defectで実証
-
+- [x] example testでは見つからない1 defectを発見またはsynthetic defectで実証

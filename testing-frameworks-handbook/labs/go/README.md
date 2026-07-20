@@ -41,17 +41,19 @@ go test -mod=readonly -race ./...
 
 race detectorは実行されたpathだけを観測します。greenでもrace absenceの証明ではないため、共有stateを触るparallel pathを意図して実行することが前提です。
 
-## Fuzz corpusとoverflow regression
+## Coverage-guided fuzzとregression corpus
 
 `FuzzTotal`はquantityとunit priceを生成し、安全な積ならexact total、`int`をoverflowする積なら`ErrTotalOverflow`をoracleにします。
 
 `testdata/fuzz/FuzzTotal/overflow-regression`には、以前のunchecked multiplicationを壊した`MaxInt64 × 2`を保存しています。通常の`go test`でもseed corpusは実行されるため、発見済みfailureは一時的なfuzz cacheではなく永続regressionになります。
 
+`FuzzParseItemLine`はraw stringを`sku|quantity|unit-price` parserへ直接渡します。accepted inputにはformat/parse round trip、`Total`とのdifferential result、error分類を要求します。`testdata/fuzz/FuzzParseItemLine/multi-digit-quantity`は、quantity 1/2だけのexampleでは見えないmulti-digit境界を固定します。
+
 ```bash
 ./scripts/run-fuzz.sh
 ```
 
-scriptは最初にcommitted seedをexact nameで再生し、その後1 worker、100 executionsのbounded campaignを実行します。短いCI campaignは回帰確認用であり、長時間continuous fuzzingの代替ではありません。
+scriptは2件のcommitted counterexampleをexact nameで再生し、`FuzzTotal`と`FuzzParseItemLine`をそれぞれ1 worker、`-fuzztime=100x`のbudgetで実行します。baseline corpusを含む表示execution数はtargetごとに異なります。短いCI campaignは回帰確認用であり、長時間continuous fuzzingの代替ではありません。
 
 ## Consumer-owned interfaceとgenerated mock
 

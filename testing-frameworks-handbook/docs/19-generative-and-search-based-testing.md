@@ -96,6 +96,8 @@ shrunk: Deposit(1), Withdraw(1), Withdraw(1)
 
 custom generatorにはsemantic shrinkerが必要な場合があります。単純にlistを短くすると前提条件を壊すことがあります。
 
+reviewでは「最初のfailureが小さいか」ではなく、固定seedで同じfailureを再生でき、shrinkerがdomain上の最小境界へ進み、最小inputだけを通常testで再生できるかを確認します。generatorのsample分布も固定seedで監査し、edge caseへ偏らせた意図とordinary caseを探索する余地の両方を数値化します。
+
 ### Stateful property testing
 
 command generatorとmodel stateを使います。
@@ -120,6 +122,8 @@ grammar/schema/protocolからvalid/invalid inputを生成します。
 ### Coverage-guided fuzzing
 
 new branch/pathへ到達したinputをcorpusへ残します。
+
+coverage feedbackは「新しいcode pathへ届いた」ことを示し、正しい結果を示しません。accepted parser inputにはround tripとsemantic/differential oracleを追加し、invalid inputにはpanicしないことと分類済みerrorを要求します。
 
 ### Stateful/protocol fuzzing
 
@@ -204,6 +208,8 @@ exact answerが作れない場合に、input transformationとoutput relationを
 - diagnostic wording
 
 normalizeしすぎるとmeaningful differenceを消します。
+
+Checkoutの実行例では、optimized totalを独立したrepeated-addition modelと比較します。normalizationはtimestamp等の非意味的差だけへ限定し、quantity、price、error分類は比較から除外しません。詳細は[advanced lab review](../labs/advanced/GENERATOR-REVIEW.md)を参照してください。
 
 ## Model-based testing
 
@@ -352,4 +358,3 @@ coverage上昇だけでは採用しません。
 - original failure trace
 
 randomnessを固定するだけでなく、failure artifactを普通のregression testへ昇格します。
-

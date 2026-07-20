@@ -18,11 +18,14 @@
 - Mocha docs: https://mochajs.org/
 - Mocha parallel mode: https://mochajs.org/#parallel-tests
 - AVA: https://avajs.dev/
+- fast-check core blocks: https://fast-check.dev/docs/core-blocks/
+- fast-check arbitraries/shrinking: https://fast-check.dev/docs/core-blocks/arbitraries/
+- fast-check configuration: https://fast-check.dev/docs/configuration/
 - Playwright Test: https://playwright.dev/docs/test-intro
 - Vitest browser mode: https://vitest.dev/guide/browser/
 - TestCafe architecture: https://testcafe.io/documentation/402631/guides/overview/why-testcafe
 
-確認したnpm version: Node docs 26.5.0、Mocha 11.7.6、AVA 8.0.1、Sinon 22.0.0、TypeScript 7.0.2（2026-07-12 registry）。
+確認したnpm version: Node docs 26.5.0、fast-check 4.9.0、Mocha 11.7.6、AVA 8.0.1、Sinon 22.0.0、TypeScript 7.0.2（2026-07-19 registry）。
 
 ## Python
 
@@ -67,6 +70,7 @@ NUnit 4.6.0は2026-05-04公開。MTP資料は2026-04-27更新。
 - package testing: https://pkg.go.dev/testing
 - testing tutorial: https://go.dev/doc/tutorial/add-a-test
 - fuzzing tutorial: https://go.dev/doc/tutorial/fuzz
+- coverage-guided fuzzing and corpus: https://go.dev/doc/security/fuzz/
 
 ## Rust
 
@@ -164,3 +168,5 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 ## 研究論文
 
 論文の分類、DOI、peer-reviewed／preprintの区別、実務への含意は [13-research-and-modern-practice.md](13-research-and-modern-practice.md) にまとめています。
+
+- Metamorphic Testing: A Review of Challenges and Opportunities: https://nottingham-repository.worktribe.com/output/925152/metamorphic-testing-a-review-of-challenges-and-opportunities

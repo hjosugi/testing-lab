@@ -265,7 +265,7 @@ Testing Libraryの中心は「実装detailよりuserの使い方に近いquery�
 | embedded/firmware | host unit/HIL/SIL | Unity/Ceedling、hardware rig |
 | PLC | industrial runtime | TcUnit |
 
-simulator/emulator、real device、hardware-in-the-loopは検出できるfailureが違います。device farmは最後だけでなく、OS/device matrixをrisk-basedで選びます。
+simulator/emulator、real device、hardware-in-the-loopは検出できるfailureが違います。device farmは最後だけでなく、OS/device matrixをrisk-basedで選びます。automation mechanism、substrate、artifact、hardware owner/予約を分ける実用matrixは[Mobile／desktop／game／device matrix設計](32-mobile-desktop-game-device-matrix.md)を参照してください。
 
 ## 8. E2E／system／release
 

@@ -129,6 +129,12 @@ hardware/OS integrationを確認できますが、調達、reset、parallel、fa
 
 Detox/EarlGrey/Espresso等はapp内部のidle/synchronization情報を利用し、black-boxより安定させます。
 
+WebDriver、gray-box、image recognitionをemulator/real deviceと混同せず、
+OS/device/input/networkをrisk-basedに削減する具体例は
+[Mobile／desktop／game／device matrix設計](32-mobile-desktop-game-device-matrix.md)
+を参照してください。device farm/HILにはartifact、owner、予約、resetを含む
+execution contractが必要です。
+
 ## Visual testing
 
 ### Pixel diff
@@ -329,4 +335,3 @@ owner/issue/expiry
 - [ ] failure artifactとtrace correlation
 - [ ] retry前flakeを計測
 - [ ] baseline/scenarioのownerとretirement
-

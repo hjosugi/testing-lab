@@ -1,0 +1,623 @@
+{
+  "schemaVersion": 1,
+  "planId": "checkout-multi-surface-reference",
+  "asOf": "2026-07-19",
+  "reviewBy": "2026-10-19",
+  "owners": {
+    "client-platform": {
+      "primary": "Client Platform team",
+      "escalation": "Client Platform on-call"
+    },
+    "game-quality": {
+      "primary": "Game Quality team",
+      "escalation": "Game Runtime on-call"
+    },
+    "embedded-quality": {
+      "primary": "Embedded Quality team",
+      "escalation": "Hardware Lab on-call"
+    },
+    "quality-infrastructure": {
+      "primary": "Quality Infrastructure team",
+      "escalation": "Quality Infrastructure on-call"
+    }
+  },
+  "dimensions": {
+    "os": [
+      "ios-current",
+      "ios-minimum",
+      "android-current",
+      "android-minimum",
+      "windows-current",
+      "game-runtime-current",
+      "firmware-current"
+    ],
+    "deviceClass": [
+      "phone-primary",
+      "phone-small",
+      "phone-low-memory",
+      "tablet",
+      "desktop",
+      "game-device",
+      "hil-rig"
+    ],
+    "input": [
+      "touch",
+      "touch-biometric",
+      "touch-camera",
+      "keyboard-mouse",
+      "gamepad",
+      "hardware-sensor"
+    ],
+    "network": [
+      "wifi-normal",
+      "wifi-constrained",
+      "offline-resume",
+      "cellular-lossy",
+      "lan-local",
+      "hardware-bus"
+    ]
+  },
+  "lanes": {
+    "pr": {
+      "trigger": "pull_request",
+      "budgetMinutes": 15
+    },
+    "nightly": {
+      "trigger": "schedule",
+      "budgetMinutes": 90
+    },
+    "release": {
+      "trigger": "release_candidate",
+      "budgetMinutes": 180
+    },
+    "hardware": {
+      "trigger": "approved_reservation",
+      "budgetMinutes": 240
+    }
+  },
+  "toolEvaluations": [
+    {
+      "name": "Appium 3",
+      "surfaces": [
+        "native-ios",
+        "native-android",
+        "desktop"
+      ],
+      "mechanisms": [
+        "webdriver"
+      ],
+      "decision": "adopt-cross-platform-black-box-smoke",
+      "limitations": [
+        "Drivers and plugins are installed and versioned separately from the server.",
+        "Appium provides automation, so a runner and test oracle remain separate choices."
+      ]
+    },
+    {
+      "name": "Detox",
+      "surfaces": [
+        "react-native-ios",
+        "react-native-android"
+      ],
+      "mechanisms": [
+        "gray-box"
+      ],
+      "decision": "adopt-react-native-critical-journeys",
+      "limitations": [
+        "The native client is linked into the test build.",
+        "Supported React Native and device configurations must be checked on every upgrade."
+      ]
+    },
+    {
+      "name": "XCUITest",
+      "surfaces": [
+        "native-ios"
+      ],
+      "mechanisms": [
+        "native-ui"
+      ],
+      "decision": "adopt-ios-platform-default",
+      "limitations": [
+        "Execution requires Xcode on macOS and Apple signing for physical devices.",
+        "System UI coverage is high fidelity, but application internals are not directly observable."
+      ]
+    },
+    {
+      "name": "EarlGrey 2",
+      "surfaces": [
+        "native-ios"
+      ],
+      "mechanisms": [
+        "gray-box",
+        "native-ui"
+      ],
+      "decision": "pilot-when-xcuitest-synchronization-is-insufficient",
+      "limitations": [
+        "Integration is more invasive than plain XCUITest.",
+        "The project branch, Xcode compatibility, and build integration require an explicit pilot."
+      ]
+    },
+    {
+      "name": "Espresso",
+      "surfaces": [
+        "native-android"
+      ],
+      "mechanisms": [
+        "gray-box"
+      ],
+      "decision": "adopt-android-platform-default",
+      "limitations": [
+        "Tests run through Android instrumentation and are coupled to Android application builds.",
+        "External applications and some system surfaces need UiAutomator or Appium."
+      ]
+    },
+    {
+      "name": "Airtest",
+      "surfaces": [
+        "game",
+        "native-mobile",
+        "windows"
+      ],
+      "mechanisms": [
+        "image-recognition"
+      ],
+      "decision": "adopt-only-when-no-stable-semantic-hierarchy-exists",
+      "limitations": [
+        "Templates drift with resolution, animation, localization, color, and rendering changes.",
+        "Image matches do not expose semantic control state."
+      ]
+    },
+    {
+      "name": "Poco",
+      "surfaces": [
+        "game",
+        "native-mobile"
+      ],
+      "mechanisms": [
+        "hierarchy-inspection"
+      ],
+      "decision": "adopt-game-hierarchy-before-image-fallback",
+      "limitations": [
+        "Game engines normally require the Poco SDK in the application build.",
+        "Hierarchy availability and stable identifiers are engine-specific contracts."
+      ]
+    },
+    {
+      "name": "Cavy",
+      "surfaces": [
+        "react-native-ios",
+        "react-native-android"
+      ],
+      "mechanisms": [
+        "in-app-hooks"
+      ],
+      "decision": "pilot-targeted-in-app-integration-only",
+      "limitations": [
+        "Components need refs or Cavy test hooks.",
+        "It does not replace native system UI or black-box device coverage."
+      ]
+    },
+    {
+      "name": "Flutter integration_test",
+      "surfaces": [
+        "flutter-ios",
+        "flutter-android",
+        "flutter-desktop"
+      ],
+      "mechanisms": [
+        "in-app-hooks"
+      ],
+      "decision": "adopt-flutter-application-journeys",
+      "limitations": [
+        "The official package runs on target devices but cannot interact with native platform UI.",
+        "Permissions, share sheets, and cross-application flows need a platform UI tool."
+      ]
+    }
+  ],
+  "artifactPolicy": {
+    "profiles": {
+      "local-virtual": {
+        "always": [
+          "result",
+          "runner-log",
+          "device-metadata"
+        ],
+        "onFailure": [
+          "device-log",
+          "screenshot",
+          "video"
+        ]
+      },
+      "device-farm": {
+        "always": [
+          "result",
+          "runner-log",
+          "device-log",
+          "device-metadata"
+        ],
+        "onFailure": [
+          "screenshot",
+          "video"
+        ]
+      },
+      "manual-real-device": {
+        "always": [
+          "result",
+          "runner-log",
+          "device-log",
+          "device-metadata"
+        ],
+        "onFailure": [
+          "screenshot",
+          "video"
+        ]
+      },
+      "hil": {
+        "always": [
+          "result",
+          "runner-log",
+          "device-log",
+          "device-metadata",
+          "rig-telemetry"
+        ],
+        "onFailure": [
+          "screenshot",
+          "video",
+          "bus-trace"
+        ]
+      }
+    },
+    "pathTemplate": "artifacts/{runId}/{scenarioId}/{attempt}/",
+    "retentionDays": {
+      "passed": 7,
+      "failed": 30,
+      "release": 90
+    },
+    "redaction": [
+      "Remove credentials, tokens, personal data, and unrelated notifications before upload.",
+      "Use synthetic accounts and reset application data after every run."
+    ],
+    "unsupportedVideoFallback": "Record provider capability metadata and retain timed screenshots plus the platform result bundle and device log."
+  },
+  "reservationProcedures": {
+    "device-farm-queue": {
+      "owner": "quality-infrastructure",
+      "leadTimeHours": 1,
+      "steps": [
+        "Check provider capacity and reduced-stability or deprecated-device flags.",
+        "Submit scenario, device model, OS, build SHA, data classification, and time budget.",
+        "Record the provider matrix ID and result bucket before execution.",
+        "Cancel queued work when the release gate is abandoned and link the reason.",
+        "Attach the result URL and artifact manifest to the release record."
+      ]
+    },
+    "manual-device-lab": {
+      "owner": "quality-infrastructure",
+      "leadTimeHours": 24,
+      "steps": [
+        "Open a reservation ticket with scenario, device or rig ID, build SHA, operator, and time window.",
+        "Wait for the lab owner to assign an exclusive lease and confirm preflight state.",
+        "Record lease ID, firmware, OS, peripherals, network profile, and calibration before execution.",
+        "Stop on safety, thermal, battery, privacy, or fixture-integrity alarms and notify the escalation owner.",
+        "Reset application data, remove credentials, restore cables and network, upload artifacts, and release the lease."
+      ]
+    }
+  },
+  "scenarios": [
+    {
+      "id": "rn-ios-primary-pr",
+      "lane": "pr",
+      "surface": "react-native-ios",
+      "tools": [
+        "Detox"
+      ],
+      "mechanisms": [
+        "gray-box"
+      ],
+      "substrate": "simulator",
+      "environment": {
+        "os": "ios-current",
+        "deviceClass": "phone-primary",
+        "input": "touch",
+        "network": "wifi-normal"
+      },
+      "risks": [
+        "critical-journey",
+        "react-native-synchronization"
+      ],
+      "owner": "client-platform",
+      "artifactProfile": "local-virtual",
+      "hardwareRequired": false
+    },
+    {
+      "id": "android-native-primary-pr",
+      "lane": "pr",
+      "surface": "native-android",
+      "tools": [
+        "Espresso"
+      ],
+      "mechanisms": [
+        "gray-box"
+      ],
+      "substrate": "emulator",
+      "environment": {
+        "os": "android-current",
+        "deviceClass": "phone-primary",
+        "input": "touch",
+        "network": "wifi-normal"
+      },
+      "risks": [
+        "critical-journey",
+        "android-instrumentation"
+      ],
+      "owner": "client-platform",
+      "artifactProfile": "local-virtual",
+      "hardwareRequired": false
+    },
+    {
+      "id": "ios-minimum-nightly",
+      "lane": "nightly",
+      "surface": "native-ios",
+      "tools": [
+        "XCUITest",
+        "EarlGrey 2"
+      ],
+      "mechanisms": [
+        "native-ui",
+        "gray-box"
+      ],
+      "substrate": "simulator",
+      "environment": {
+        "os": "ios-minimum",
+        "deviceClass": "phone-small",
+        "input": "touch",
+        "network": "offline-resume"
+      },
+      "risks": [
+        "minimum-supported-os",
+        "resume-and-retry",
+        "small-screen-layout"
+      ],
+      "owner": "client-platform",
+      "artifactProfile": "local-virtual",
+      "hardwareRequired": false
+    },
+    {
+      "id": "android-low-memory-nightly",
+      "lane": "nightly",
+      "surface": "native-android",
+      "tools": [
+        "Appium 3"
+      ],
+      "mechanisms": [
+        "webdriver"
+      ],
+      "substrate": "emulator",
+      "environment": {
+        "os": "android-minimum",
+        "deviceClass": "phone-low-memory",
+        "input": "touch",
+        "network": "wifi-constrained"
+      },
+      "risks": [
+        "minimum-supported-os",
+        "process-recreation",
+        "cross-platform-black-box-contract"
+      ],
+      "owner": "client-platform",
+      "artifactProfile": "local-virtual",
+      "hardwareRequired": false
+    },
+    {
+      "id": "flutter-tablet-nightly",
+      "lane": "nightly",
+      "surface": "flutter-android",
+      "tools": [
+        "Flutter integration_test"
+      ],
+      "mechanisms": [
+        "in-app-hooks"
+      ],
+      "substrate": "emulator",
+      "environment": {
+        "os": "android-current",
+        "deviceClass": "tablet",
+        "input": "touch",
+        "network": "wifi-constrained"
+      },
+      "risks": [
+        "flutter-widget-integration",
+        "large-screen-layout"
+      ],
+      "owner": "client-platform",
+      "artifactProfile": "local-virtual",
+      "hardwareRequired": false
+    },
+    {
+      "id": "rn-cavy-pilot-nightly",
+      "lane": "nightly",
+      "surface": "react-native-android",
+      "tools": [
+        "Cavy"
+      ],
+      "mechanisms": [
+        "in-app-hooks"
+      ],
+      "substrate": "emulator",
+      "environment": {
+        "os": "android-current",
+        "deviceClass": "phone-small",
+        "input": "touch",
+        "network": "wifi-normal"
+      },
+      "risks": [
+        "in-app-component-integration",
+        "test-hook-maintenance-cost"
+      ],
+      "owner": "client-platform",
+      "artifactProfile": "local-virtual",
+      "hardwareRequired": false
+    },
+    {
+      "id": "android-vendor-farm-release",
+      "lane": "release",
+      "surface": "native-android",
+      "tools": [
+        "Appium 3"
+      ],
+      "mechanisms": [
+        "webdriver"
+      ],
+      "substrate": "real-device",
+      "environment": {
+        "os": "android-current",
+        "deviceClass": "phone-primary",
+        "input": "touch",
+        "network": "wifi-normal"
+      },
+      "risks": [
+        "vendor-os-difference",
+        "physical-installation",
+        "device-farm-compatibility"
+      ],
+      "owner": "client-platform",
+      "artifactProfile": "device-farm",
+      "hardwareRequired": true,
+      "reservationProcedure": "device-farm-queue"
+    },
+    {
+      "id": "ios-biometric-real-release",
+      "lane": "release",
+      "surface": "native-ios",
+      "tools": [
+        "XCUITest"
+      ],
+      "mechanisms": [
+        "native-ui"
+      ],
+      "substrate": "real-device",
+      "environment": {
+        "os": "ios-current",
+        "deviceClass": "phone-primary",
+        "input": "touch-biometric",
+        "network": "cellular-lossy"
+      },
+      "risks": [
+        "biometric-hardware",
+        "radio-transition",
+        "signing-and-entitlements"
+      ],
+      "owner": "client-platform",
+      "artifactProfile": "manual-real-device",
+      "hardwareRequired": true,
+      "reservationProcedure": "manual-device-lab"
+    },
+    {
+      "id": "android-camera-vendor-release",
+      "lane": "release",
+      "surface": "native-android",
+      "tools": [
+        "Appium 3"
+      ],
+      "mechanisms": [
+        "webdriver"
+      ],
+      "substrate": "real-device",
+      "environment": {
+        "os": "android-current",
+        "deviceClass": "phone-low-memory",
+        "input": "touch-camera",
+        "network": "cellular-lossy"
+      },
+      "risks": [
+        "camera-hardware",
+        "vendor-os-difference",
+        "low-memory-process-death"
+      ],
+      "owner": "client-platform",
+      "artifactProfile": "manual-real-device",
+      "hardwareRequired": true,
+      "reservationProcedure": "manual-device-lab"
+    },
+    {
+      "id": "windows-keyboard-release",
+      "lane": "release",
+      "surface": "windows-desktop",
+      "tools": [
+        "Appium 3"
+      ],
+      "mechanisms": [
+        "webdriver"
+      ],
+      "substrate": "real-device",
+      "environment": {
+        "os": "windows-current",
+        "deviceClass": "desktop",
+        "input": "keyboard-mouse",
+        "network": "lan-local"
+      },
+      "risks": [
+        "keyboard-navigation",
+        "window-management",
+        "desktop-installation"
+      ],
+      "owner": "client-platform",
+      "artifactProfile": "manual-real-device",
+      "hardwareRequired": true,
+      "reservationProcedure": "manual-device-lab"
+    },
+    {
+      "id": "unity-game-device-hardware",
+      "lane": "hardware",
+      "surface": "unity-game",
+      "tools": [
+        "Poco",
+        "Airtest"
+      ],
+      "mechanisms": [
+        "hierarchy-inspection",
+        "image-recognition"
+      ],
+      "substrate": "real-device",
+      "environment": {
+        "os": "game-runtime-current",
+        "deviceClass": "game-device",
+        "input": "gamepad",
+        "network": "lan-local"
+      },
+      "risks": [
+        "engine-ui-hierarchy",
+        "rendered-surface-fallback",
+        "physical-input"
+      ],
+      "owner": "game-quality",
+      "artifactProfile": "manual-real-device",
+      "hardwareRequired": true,
+      "reservationProcedure": "manual-device-lab"
+    },
+    {
+      "id": "embedded-sensor-hil",
+      "lane": "hardware",
+      "surface": "embedded-controller",
+      "tools": [],
+      "mechanisms": [
+        "hardware-protocol"
+      ],
+      "substrate": "hil",
+      "environment": {
+        "os": "firmware-current",
+        "deviceClass": "hil-rig",
+        "input": "hardware-sensor",
+        "network": "hardware-bus"
+      },
+      "risks": [
+        "sensor-calibration",
+        "firmware-timing",
+        "physical-safety-interlock"
+      ],
+      "owner": "embedded-quality",
+      "artifactProfile": "hil",
+      "hardwareRequired": true,
+      "reservationProcedure": "manual-device-lab"
+    }
+  ]
+}

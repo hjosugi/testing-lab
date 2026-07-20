@@ -110,8 +110,6 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 - Pact JS provider verification: https://github.com/pact-foundation/pact-js/blob/master/docs/provider.md
 - Pending pacts and WIP pacts: https://docs.pact.io/pact_broker/advanced_topics/pending_pacts
 - `can-i-deploy`: https://docs.pact.io/pact_broker/can_i_deploy
-- Airtest docs: https://airtest.doc.io.netease.com/en/
-- EarlGrey repository: https://github.com/google/EarlGrey
 - mountebank docs: https://www.mbtest.org/docs/gettingStarted
 
 ## Nix
@@ -132,7 +130,24 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 - Storybook test-runner migration guide: https://storybook.js.org/docs/writing-tests/integrations/vitest-addon/migration-guide
 - Storybook for Web Components with Vite: https://storybook.js.org/docs/get-started/frameworks/web-components-vite
 - Schemathesis: https://schemathesis.readthedocs.io/
-- Appium 3 architecture: https://appium.io/docs/en/3.5/intro/appium/
+- Appium 3 architecture: https://appium.io/docs/en/latest/intro/appium/
+- Appium driver ecosystem: https://appium.io/docs/en/latest/ecosystem/drivers/
+- Appium CLI: https://appium.io/docs/en/latest/reference/cli/
+- Detox architecture and synchronization: https://wix.github.io/Detox/docs/articles/how-detox-works/
+- Detox artifact collection: https://wix.github.io/Detox/docs/config/artifacts/
+- Detox project/device setup: https://wix.github.io/Detox/docs/introduction/project-setup/
+- Apple testing in Xcode: https://developer.apple.com/documentation/xcode/testing
+- XCTest result bundles: https://developer.apple.com/documentation/xcode/running-tests-and-interpreting-results
+- XCTest activities and attachments: https://developer.apple.com/documentation/xctest/activities-and-attachments
+- EarlGrey 2: https://github.com/google/EarlGrey/tree/earlgrey2
+- Android Espresso: https://developer.android.com/training/testing/espresso
+- Android build-managed devices: https://developer.android.com/studio/test/managed-devices
+- Airtest/Poco docs: https://airtest.doc.io.netease.com/en/
+- Cavy: https://cavy.app/docs/getting-started/running-tests
+- Flutter integration tests: https://docs.flutter.dev/testing/integration-tests
+- Firebase Test Lab: https://firebase.google.com/docs/test-lab
+- Firebase Test Lab Android results: https://firebase.google.com/docs/test-lab/android/get-started
+- Firebase Test Lab iOS device availability: https://firebase.google.com/docs/test-lab/ios/available-testing-devices
 - Testing Library guiding principles: https://testing-library.com/docs/guiding-principles
 - Testing Library query priority: https://testing-library.com/docs/queries/about#priority
 - Playwright browsers: https://playwright.dev/docs/browsers

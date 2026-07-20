@@ -3,14 +3,13 @@
 
 ## Tasks
 
-- [ ] Appium 3、Detox、XCUITest/EarlGrey、Espresso、Airtest/Pocoをsurface別比較
-- [ ] simulator/emulator/real device/HILの責務を定義
-- [ ] OS/device/input/network matrixをrisk-basedで削減
-- [ ] device farm artifact、video、device logを保存
-- [ ] React NativeはDetox/Cavy、Flutterはintegration_test候補を評価
+- [x] Appium 3、Detox、XCUITest/EarlGrey、Espresso、Airtest/Pocoをsurface別比較
+- [x] simulator/emulator/real device/HILの責務を定義
+- [x] OS/device/input/network matrixをrisk-basedで削減
+- [x] device farm artifact、video、device logを保存
+- [x] React NativeはDetox/Cavy、Flutterはintegration_test候補を評価
 
 ## Acceptance criteria
 
-- [ ] WebDriver/emulation/gray-box/image recognitionを区別
-- [ ] hardware必須testにownerと予約手順がある
-
+- [x] WebDriver/emulation/gray-box/image recognitionを区別
+- [x] hardware必須testにownerと予約手順がある

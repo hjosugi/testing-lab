@@ -1,4 +1,4 @@
-.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-python-postgres test-python-postgres-unavailable test-node test-node-semantics test-node-unawaited test-system-api test-system-pact test-system-storybook test-system-http-stability test-advanced test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-cpp-ctest test-cpp-benchmark test-cpp-compile-time test-cpp-sanitizers test-go test-go-race test-go-parallel test-go-fuzz test-go-generated test-go-benchmark test-go-failures test-rust test-rust-boundaries test-rust-quality test-rust-mutation test-php test-php-migration test-php-mutation test-php-equivalent issues-dry-run notebooklm
+.PHONY: bootstrap bootstrap-locked check-locks test test-python test-python-parallel test-python-mutation test-python-postgres test-python-postgres-unavailable test-node test-node-semantics test-node-unawaited test-system-api test-system-pact test-system-storybook test-system-e2e-stability test-system-http-stability test-advanced test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-cpp-ctest test-cpp-benchmark test-cpp-compile-time test-cpp-sanitizers test-go test-go-race test-go-parallel test-go-fuzz test-go-generated test-go-benchmark test-go-failures test-rust test-rust-boundaries test-rust-quality test-rust-mutation test-php test-php-migration test-php-mutation test-php-equivalent issues-dry-run notebooklm
 
 bootstrap:
 	./scripts/bootstrap.sh
@@ -44,6 +44,9 @@ test-system-pact:
 
 test-system-storybook:
 	cd labs/system && npm run test:storybook
+
+test-system-e2e-stability:
+	cd labs/system && npm run test:e2e:stability
 
 test-system-http-stability:
 	cd labs/system && npm run test:http-stability

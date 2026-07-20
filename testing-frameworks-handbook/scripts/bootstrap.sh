@@ -19,11 +19,19 @@ run_if() {
   fi
 }
 
+install_playwright_browsers() {
+  if [[ -n "${PLAYWRIGHT_BROWSERS_PATH:-}" ]]; then
+    echo "bootstrap: Playwright browsers supplied by Nix"
+  else
+    npm exec -- playwright install chromium firefox webkit
+  fi
+}
+
 run_if npm labs/node npm ci
 run_if npm labs/advanced npm ci
 run_if npm labs/system npm ci
 run_if uv labs/system/api-tests uv sync --frozen
-run_if npm labs/system npm exec -- playwright install chromium
+run_if npm labs/system install_playwright_browsers
 run_if npm labs/system npm run verify:browser-lock
 run_if gradle labs/java gradle dependencies --no-daemon
 run_if dotnet labs/dotnet dotnet restore tests/NUnitTests/NUnitTests.csproj --locked-mode

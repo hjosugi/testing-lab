@@ -1,11 +1,8 @@
 import { expect, waitFor } from 'storybook/test';
-import {
-  CHECKOUT_PHASE,
-  DEFAULT_CHECKOUT_COMMAND,
-} from './checkout-panel.js';
+import { CHECKOUT_PHASE } from './checkout-panel.js';
 
 const CONFIRMED_ORDER = Object.freeze({
-  orderId: DEFAULT_CHECKOUT_COMMAND.orderId,
+  orderId: 'storybook-order',
   total: 1200,
   status: 'CONFIRMED',
 });

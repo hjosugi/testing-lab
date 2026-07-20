@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "test": "npm run test:component && npm run test:http-integration && npm run test:contract && npm run test:property",
     "test:component": "node --test test/component/*.test.js",
@@ -18,12 +20,12 @@
     "test:pact:provider": "node --test test/pact/order-provider.pact.test.js",
     "test:storybook": "vitest run --project=storybook",
     "test:e2e": "playwright test",
+    "test:e2e:stability": "node scripts/verify-e2e-stability.mjs",
     "storybook": "storybook dev --port 6006 --no-open --disable-telemetry",
     "build-storybook": "storybook build --quiet --disable-telemetry",
     "verify:browser-lock": "node scripts/verify-browser-lock.js"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.12.1",
     "@pact-foundation/pact": "17.0.1",
     "@playwright/test": "1.61.1",
     "@storybook/addon-a11y": "10.5.2",

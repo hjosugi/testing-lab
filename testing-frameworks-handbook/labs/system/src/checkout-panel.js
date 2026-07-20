@@ -1,3 +1,4 @@
+import { createCheckoutCommand } from './checkout-command.js';
 import { createOrderClient } from './order-client.js';
 
 export const CHECKOUT_PHASE = Object.freeze({
@@ -5,14 +6,6 @@ export const CHECKOUT_PHASE = Object.freeze({
   submitting: 'submitting',
   confirmed: 'confirmed',
   failed: 'failed',
-});
-
-export const DEFAULT_CHECKOUT_COMMAND = Object.freeze({
-  orderId: 'o-1',
-  token: 't-1',
-  items: Object.freeze([
-    Object.freeze({ sku: 'book', quantity: 2, unitPrice: 600 }),
-  ]),
 });
 
 const VALID_PHASES = new Set(Object.values(CHECKOUT_PHASE));
@@ -77,7 +70,7 @@ export class CheckoutPanel extends HTMLElement {
 
     try {
       this.#order = await this.#orderClient.confirmOrder(
-        DEFAULT_CHECKOUT_COMMAND,
+        createCheckoutCommand(),
       );
       this.#phase = CHECKOUT_PHASE.confirmed;
     } catch (error) {

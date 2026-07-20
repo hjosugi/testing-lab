@@ -1,8 +1,8 @@
 # System vertical slice lab
 
 1つのcheckout Web applicationへcomponent、real HTTP integration、API
-contract、property、Storybook browser component、browser E2E、
-accessibilityの各test layerを当てます。
+contract、property、Storybook browser component/accessibility、browser E2Eの
+各test layerを当てます。
 test名の`[component/in-process]`、`[integration/real-http]`、
 `[contract/real-http]`、Storybook project、`[system/browser-*]`が実際に
 通る境界を示します。
@@ -15,19 +15,20 @@ handbook rootからNix shellだけでtoolchainとdependencyを揃えられます
 nix develop .#api --command uv sync --frozen --project labs/system/api-tests
 nix develop .#api --command make test-system-api
 nix develop .#node --command make test-system-storybook
+nix develop .#node --command make test-system-e2e-stability
 ```
 
 全labのbootstrapを先に済ませた場合は、system lab内の個別commandも使えます。
 
 ```bash
 npm ci
-npm exec -- playwright install chromium
 npm run verify:browser-lock
 
 npm test
 npm run test:http-stability
 npm run test:storybook
 npm run test:e2e
+npm run test:e2e:stability
 npm run build-storybook
 ```
 
@@ -52,7 +53,7 @@ uvによるPython downloadは無効です。
 
 | Test layer | Scope / real boundary | Double | Oracle |
 |---|---|---|---|
-| component | `createCheckout`を同一processで直接呼ぶ。HTTP、JSON、socketは通さない | payment captureとrepository saveのin-memory port | returned order、capture→saveの順序、invalid commandでportを呼ばないこと |
+| component | `createCheckout`とcheckout command factoryを同一processで直接呼ぶ。HTTP、JSON、socketは通さない | payment/repository port、command factoryではUUID source | returned order、capture→saveの順序、invalid commandでportを呼ばないこと、order ID isolation |
 | real HTTP integration | ephemeral TCP port上のNode HTTP server、router、request stream、JSON、response serializer、real HTTP client | componentの外側にあるpayment/repository portだけ | status、content type、body、trace ID、abort reason、save有無、unique port |
 | provider contract | `openapi.yaml`で公開するsuccess/problem responseをreal HTTP stackから取得 | external infrastructure | field集合と型、media type、`X-Trace-Id`とbody `traceId`の一致 |
 | consumer contract | real `createOrderClient`でPact mockを呼び、生成したPact V4をreal HTTP providerへ再生 | paymentとrepositoryの外部infrastructure | consumerが使うfield、minimal matcher、provider state、互換性 |
@@ -60,9 +61,8 @@ uvによるPython downloadは無効です。
 | stateful API | OpenAPI LinkをたどるPOST→GET→DELETE→GET | in-memory order store | create後の可用性、delete後の非可用性、response schema |
 | property | pureな`totalOf`をgenerated itemsで呼ぶ | なし | valid itemを追加してtotalが減らないinvariant |
 | browser component | Storybook 10.5.2、Vitest browser mode、Playwright Chromium、production Web Component | order clientだけ | state matrix、role/name interaction、addon-a11y violation |
-| browser E2E | application server、Chromium、DOM、fetch、real HTTP | payment/repository port | role経由で観測する`CONFIRMED: 1200` |
-| accessibility | application serverとChromium DOM | payment/repository port | axeが自動検出するviolation集合が空 |
-| CSS token contract | application serverとChromium CSSOM | payment/repository port | typography・layoutの主要declarationが`:root` custom propertiesを参照 |
+| browser E2E | application server、Chromium/Firefox/WebKit、testごとのBrowserContext、DOM、fetch、real HTTP | failure journeyだけ`/orders`をHTTP 503で置換。server外部portはin-memory | role経由で観測するsuccess statusとfailure alert |
+| CSS token contract | production CSS sourceをNode component testで読む | なし | typography・layout・colorの主要declarationが`:root` custom propertiesを参照 |
 
 component testのfailureはcheckout ruleまたはport orchestrationへ局所化できます。
 HTTP integrationはそれに加えてwire format、stream lifecycle、timeout、
@@ -98,6 +98,42 @@ coupleしません。`addon-a11y`の`a11y.test = 'error'`をpreview全体へ設�
 lock検査もdeprecated packageの再導入を拒否します。Visual regressionは
 reviewed baselineとrender determinismが別途必要なため、このgateのoracleへ
 暗黙に混ぜません。
+
+## Playwright critical journey gate
+
+E2Eはuser-visibleな2 journeyだけをChromium、Firefox、WebKitで実行します。
+
+| Journey | Boundary | Primary oracle |
+|---|---|---|
+| checkout success | production page → Web Component → fetch → real application server | buttonをrole/nameで操作し、statusが`CONFIRMED: 1200`になる |
+| checkout failure | production page → Web Component → browser内HTTP 503 route | buttonをrole/nameで操作し、alertが`Order API returned HTTP 503`になる |
+
+Playwrightがtestごとに新しいBrowserContextとpageを作ります。さらにproductionの
+`createCheckoutCommand`は`crypto.randomUUID()`から毎回異なるorder IDを作り、
+共有server storeでもproject/repeat間のdata collisionを避けます。failure routeも
+そのpage/contextだけに属するためsuccess journeyへ漏れません。固定sleepは使わず、
+locator actionとweb-first assertionのauto-waitへ同期を任せます。
+
+```bash
+nix develop .#node --command bash -lc \
+  'cd labs/system && npm run verify:browser-lock && npm run test:e2e'
+nix develop .#node --command make test-system-e2e-stability
+```
+
+通常runはtrace/videoを最初のfailure時だけ保持し、screenshotはfailure時だけ
+保存します。custom reporterは各attemptのstatusとretry番号をJSONへ書き、
+retry前のfailure、retry attempt、recovered flaky testを別々に数えます。
+stability targetは2 shardを順番に1 workerずつ実行して100回repeatし、
+`100 × 2 journeys × 3 browsers = 600 attempts`を検証します。retry後にgreenでも
+最初のattemptがfailしていればgateをfailさせるため、retryでflakeを隠しません。
+browser/ffmpeg process自身がhostを飽和させない値をdefaultにし、専用runnerで
+並列度を上げる場合だけ`E2E_STABILITY_WORKERS`を明示します。調査時は
+`E2E_STABILITY_RUNS=10`のように回数を下げられます。
+
+state matrixと自動accessibilityはStorybook、CSS token参照はsource component
+test、wire/schema edgeはHTTP/contract/schema testがownerです。E2Eからaxe、
+CSSOM、API shapeの重複assertionを外し、browser surface間を通る2 journeyだけを
+残しています。
 
 ## Pact consumer/provider compatibility gate
 
@@ -218,7 +254,7 @@ Node request streamの正常なcloseをclient cancellationと誤認しないよ�
 responseの`close`と`writableEnded`を組み合わせてdisconnectだけを
 `AbortController`へ伝えます。
 
-## Parallel and stability gate
+## HTTP parallel and stability gate
 
 serverは固定portを使わず`127.0.0.1:0`でlistenします。integration suiteは
 8 serverを並列起動し、OSが割り当てたportがすべて異なることと、各serverが
@@ -239,15 +275,24 @@ checkout pageのstyleは`:root`のCSS custom propertiesをsource of truthにし�
 font family/size/line height、spacing、content width、border/radius、colorを
 token化し、selector内へ同種のliteralを散在させません。見た目を変更するときは
 まず`--font-*`、`--space-*`、`--color-*`などのtokenを更新します。
-`[system/browser-css]` testは主要tokenの存在とselectorからの参照をCSSOMで
-検証します。
+`[component/source-css]` testはproduction CSS sourceを直接読み、主要tokenの
+存在とselectorからの参照を高速に検証します。`:root`外のraw colorと
+tokenを使わない`font-size`も拒否し、style追加時のばらつきを防ぎます。
 
 ## Browser reproducibility
 
-Playwright browserはNix側の別packageを混ぜず、`package-lock.json`で固定した
-`@playwright/test`自身にdownloadさせます。`verify:browser-lock`は
-`@playwright/test`、`playwright`、`playwright-core`のversion一致、
-`browsers.json`のChromium revision、実行binaryの存在を検証します。
+Nixの`node` shellはNode 24に加え、pinned nixpkgsの
+`playwright-driver.browsers`からChromium、Firefox、WebKitを供給します。
+`PLAYWRIGHT_BROWSERS_PATH`をNix storeへ固定し、npm packageの暗黙downloadや
+system browserへのfallbackを許しません。LinuxではNixのMesa EGL/DRI pathと
+software renderingもshellで固定するため、非NixOS hostのGPU driverを前提に
+しません。
+
+`verify:browser-lock`は`@playwright/test`、`playwright`、
+`playwright-core`、Nix driverがすべて1.61.1であることに加え、
+`browsers.json`のChromium 1228、Firefox 1532、WebKit 2311と各実行binaryを
+照合します。Nixを使わない直接bootstrapだけは同じnpm lockから3 browserを
+downloadするfallbackを持ちます。
 
 ## Primary references
 
@@ -270,3 +315,13 @@ Playwright browserはNix側の別packageを混ぜず、`package-lock.json`で固
 - [Storybook interaction testing](https://storybook.js.org/docs/writing-tests/interaction-testing)
 - [Storybook accessibility testing](https://storybook.js.org/docs/writing-tests/accessibility-testing)
 - [Migrating from the Storybook test-runner](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon/migration-guide)
+- [Playwright browsers](https://playwright.dev/docs/browsers)
+- [Playwright projects](https://playwright.dev/docs/api/class-testproject)
+- [Playwright isolation](https://playwright.dev/docs/browser-contexts)
+- [Playwright auto-retrying assertions](https://playwright.dev/docs/test-assertions)
+- [Playwright retries](https://playwright.dev/docs/test-retries)
+- [Playwright sharding](https://playwright.dev/docs/test-sharding)
+- [Playwright trace and screenshot options](https://playwright.dev/docs/test-use-options)
+- [Playwright video options](https://playwright.dev/docs/videos)
+- [Playwright custom reporters](https://playwright.dev/docs/api/class-reporter)
+- [Playwright best practices](https://playwright.dev/docs/best-practices)

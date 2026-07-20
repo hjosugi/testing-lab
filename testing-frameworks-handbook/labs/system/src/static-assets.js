@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 
 const STATIC_ASSET_CONTENT_TYPES = Object.freeze({
   'checkout.css': 'text/css; charset=utf-8',
+  'checkout-command.js': 'text/javascript; charset=utf-8',
   'checkout-panel.js': 'text/javascript; charset=utf-8',
   'order-client.js': 'text/javascript; charset=utf-8',
 });

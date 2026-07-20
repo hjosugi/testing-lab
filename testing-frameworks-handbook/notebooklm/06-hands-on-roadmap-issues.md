@@ -70,11 +70,14 @@ I classify the cause: time, concurrency, shared state, network, UI waiting, rand
 - Mocha docs: https://mochajs.org/
 - Mocha parallel mode: https://mochajs.org/#parallel-tests
 - AVA: https://avajs.dev/
+- fast-check core blocks: https://fast-check.dev/docs/core-blocks/
+- fast-check arbitraries/shrinking: https://fast-check.dev/docs/core-blocks/arbitraries/
+- fast-check configuration: https://fast-check.dev/docs/configuration/
 - Playwright Test: https://playwright.dev/docs/test-intro
 - Vitest browser mode: https://vitest.dev/guide/browser/
 - TestCafe architecture: https://testcafe.io/documentation/402631/guides/overview/why-testcafe
 
-確認したnpm version: Node docs 26.5.0、Mocha 11.7.6、AVA 8.0.1、Sinon 22.0.0、TypeScript 7.0.2（2026-07-12 registry）。
+確認したnpm version: Node docs 26.5.0、fast-check 4.9.0、Mocha 11.7.6、AVA 8.0.1、Sinon 22.0.0、TypeScript 7.0.2（2026-07-19 registry）。
 
 ## Python
 
@@ -119,6 +122,7 @@ NUnit 4.6.0は2026-05-04公開。MTP資料は2026-04-27更新。
 - package testing: https://pkg.go.dev/testing
 - testing tutorial: https://go.dev/doc/tutorial/add-a-test
 - fuzzing tutorial: https://go.dev/doc/tutorial/fuzz
+- coverage-guided fuzzing and corpus: https://go.dev/doc/security/fuzz/
 
 ## Rust
 
@@ -217,6 +221,8 @@ PHPUnit 13は2026-02-06公開、PHP 8.4以上。PHPUnit 13.2は2026-06-05公開�
 
 論文の分類、DOI、peer-reviewed／preprintの区別、実務への含意は [13-research-and-modern-practice.md](13-research-and-modern-practice.md) にまとめています。
 
+- Metamorphic Testing: A Review of Challenges and Opportunities: https://nottingham-repository.worktribe.com/output/925152/metamorphic-testing-a-review-of-challenges-and-opportunities
+
 ---
 
 <!-- SOURCE: docs/12-nix-setup.md -->
@@ -249,7 +255,7 @@ bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、
 |---|---|---|
 | Nix/toolchain | `flake.lock` | `nix flake check --all-systems --no-build` |
 | Node/Mocha/AVA | `labs/node/package-lock.json` | `npm ci` |
-| Node advanced | `labs/advanced/package-lock.json` | `npm ci` |
+| Node advanced | `labs/advanced/package-lock.json`、fast-check 4.9.0 exact pin | `npm ci`、5 property、distribution/shrink、metamorphic/differential |
 | Pact/Storybook/Vitest/Playwright/system | `labs/system/package-lock.json` + `flake.lock`のPlaywright driver/browser | `npm ci` + Pact 17.0.1 provider verification + Storybook 10.5.2/Vitest 4.1.10 browser test + 3-engine E2E + `verify:browser-lock` |
 | OpenAPI/Schemathesis | `labs/system/api-tests/uv.lock` | NixのPython 3.13/uv + `uv sync --frozen`、Schemathesis 4.23.0 |
 | JVM | `labs/java/gradle.lockfile` | Gradle dependency locking |
@@ -260,7 +266,7 @@ bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、
 | Go | `labs/go/go.mod` + `go.sum`、mockgen tool directive | `go mod download`、`-mod=readonly`、generated mock drift check |
 | Python/Postgres | dependencyはNix、containerはdigestで固定 | pytest、Hypothesis、Psycopg 3.3.4、Testcontainers 4.14.2、Docker CLIをNixから供給し、Postgres/Ryuk image pinを検査 |
 
-`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digest、Schemathesis/Pact/Playwright/Storybook/Vitest/Viteのexact pin、deprecated Storybook test-runnerやE2E用axe重複dependencyの再導入、Nixのuvの欠落を検出します。
+`scripts/check-lockfiles.sh`はmanifestに対応するlockの欠落、fast-check、Schemathesis、Pact、Playwright、Storybook、Vitest、Viteのexact pin、Goのmockgen tool pin、CMake fallbackのmutable tag、Python integration dependencyとcontainer image digest、deprecated Storybook test-runnerやE2E用axe重複dependencyの再導入、Nixのuvの欠落を検出します。
 
 ## CI matrix
 
@@ -302,6 +308,21 @@ nix develop .#api --command make test-system-api
 seed付きpositive/negative generation、OpenAPI Linkによるstateful
 POST→GET→DELETE、保存済みfailure corpus、3種類のfault-injection oracleを
 一度に実行します。外部serviceやDocker daemonは不要です。
+
+## Property / fuzz suiteの1 command実行
+
+Nixの`generative` shellがNode.js、npm、Goを供給します。fast-check 4.9.0は
+`labs/advanced/package-lock.json`から復元し、Go coverage-guided fuzzerはNixの
+Go toolchainを使います。
+
+```bash
+nix develop .#generative --command npm --prefix labs/advanced ci
+nix develop .#generative --command make test-generative
+```
+
+このtargetは5件のdomain invariant、generator分布、shrinker、metamorphic /
+differential oracle、commit済みcounterexample、parser/APIの2 fuzz targetを
+実行します。Docker、外部service、host側のNode/Goは不要です。
 
 ## Pactの1 command実行
 
@@ -420,6 +441,7 @@ default shellは全言語を含み重いので、日常作業では個別shell�
 ```bash
 nix develop .#python
 nix develop .#api
+nix develop .#generative
 nix develop .#node
 nix develop .#jvm
 nix develop .#dotnet
@@ -903,17 +925,16 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] domain invariantを5件定義
-- [ ] generator distributionとshrinkerをreview
-- [ ] parser/APIへcoverage-guided fuzz
-- [ ] oracleが難しい機能へmetamorphic relation
-- [ ]旧版/別実装とのdifferential test
-- [ ] seeds/counterexamplesをregression corpusへ保存
+- [x] domain invariantを5件定義
+- [x] generator distributionとshrinkerをreview
+- [x] parser/APIへcoverage-guided fuzz
+- [x] oracleが難しい機能へmetamorphic relation
+- [x] 旧版/別実装とのdifferential test
+- [x] seeds/counterexamplesをregression corpusへ保存
 
 ## Acceptance criteria
 
-- [ ] example testでは見つからない1 defectを発見またはsynthetic defectで実証
-
+- [x] example testでは見つからない1 defectを発見またはsynthetic defectで実証
 
 ---
 

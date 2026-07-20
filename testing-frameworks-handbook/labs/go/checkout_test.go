@@ -173,6 +173,25 @@ func TestCheckoutPaymentFailureDoesNotSave(t *testing.T) {
 	}
 }
 
+func TestParseItemLineExamples(t *testing.T) {
+	t.Parallel()
+	for _, testCase := range []struct {
+		line string
+		want Item
+	}{
+		{line: "BOOK|1|800", want: Item{SKU: "BOOK", Quantity: 1, UnitPrice: 800}},
+		{line: "PEN|2|120", want: Item{SKU: "PEN", Quantity: 2, UnitPrice: 120}},
+	} {
+		got, err := ParseItemLine(testCase.line)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got != testCase.want {
+			t.Fatalf("ParseItemLine(%q)=%+v, want %+v", testCase.line, got, testCase.want)
+		}
+	}
+}
+
 func FuzzTotal(f *testing.F) {
 	f.Add(int64(2), int64(600))
 	f.Fuzz(func(t *testing.T, quantity, unitPrice int64) {
@@ -201,6 +220,42 @@ func FuzzTotal(f *testing.F) {
 		}
 		if want := int(quantity * unitPrice); got != want {
 			t.Fatalf("got %d, want %d", got, want)
+		}
+	})
+}
+
+func FuzzParseItemLine(f *testing.F) {
+	f.Add("BOOK|1|800")
+	f.Add("PEN|2|120")
+	f.Add("broken")
+	f.Fuzz(func(t *testing.T, line string) {
+		item, err := ParseItemLine(line)
+		if err != nil {
+			if !errors.Is(err, ErrInvalidItemLine) {
+				t.Fatalf("invalid input returned an unclassified error: %v", err)
+			}
+			return
+		}
+
+		encoded, err := FormatItemLine(item)
+		if err != nil {
+			t.Fatalf("accepted item cannot be encoded: %v", err)
+		}
+		roundTripped, err := ParseItemLine(encoded)
+		if err != nil {
+			t.Fatalf("encoded item cannot be parsed: %v", err)
+		}
+		if roundTripped != item {
+			t.Fatalf("round trip=%+v, want %+v", roundTripped, item)
+		}
+
+		got, err := Total([]Item{item})
+		if err != nil {
+			t.Fatalf("accepted item cannot be totaled: %v", err)
+		}
+		want := item.Quantity * item.UnitPrice
+		if got != want {
+			t.Fatalf("parsed total=%d, want %d", got, want)
 		}
 	})
 }

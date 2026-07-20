@@ -13,9 +13,15 @@ exampleを列挙する代わりに、広い入力に対して保たれる性質�
 
 property testは具体例を不要にするものではありません。business例は読みやすいspecificationとして残し、広い入力空間をpropertyで補います。
 
+generatorは値をrandomに作るだけでは不十分です。empty/single/many、境界/通常値、valid/invalidの分布を定義し、failure時にdomain上の小さいcounterexampleへ縮むかreviewします。実行seedとshrink pathに加え、原因が分かったminimal inputをregression corpusへ昇格します。
+
 ## Fuzzing
 
 fuzzingはcrash、panic、hang、security boundaryに強い手法です。Goはtoolchainにfuzzingを統合しています。seed corpus、最大時間、failure inputの保存、nondeterminism排除が重要です。
+
+property-based testingのgenerator coverageと、coverage-guided fuzzerのprogram edge feedbackは別物です。structured domain inputは前者、raw parser/API boundaryは後者をdefaultにし、round trip、semantic invariant、differential resultをcrash以外のoracleとして追加します。
+
+実行可能な5 invariant、generator/shrinker review、metamorphic/differential suite、Go parser fuzzは[advanced lab](../labs/advanced/GENERATOR-REVIEW.md)にあります。
 
 ## Mutation testing
 

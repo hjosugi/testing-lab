@@ -22,9 +22,15 @@ exampleを列挙する代わりに、広い入力に対して保たれる性質�
 
 property testは具体例を不要にするものではありません。business例は読みやすいspecificationとして残し、広い入力空間をpropertyで補います。
 
+generatorは値をrandomに作るだけでは不十分です。empty/single/many、境界/通常値、valid/invalidの分布を定義し、failure時にdomain上の小さいcounterexampleへ縮むかreviewします。実行seedとshrink pathに加え、原因が分かったminimal inputをregression corpusへ昇格します。
+
 ## Fuzzing
 
 fuzzingはcrash、panic、hang、security boundaryに強い手法です。Goはtoolchainにfuzzingを統合しています。seed corpus、最大時間、failure inputの保存、nondeterminism排除が重要です。
+
+property-based testingのgenerator coverageと、coverage-guided fuzzerのprogram edge feedbackは別物です。structured domain inputは前者、raw parser/API boundaryは後者をdefaultにし、round trip、semantic invariant、differential resultをcrash以外のoracleとして追加します。
+
+実行可能な5 invariant、generator/shrinker review、metamorphic/differential suite、Go parser fuzzは[advanced lab](../labs/advanced/GENERATOR-REVIEW.md)にあります。
 
 ## Mutation testing
 
@@ -176,6 +182,8 @@ shrunk: Deposit(1), Withdraw(1), Withdraw(1)
 
 custom generatorにはsemantic shrinkerが必要な場合があります。単純にlistを短くすると前提条件を壊すことがあります。
 
+reviewでは「最初のfailureが小さいか」ではなく、固定seedで同じfailureを再生でき、shrinkerがdomain上の最小境界へ進み、最小inputだけを通常testで再生できるかを確認します。generatorのsample分布も固定seedで監査し、edge caseへ偏らせた意図とordinary caseを探索する余地の両方を数値化します。
+
 ### Stateful property testing
 
 command generatorとmodel stateを使います。
@@ -200,6 +208,8 @@ grammar/schema/protocolからvalid/invalid inputを生成します。
 ### Coverage-guided fuzzing
 
 new branch/pathへ到達したinputをcorpusへ残します。
+
+coverage feedbackは「新しいcode pathへ届いた」ことを示し、正しい結果を示しません。accepted parser inputにはround tripとsemantic/differential oracleを追加し、invalid inputにはpanicしないことと分類済みerrorを要求します。
 
 ### Stateful/protocol fuzzing
 
@@ -284,6 +294,8 @@ exact answerが作れない場合に、input transformationとoutput relationを
 - diagnostic wording
 
 normalizeしすぎるとmeaningful differenceを消します。
+
+Checkoutの実行例では、optimized totalを独立したrepeated-addition modelと比較します。normalizationはtimestamp等の非意味的差だけへ限定し、quantity、price、error分類は比較から除外しません。詳細は[advanced lab review](../labs/advanced/GENERATOR-REVIEW.md)を参照してください。
 
 ## Model-based testing
 
@@ -432,7 +444,6 @@ coverage上昇だけでは採用しません。
 - original failure trace
 
 randomnessを固定するだけでなく、failure artifactを普通のregression testへ昇格します。
-
 
 ---
 

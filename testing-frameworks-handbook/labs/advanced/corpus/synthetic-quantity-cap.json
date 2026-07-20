@@ -1,0 +1,17 @@
+{
+  "id": "quantity-cap-10",
+  "discoveredBy": "fast-check differential property",
+  "fastCheckVersion": "4.9.0",
+  "seed": 20260719,
+  "path": "0:1:0:0:0:0:0:1:0:0:1",
+  "numRuns": 1,
+  "numShrinks": 10,
+  "input": {
+    "sku": "A",
+    "quantity": 10,
+    "unitPrice": 1
+  },
+  "expected": 10,
+  "legacyActual": 9,
+  "regressionOracle": "totalOf([input]) === expected"
+}

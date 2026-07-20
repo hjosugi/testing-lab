@@ -2,7 +2,11 @@ export function totalOf(items) {
   return items.reduce((sum, item) => {
     if (!Number.isSafeInteger(item.unitPrice) || item.unitPrice < 0) throw new TypeError('unitPrice must be a non-negative safe integer');
     if (!Number.isSafeInteger(item.quantity) || item.quantity <= 0) throw new TypeError('quantity must be a positive safe integer');
-    return sum + item.unitPrice * item.quantity;
+    const subtotal = item.unitPrice * item.quantity;
+    if (!Number.isSafeInteger(subtotal) || !Number.isSafeInteger(sum + subtotal)) {
+      throw new RangeError('total must be a safe integer');
+    }
+    return sum + subtotal;
   }, 0);
 }
 
@@ -17,6 +21,22 @@ export function referenceTotal(items) {
 export function discountedTotal(items, basisPoints) {
   if (!Number.isInteger(basisPoints) || basisPoints < 0 || basisPoints > 10_000) throw new RangeError('invalid discount');
   return Math.floor(totalOf(items) * (10_000 - basisPoints) / 10_000);
+}
+
+export function canonicalizeCart(items) {
+  const lines = new Map();
+  for (const item of items) {
+    totalOf([item]);
+    const key = JSON.stringify([item.sku, item.unitPrice]);
+    const quantity = (lines.get(key)?.quantity ?? 0) + item.quantity;
+    if (!Number.isSafeInteger(quantity)) throw new RangeError('quantity must be a safe integer');
+    lines.set(key, { sku: item.sku, quantity, unitPrice: item.unitPrice });
+  }
+  return [...lines.values()].sort((left, right) => {
+    if (left.sku < right.sku) return -1;
+    if (left.sku > right.sku) return 1;
+    return left.unitPrice - right.unitPrice;
+  });
 }
 
 export class Order {

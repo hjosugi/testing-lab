@@ -10,7 +10,7 @@
 |---|---|---|
 | Flake evaluation | PASS | `x86_64-linux`、`aarch64-linux`、`aarch64-darwin`の全dev shellを`--all-systems --no-build`で評価 |
 | Clean bootstrap | PASS | npm、Gradle、NuGet、Cargo、Composerをcommit済みlockから復元 |
-| Lock coverage | PASS | Nix、npm 3 project、Pact JS 17.0.1、Storybook 10.5.2/Vitest 4.1.10/Vite 8.1.5、Schemathesis 4.23.0 + uv.lock、Gradle、NuGet 5 project、Go module/tool、Cargo+proptest、Composer、PHPUnit PHAR、C++ commit pin、Psycopg/Testcontainers exact version、Postgres/Ryuk digest |
+| Lock coverage | PASS | Nix、npm 3 project、fast-check 4.9.0、Pact JS 17.0.1、Storybook 10.5.2/Vitest 4.1.10/Vite 8.1.5、Schemathesis 4.23.0 + uv.lock、Gradle、NuGet 5 project、Go module/tool、Cargo+proptest、Composer、PHPUnit PHAR、C++ commit pin、Psycopg/Testcontainers exact version、Postgres/Ryuk digest |
 | Playwright lock | PASS | npm/Nix Playwright 1.61.1、Chromium 1228、Firefox 1532、WebKit 2311と各Nix store実行binaryを照合 |
 | Workflow lint | PASS | `.github/workflows/reproducibility.yml`を`actionlint`で検証 |
 | Hybrid policy links | PASS | ADR/index/template/entrypointを`lychee --offline`で検証、error 0 |
@@ -21,7 +21,8 @@
 | Mockito agent matrix | PASS | OpenJDK 21.0.12 / 25.0.4、explicit agent、self-attachなし |
 | .NET runner matrix | PASS | NUnit/MSTest × MTP/VSTest、4 TRX、intentional failure 2 cases |
 | C++ sanitizer matrix | PASS | ASan heap-use-after-free、UBSan signed overflow、TSan data raceを別laneで検出 |
-| Go execution matrix | PASS | 通常/race、parallel 60 executions、fuzz 100 executions、generated drift、benchmark、3 intentional failures |
+| Property / fuzz suite | PASS | fast-check 18 tests、5 invariant × 500 runs、固定seed分布監査、quantity 10 / price 1までshrink、metamorphic/differential、3 committed counterexamples |
+| Go execution matrix | PASS | 通常/race、parallel 60 executions、total/parser fuzz各100x budget、generated drift、benchmark、3 intentional failures |
 | Rust execution matrix | PASS | private unit 2、public integration 6、property 256 cases、trait 1、doctest 2、mutants 7/7 |
 | PHP execution matrix | PASS | PHP 8.4、PHPUnit 12.5.31→13.2.4、high-risk mutants 14/14、equivalent mutant 1 classified |
 | System HTTP vertical slice | PASS | component/source contract 8、real HTTP integration 8、contract 2、property 1、HTTP integration 100/100連続green |
@@ -42,6 +43,7 @@ nix develop --command env STRICT=1 ./scripts/test-all.sh
 nix develop .#node --command make test-system-pact
 nix develop .#node --command make test-system-storybook
 nix develop .#node --command make test-system-e2e-stability
+nix develop .#generative --command make test-generative
 nix develop --command make verify-device-matrix
 nix develop .#python --command make test-python-postgres
 ```
@@ -61,13 +63,13 @@ nix develop .#python --command make test-python-postgres
 | Storybook/Vitest browser component | PASS | 5 stories、real Chromium、role/name interaction、addon-a11y、image-alt mutation 5/5 failed as expected |
 | Playwright E2E / stability | PASS | 2 journeys × 3 browsers = 6 tests、100-repeat 2-shard gateは600 attempts、flake 0。accessibilityはStorybook、CSS tokenはsource component testが担当 |
 | Mobile/device matrix validator | PASS | WebDriver/gray-box/image/hierarchy分類、simulator/emulator/real-device/HIL、dimension coverage、hardware owner/予約/artifact contract |
-| Advanced techniques | PASS | 11 tests |
+| Advanced generative techniques | PASS | 18 tests、5 invariant、固定seed `20260719`、boundary/cart-size分布、shrink、4 metamorphic relation、独立reference differential、synthetic defect corpus |
 | JUnit / Mockito / Truth | PASS | 13 tests、Jupiter 6.1.1 present、Vintage absent |
 | NUnit 4 | PASS | 6 tests、MTP 2.1.0 / VSTest、cancel・async failure |
 | MSTest 4 | PASS | 9 tests、MTP 2.3.1 / VSTest、cancel・async failure |
 | Catch2 / CTest | PASS | 3 tests、SECTION/GENERATE、2 shards、fixed-seed random order |
 | C++ benchmark / compile cost | PASS | 3 noise trials、handwritten spy対Trompeloeil clean build |
-| Go | PASS | `-mod=readonly`、`-race`、goleak、parallel isolation、overflow corpus、GoMock drift、0 alloc benchmark |
+| Go | PASS | `-mod=readonly`、`-race`、goleak、parallel isolation、overflow/parser corpus、2 coverage-guided fuzz targets × 100x budget、GoMock drift、0 alloc benchmark |
 | Rust / rstest / proptest | PASS | unit/integration/doc境界、10 runtime tests、2 doctests、7/7 targeted mutants、fmt/Clippy |
 | PHPUnit / Infection | PASS | 10 tests、28 assertions、12.5/13.2 deprecation-free、MSI/covered MSI 100% |
 

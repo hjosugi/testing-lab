@@ -1,17 +1,20 @@
 # Advanced technique comparison lab
 
-同じproduction codeへ異なるoracleと入力生成を当てます。外部dependencyはありません。
+同じproduction codeへ異なるoracleと入力生成を当てます。fast-checkはdomain property、metamorphic relation、differential oracle、shrinkingを担当し、Go標準fuzzerはparser/APIのcoverage-guided探索を担当します。
 
 ```bash
-cd labs/advanced
-npm test
+nix develop .#generative --command npm --prefix labs/advanced ci
+nix develop .#generative --command make test-generative
 ```
+
+generator分布、5件のdomain invariant、shrinker、corpus運用のreview結果は[GENERATOR-REVIEW.md](GENERATOR-REVIEW.md)を参照してください。
 
 ## 観察すること
 
 | Test | 狙う欠陥 | Exampleだけでは弱い理由 |
 |---|---|---|
-| property | 広い入力のinvariant | 手選びcaseに偏る |
+| property | 5件のdomain invariant | 手選びcaseに偏る |
+| coverage-guided fuzz | parser/APIの未知branch | valid exampleだけではmalformed inputへ届かない |
 | metamorphic | 正解値不明でも関係を確認 | exact expectedが作れない |
 | differential | 最適化実装の差 | 両実装が独立oracleになる |
 | model-based | command列・状態遷移 | 連続操作の組合せが多い |
@@ -24,7 +27,7 @@ npm test
 
 ## 実験
 
-1. `totalOf`の`quantity`を無視し、どのtestが落ちるか見る。
+1. `corpus/synthetic-quantity-cap.json`を再生し、exampleでは見えないquantity 9上限を確認する。
 2. idempotent cacheを削除し、concurrency testを実行する。
 3. `sanitize`の正規表現から`authorization`を消し、新caseを加える。
 4. legacy shipping ruleの正しい仕様を決めてからcharacterizationを置換する。

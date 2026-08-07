@@ -1,1 +1,6 @@
 .claude/settings.local.json
+.claude/skills/graphify/
+.copilot/skills/graphify/
+.codex/skills/graphify/
+.codex/hooks.json
+graphify-out/

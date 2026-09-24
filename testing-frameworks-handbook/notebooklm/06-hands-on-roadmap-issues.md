@@ -1050,18 +1050,17 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] first-attempt failureを保存しretry後greenと分離
-- [ ] co-failureをworker/host/fixture/serviceでcluster化
-- [ ] random orderとseed保存
-- [ ] quarantine owner/expiry/原因分類
-- [ ] dependency-based affected testsを先に導入
-- [ ] predictive selectionはperiodic full runとmiss metricを併用
+- [x] first-attempt failureを保存しretry後greenと分離
+- [x] co-failureをworker/host/fixture/serviceでcluster化
+- [x] random orderとseed保存
+- [x] quarantine owner/expiry/原因分類
+- [x] dependency-based affected testsを先に導入
+- [x] predictive selectionはperiodic full runとmiss metricを併用
 
 ## Acceptance criteria
 
-- [ ] flake rate、diagnosis time、selection missをdashboard化
-- [ ] retryでrequired checkを常時greenに見せない
-
+- [x] flake rate、diagnosis time、selection missをdashboard化
+- [x] retryでrequired checkを常時greenに見せない
 
 ---
 

@@ -1,0 +1,10 @@
+{
+  "evaluatedAt": "2026-10-01",
+  "entries": [
+    { "testId": "payment-capture", "owner": "payments-team", "cause": "host-infra", "issue": "FLAKE-12 runner-7 cannot resolve the payments sandbox", "quarantinedAt": "2026-09-20", "expires": "2026-10-10" },
+    { "testId": "payment-refund", "owner": "payments-team", "cause": "host-infra", "issue": "FLAKE-12 runner-7 cannot resolve the payments sandbox", "quarantinedAt": "2026-09-20", "expires": "2026-10-10" },
+    { "testId": "payment-webhook", "owner": "payments-team", "cause": "host-infra", "issue": "FLAKE-12 runner-7 cannot resolve the payments sandbox", "quarantinedAt": "2026-09-20", "expires": "2026-10-10" },
+    { "testId": "orders-list", "owner": "orders-team", "cause": "order-dependent-fixture", "issue": "FLAKE-15 orders-list relies on rows that orders-cleanup deletes", "quarantinedAt": "2026-09-22", "expires": "2026-10-15" },
+    { "testId": "ui-timer", "owner": "web-team", "cause": "timing", "issue": "FLAKE-18 ui-timer asserts on wall-clock intervals", "quarantinedAt": "2026-09-25", "expires": "2026-10-20" }
+  ]
+}

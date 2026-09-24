@@ -48,6 +48,8 @@ run_test Performance-profiles node labs/performance node --test --test-concurren
 run_test Security-portfolio node labs/security node --test 'test/*.test.mjs'
 run_test Resilience node labs/resilience node --test 'test/*.test.mjs'
 run_test AI-evals node labs/ai-evals node --test 'test/*.test.mjs'
+run_test Flakiness node labs/flakiness node --test 'test/*.test.mjs'
+run_test Flake-dashboard node labs/flakiness node scripts/dashboard.mjs
 run_test Security-SBOM node labs/security node scripts/sbom.mjs
 run_test Java gradle labs/java gradle test --no-daemon
 run_test NUnit dotnet labs/dotnet dotnet test --project tests/NUnitTests/NUnitTests.csproj

@@ -1,5 +1,7 @@
 # CI・Flakiness・テスト経済性
 
+> 実行例: [`labs/flakiness`](../labs/flakiness/README.md)は、ground truth付きCI historyからfirst attemptとretryを分離し、co-failure clusteringでhost・fixture順序・intrinsic・regressionを判別し、seedでorder依存を再現し、owner/期限付きquarantineとfirst-attempt基準のrequired check、dependency-based/predictive selectionのmiss rateをdashboardへ出します。
+
 ## 一言でいうと
 
 テストは「多いほど良い」のではありません。**重要な欠陥を、十分早く、十分正確に、原因を追える形で知らせる情報システム**です。

@@ -14,6 +14,7 @@
 - threat-model駆動abuse-case test、secret/SAST/workflow/SCA scan、SBOM署名、finding ledgerのsecurity verification lab
 - seed再現可能なdeterministic simulationとabort/rollback付きchaos experimentのresilience lab
 - fake model・versioned datasetによるdata/ML/RAG/LLM-as-judge/agent sandbox evaluation lab
+- co-failure clustering、quarantine policy、safe test selectionのflakiness lab
 - Nix flakeとtoolchain別development shell
 - GitHub Issue本文52件
 - test design、strategy、device matrix、research reproduction、testing policy exception ADR template

@@ -16,6 +16,7 @@
 - fake model・versioned datasetによるdata/ML/RAG/LLM-as-judge/agent sandbox evaluation lab
 - co-failure clustering、quarantine policy、safe test selectionのflakiness lab
 - example mappingから実行可能Gherkinとtraceabilityまでのacceptance/BDD lab
+- canary/shadow/synthetic/runtime invariantとobservability-as-behaviorのproduction verification lab
 - Nix flakeとtoolchain別development shell
 - GitHub Issue本文52件
 - test design、strategy、device matrix、research reproduction、testing policy exception ADR template

@@ -1,5 +1,7 @@
 # 本番プロジェクトへの導入
 
+> 実行例: [`labs/production`](../labs/production/README.md)は、canary（sticky routing、最小sample、invariant違反でabort/rollback）、sanitized shadow、tag付きsynthetic accountのidempotent cleanup、feature flag cohortとkill switch、multi-window burn-rate alertとrunbook、`traceparent`伝播によるcritical flow trace、telemetryのredactionとcardinality制限を、pre-deploy testの代替ではなく二枚目の網としてtestします。
+
 ## 90日プラン
 
 ### Day 1-14: 可視化

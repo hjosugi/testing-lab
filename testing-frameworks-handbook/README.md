@@ -98,6 +98,8 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 `labs/acceptance`には、example mapping、business languageのGherkin、依存なしの最小runner、UI detail/duplicate/traceability lint、feature hashへ結び付く3役review記録によるSpecification by Exampleの例があります。
 
+`labs/production`には、canary・shadow・synthetic・runtime invariant・feature flag kill switch・burn-rate alertと、log/metric/trace/alertをbehaviorとしてtestする例があります。
+
 `labs/advanced` には、同じproduction codeに対する5 domain invariant、fast-check generator/shrinker監査、metamorphic/differential、model-based、concurrency、fault-injection、characterization、snapshot、performanceと、Go parser/API coverage-guided fuzzの比較実験があります。
 
 ## Issue backlog

@@ -3,15 +3,14 @@
 
 ## Tasks
 
-- [ ] synthetic accountとidempotent cleanup
-- [ ] canary metric/abort/rollback
-- [ ] sanitized shadow traffic
-- [ ] runtime business invariantとSLO alert
-- [ ] OpenTelemetry traceでcritical flowを検証
-- [ ] feature flag cohort/kill switchをtest
+- [x] synthetic accountとidempotent cleanup
+- [x] canary metric/abort/rollback
+- [x] sanitized shadow traffic
+- [x] runtime business invariantとSLO alert
+- [x] OpenTelemetry traceでcritical flowを検証
+- [x] feature flag cohort/kill switchをtest
 
 ## Acceptance criteria
 
 - [ ] production verificationのblast radius/privacyをreview
-- [ ] pre-deploy testをproduction monitoringで置換しない
-
+- [x] pre-deploy testをproduction monitoringで置換しない

@@ -1,0 +1,22 @@
+{
+  "service": "checkout",
+  "reviewed": false,
+  "reviewNote": "Engineering draft. Blast radius and privacy review by SRE and the privacy owner has not happened yet; this file is the checklist they sign.",
+  "blastRadius": {
+    "maxCanaryPercent": 5,
+    "maxFlagCohortPercent": 10,
+    "syntheticOrdersPerHour": 12,
+    "abortCriteria": ["canary error rate exceeds baseline by 1 point", "any runtime invariant violation", "burn-rate page"],
+    "rollback": "router.rollback() sets canary weight to 0; flag kill switch disables the cohort"
+  },
+  "privacy": {
+    "shadowTraffic": "customer and order IDs hashed, only sku/quantity/unitPrice copied, no persistence, no side effects",
+    "telemetry": "emails hashed, card/token/password fields redacted, PAN-like digit runs masked",
+    "syntheticAccounts": "dedicated tagged accounts, no real customer data"
+  },
+  "preDeployCoverage": {
+    "total != subtotal - discount": "labs/production/test/production.test.mjs: pre-deploy pricing contract",
+    "discount out of range": "labs/production/test/production.test.mjs: pre-deploy pricing contract",
+    "subtotal != sum(lines)": "labs/production/test/production.test.mjs: pre-deploy pricing contract"
+  }
+}

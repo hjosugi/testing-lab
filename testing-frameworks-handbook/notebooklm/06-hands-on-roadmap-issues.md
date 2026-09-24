@@ -1091,18 +1091,17 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] synthetic accountとidempotent cleanup
-- [ ] canary metric/abort/rollback
-- [ ] sanitized shadow traffic
-- [ ] runtime business invariantとSLO alert
-- [ ] OpenTelemetry traceでcritical flowを検証
-- [ ] feature flag cohort/kill switchをtest
+- [x] synthetic accountとidempotent cleanup
+- [x] canary metric/abort/rollback
+- [x] sanitized shadow traffic
+- [x] runtime business invariantとSLO alert
+- [x] OpenTelemetry traceでcritical flowを検証
+- [x] feature flag cohort/kill switchをtest
 
 ## Acceptance criteria
 
 - [ ] production verificationのblast radius/privacyをreview
-- [ ] pre-deploy testをproduction monitoringで置換しない
-
+- [x] pre-deploy testをproduction monitoringで置換しない
 
 ---
 
@@ -1396,16 +1395,15 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] critical journeyのcorrelation ID propagationを検証
-- [ ] metric label/cardinalityとSLO queryを確認
-- [ ] failure logのactionabilityとredactionを検証
-- [ ] synthetic incidentでalert route/runbookを確認
+- [x] critical journeyのcorrelation ID propagationを検証
+- [x] metric label/cardinalityとSLO queryを確認
+- [x] failure logのactionabilityとredactionを検証
+- [x] synthetic incidentでalert route/runbookを確認
 
 ## Acceptance criteria
 
-- [ ] incidentをartifactだけでtriage可能
-- [ ] secret/PIIをtelemetryへ出さないtestがある
-
+- [x] incidentをartifactだけでtriage可能
+- [x] secret/PIIをtelemetryへ出さないtestがある
 
 ---
 

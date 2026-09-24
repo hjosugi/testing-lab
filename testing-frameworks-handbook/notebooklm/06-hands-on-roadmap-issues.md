@@ -1112,17 +1112,16 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] coverageとmutation effectivenessの相関をsample moduleで測る
-- [ ] property-based testingのgenerator/shrinker差を比較
-- [ ] flaky co-failure clusterをsynthetic datasetで再現
-- [ ] deterministic simulationのseed reproductionをprototype
+- [x] coverageとmutation effectivenessの相関をsample moduleで測る
+- [x] property-based testingのgenerator/shrinker差を比較
+- [x] flaky co-failure clusterをsynthetic datasetで再現
+- [x] deterministic simulationのseed reproductionをprototype
 - [ ] LLM生成testをcoverage/mutation/smell/flakeで評価
 
 ## Acceptance criteria
 
-- [ ] claim、context、evidence、threats、resultをtemplateで記録
-- [ ] 再現できない結果もnegative resultとして保存
-
+- [x] claim、context、evidence、threats、resultをtemplateで記録
+- [x] 再現できない結果もnegative resultとして保存
 
 ---
 
@@ -1552,17 +1551,16 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] coverage vs mutationの小実験
-- [ ] generated vs human testをmutation/defect/maintenanceで比較
-- [ ] flaky detectionとselectionのmissを測定
-- [ ] peer-reviewedとpreprintを区別
-- [ ] `templates/research-reproduction.md`で記録
+- [x] coverage vs mutationの小実験
+- [x] generated vs human testをmutation/defect/maintenanceで比較
+- [x] flaky detectionとselectionのmissを測定
+- [x] peer-reviewedとpreprintを区別
+- [x] `templates/research-reproduction.md`で記録
 
 ## Acceptance criteria
 
-- [ ] positive/negative resultの両方を保存
-- [ ] 自社contextへのexternal validityを議論
-
+- [x] positive/negative resultの両方を保存
+- [x] 自社contextへのexternal validityを議論
 
 ---
 

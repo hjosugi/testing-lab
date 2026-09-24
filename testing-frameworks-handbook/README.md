@@ -100,6 +100,8 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 `labs/production`には、canary・shadow・synthetic・runtime invariant・feature flag kill switch・burn-rate alertと、log/metric/trace/alertをbehaviorとしてtestする例があります。
 
+`labs/research`には、coverage/mutation相関、assertion数、PBT generator/shrinking、生成test vs human testなどの論文主張を同一budget・同一oracleで再現し、negative resultも含めてtemplate形式で記録する例があります。
+
 `labs/advanced` には、同じproduction codeに対する5 domain invariant、fast-check generator/shrinker監査、metamorphic/differential、model-based、concurrency、fault-injection、characterization、snapshot、performanceと、Go parser/API coverage-guided fuzzの比較実験があります。
 
 ## Issue backlog

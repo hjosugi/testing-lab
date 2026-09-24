@@ -17,6 +17,7 @@
 - co-failure clustering、quarantine policy、safe test selectionのflakiness lab
 - example mappingから実行可能Gherkinとtraceabilityまでのacceptance/BDD lab
 - canary/shadow/synthetic/runtime invariantとobservability-as-behaviorのproduction verification lab
+- 7件の論文主張を同一budgetで再現し、negative resultも保存するresearch reproduction lab
 - Nix flakeとtoolchain別development shell
 - GitHub Issue本文52件
 - test design、strategy、device matrix、research reproduction、testing policy exception ADR template

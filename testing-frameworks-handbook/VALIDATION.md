@@ -30,6 +30,7 @@
 | Flakiness / selection | PASS | 9 tests: 600 test-run中first-attempt failure 13.7%とretry後の見かけ97.3%を分離、4 cluster（host=runner-7、after=orders-cleanup、intrinsic、regression）を復元、seed順序再現、quarantine validation、first-attempt required check、dependency selection miss 0/13・predictive 8/13（full run 5 commitごとで最大4 commit遅延） |
 | Acceptance / BDD | PASS（review未実施） | 17 tests: 5 rule × 7 scenario（Outline展開）、6 rule名unit test、UI detail/duplicate/rule tag lint、undefined/ambiguous step、traceability、review hash binding。product/QA/engineerのsign-offは0件で、3役reviewは未実施として記録 |
 | Production verification / observability | PASS（plan未review） | 9 tests: pre-deploy invariant coverage、synthetic idempotent cleanup、5% sticky canaryのabort/rollback、10% flag cohortとkill switch、shadowのPII除去と欠陥検出、burn-rate page/ticketとrunbook anchor、real HTTP checkout→paymentのtraceparent伝播とtrace ID結合log、telemetryのemail/PAN/token不在、label/series上限。blast radius/privacy reviewは未実施 |
+| Research reproduction | PASS | 5 tests、7 record（再現2、部分再現3、手法のみ再現1、再現せず1）。results.jsonとrecordの数値を再実行で照合。LLM生成testは有料APIなしのため非LLMの代替generatorで評価 |
 | Go execution matrix | PASS | 通常/race、parallel 60 executions、total/parser fuzz各100x budget、generated drift、benchmark、3 intentional failures |
 | Rust execution matrix | PASS | private unit 2、public integration 6、property 256 cases、trait 1、doctest 2、mutants 7/7 |
 | PHP execution matrix | PASS | PHP 8.4、PHPUnit 12.5.31→13.2.4、high-risk mutants 14/14、equivalent mutant 1 classified |

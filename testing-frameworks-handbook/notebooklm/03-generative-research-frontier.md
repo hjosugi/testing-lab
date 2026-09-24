@@ -691,6 +691,8 @@ Decision date:
 
 # テスト研究を実務へ適用するガイド
 
+> 実行例: [`labs/research`](../labs/research/README.md)は、coverage/mutation相関（size制御）、assertion数、PBT generator/shrinking、flaky co-failure、deterministic simulation、生成test vs human test、predictive selectionの7主張を同一budget・同一oracleで再現し、negative resultも含めて`templates/research-reproduction.md`形式で記録します。recordの数値はtestで実験結果と一致を強制します。
+
 ## 一言でいうと
 
 論文の結論をそのまま規則にせず、**問い・対象・比較条件・効果量・限界**を読み、自分のsystemで小さく再現します。

@@ -1,0 +1,52 @@
+{
+  "coverageVersusMutation": {
+    "mutants": 16,
+    "pool": 24,
+    "suites": 160,
+    "rawCoverageTau": 0.641,
+    "rawSizeTau": 0.673,
+    "meanCoverageTauFixedSize": 0.344,
+    "meanAssertionTauFixedSize": 0.132,
+    "bySize": [
+      {
+        "size": 3,
+        "coverageTau": 0.248,
+        "assertionTau": -0.146
+      },
+      {
+        "size": 5,
+        "coverageTau": 0.408,
+        "assertionTau": 0.315
+      },
+      {
+        "size": 8,
+        "coverageTau": 0.366,
+        "assertionTau": 0.237
+      },
+      {
+        "size": 12,
+        "coverageTau": 0.353,
+        "assertionTau": 0.12
+      }
+    ]
+  },
+  "generatorAndShrinker": {
+    "seeds": 200,
+    "budget": 100,
+    "uniformDetection": 0.075,
+    "boundaryDetection": 0.995,
+    "firstCounterexample": 62,
+    "shrunkCounterexample": 37
+  },
+  "generatedVersusHuman": {
+    "humanTests": 24,
+    "generatedTests": 24,
+    "humanMutationScore": 0.813,
+    "generatedMutationScore": 1,
+    "humanDetectsSeededDefect": true,
+    "generatedDetectsSeededDefect": false,
+    "humanTypeOnlyAssertions": 6,
+    "generatedDuplicateInputs": 0,
+    "generatedMagicNumberOracles": 24
+  }
+}

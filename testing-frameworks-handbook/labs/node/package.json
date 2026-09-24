@@ -7,7 +7,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "test": "npm run test:node && npm run test:node:module-mock && npm run test:mocha && npm run test:ava && npm run test:semantics && npm run test:unawaited",
+    "test": "npm run test:node && npm run test:node:module-mock && npm run test:mocha && npm run test:ava && npm run test:semantics && npm run test:unawaited && npm run test:spike",
     "test:node": "node --test test/node/*.test.js",
     "test:node:module-mock": "node --experimental-test-module-mocks --test test/module-mock/*.test.js",
     "test:mocha": "mocha 'test/mocha/**/*.test.js'",
@@ -17,7 +17,9 @@
     "record:semantics": "node scripts/execution-semantics.mjs --record",
     "test:unawaited": "node scripts/intentional-failures.mjs --check",
     "record:unawaited": "node scripts/intentional-failures.mjs --record",
-    "coverage": "node --test --experimental-test-coverage test/node/*.test.js"
+    "coverage": "node --test --experimental-test-coverage test/node/*.test.js",
+    "test:spike": "node scripts/runner-spike.mjs --check",
+    "record:spike": "node scripts/runner-spike.mjs --record"
   },
   "devDependencies": {
     "ava": "8.0.1",

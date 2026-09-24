@@ -4,6 +4,7 @@
 |---|---|---|
 | [0001](0001-hybrid-testing-policy.md) | Accepted | Classical/London hybrid testing policy |
 | [0002](0002-adopt-microsoft-testing-platform.md) | Accepted | .NET 10 testの既定platformにMTPを採用 |
+| [0003](0003-javascript-unit-runner-selection.md) | Accepted | Node.js unit/component testの既定runnerをnode:testにする |
 
 ## 運用
 

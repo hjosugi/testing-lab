@@ -1132,17 +1132,16 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] target layerとfailure typeを定義
-- [ ] async/failure/parameterized/parallel/diagnosticの共通5caseを実装
-- [ ] maintenance/security/runtime compatibilityを確認
+- [x] target layerとfailure typeを定義
+- [x] async/failure/parameterized/parallel/diagnosticの共通5caseを実装
+- [x] maintenance/security/runtime compatibilityを確認
 - [ ] team diagnosis timeを計測
-- [ ] migration/exit strategyを記録
+- [x] migration/exit strategyを記録
 
 ## Acceptance criteria
 
-- [ ] star数や更新日だけで選ばない
-- [ ] runner/framework/assertion/double/toolを誤分類しない
-
+- [x] star数や更新日だけで選ばない
+- [x] runner/framework/assertion/double/toolを誤分類しない
 
 ---
 
@@ -1531,16 +1530,15 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] 候補runnerで同じ5 testを実装
-- [ ] discovery、lifecycle、isolation、parallel schedulingを調査
-- [ ] intentional failureのdiff/stack/artifactを比較
-- [ ] IDE/CI/XML/plugin/upgradeを評価
+- [x] 候補runnerで同じ5 testを実装
+- [x] discovery、lifecycle、isolation、parallel schedulingを調査
+- [x] intentional failureのdiff/stack/artifactを比較
+- [x] IDE/CI/XML/plugin/upgradeを評価
 
 ## Acceptance criteria
 
-- [ ] syntaxの好み以外のdecision recordがある
-- [ ] lock-inとmigration costを明記
-
+- [x] syntaxの好み以外のdecision recordがある
+- [x] lock-inとmigration costを明記
 
 ---
 

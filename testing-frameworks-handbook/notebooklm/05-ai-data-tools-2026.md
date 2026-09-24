@@ -890,6 +890,8 @@ PHP labは公式PHPUnit 12.5.31 PHARをNixでhash pinし、同じ10-test suite�
 
 # 選定ガイド
 
+> 実行例: [ADR-0003](adr/0003-javascript-unit-runner-selection.md)は、node:test・Mocha・AVAへ同じ5 caseを実装した[`labs/node/test/spike/`](../labs/node/test/spike/)の実測scorecard（診断要素、JUnit XML、依存数、engine範囲、並列semantics）から既定runnerを決め、migration/exit strategyとlock-inを記録した例です。
+
 ## 先に結論
 
 | 状況 | 第一候補 | 理由 |

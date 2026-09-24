@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "node": "24",
+  "scorecard": [
+    {
+      "runner": "node:test",
+      "fiveCasesPass": true,
+      "intentionalFailureExitsNonZero": true,
+      "diagnostics": {
+        "namesTheTest": true,
+        "pointsToSourceLine": true,
+        "showsBothDifferingValues": true,
+        "showsStructuredDiff": true
+      },
+      "junitXml": {
+        "builtIn": true,
+        "reporter": "junit",
+        "listsAllCases": true
+      },
+      "footprint": {
+        "npmPackages": 0,
+        "engines": "bundled with Node"
+      }
+    },
+    {
+      "runner": "Mocha",
+      "fiveCasesPass": true,
+      "intentionalFailureExitsNonZero": true,
+      "diagnostics": {
+        "namesTheTest": true,
+        "pointsToSourceLine": true,
+        "showsBothDifferingValues": true,
+        "showsStructuredDiff": true
+      },
+      "junitXml": {
+        "builtIn": true,
+        "reporter": "xunit",
+        "listsAllCases": true
+      },
+      "footprint": {
+        "npmPackages": 51,
+        "engines": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      }
+    },
+    {
+      "runner": "AVA",
+      "fiveCasesPass": true,
+      "intentionalFailureExitsNonZero": true,
+      "diagnostics": {
+        "namesTheTest": true,
+        "pointsToSourceLine": true,
+        "showsBothDifferingValues": true,
+        "showsStructuredDiff": true
+      },
+      "junitXml": {
+        "builtIn": false,
+        "note": "TAP only (--tap); JUnit needs an external converter"
+      },
+      "footprint": {
+        "npmPackages": 132,
+        "engines": "^22.20 || ^24.12 || >=26"
+      }
+    }
+  ]
+}

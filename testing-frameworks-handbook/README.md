@@ -59,7 +59,7 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 31. [最先端テストを「7つの観点」で理解する](docs/31-frontier-multi-perspective.md)
 32. [Mobile／desktop／game／device matrix設計](docs/32-mobile-desktop-game-device-matrix.md)
 
-実装時のClassical/London defaultは[ADR-0001: hybrid testing policy](docs/adr/0001-hybrid-testing-policy.md)、.NET 10のtest platformは[ADR-0002: MTP adoption](docs/adr/0002-adopt-microsoft-testing-platform.md)を正とします。
+実装時のClassical/London defaultは[ADR-0001: hybrid testing policy](docs/adr/0001-hybrid-testing-policy.md)、.NET 10のtest platformは[ADR-0002: MTP adoption](docs/adr/0002-adopt-microsoft-testing-platform.md)、Node.js unit/component runnerは[ADR-0003: node:test](docs/adr/0003-javascript-unit-runner-selection.md)を正とします。
 
 実案件へ転用する場合は、[test design card](templates/test-design-card.md)、[test strategy template](templates/test-strategy-template.md)、[device test plan](templates/device-test-plan.md)、[検証可能なdevice matrix JSON](templates/device-test-matrix.example.json)、[研究再現template](templates/research-reproduction.md)、[testing policy例外ADR template](templates/testing-policy-exception-adr.md)をコピーして使えます。
 

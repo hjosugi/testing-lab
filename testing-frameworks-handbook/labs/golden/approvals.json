@@ -1,0 +1,8 @@
+{
+  "policy": "Each baseline hash needs its own approval: reviewer != author, a specific reason (>= 20 chars), and no reason shared by several baselines.",
+  "approvals": [],
+  "pending": [
+    { "baseline": "checkout-2-items.ppm", "author": "claude (initial baseline)", "note": "Initial baseline created with the lab; awaiting a human reviewer." },
+    { "baseline": "receipt.golden.txt", "author": "claude (initial baseline)", "note": "Initial baseline created with the lab; awaiting a human reviewer." }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "viewport": { "width": 64, "height": 40 },
+  "clock": "2026-09-25T00:00:00Z",
+  "animations": "disabled",
+  "fonts": "none (block rendering)",
+  "threshold": 0.001,
+  "masks": [ { "x": 44, "y": 35, "w": 20, "h": 3, "reason": "order timestamp changes every run; covered by a semantic assertion instead" } ]
+}

@@ -3,13 +3,12 @@
 
 ## Tasks
 
-- [ ] semantic assertionで置換できるsnapshotを整理
-- [ ] font/time/animation/viewportを固定
-- [ ] baseline updateにreviewerと理由を要求
-- [ ] perceptual thresholdとmask領域を監査
+- [x] semantic assertionで置換できるsnapshotを整理
+- [x] font/time/animation/viewportを固定
+- [x] baseline updateにreviewerと理由を要求
+- [x] perceptual thresholdとmask領域を監査
 
 ## Acceptance criteria
 
-- [ ] bulk updateだけで重要差分を承認できない
-- [ ] failure artifactから意味のある差を判断可能
-
+- [x] bulk updateだけで重要差分を承認できない
+- [x] failure artifactから意味のある差を判断可能

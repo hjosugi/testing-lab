@@ -38,6 +38,7 @@
 | Concurrency | PASS | 6 tests: 逐次では見えない重複注文とlost updateをbarrierで再現（sleepなし）、4 threadが最後の1個を4回販売しCAS/mutexで1回、逆順lockのdeadlockを300ms deadlineで循環証拠化しlock順序で解消、全worker exit 0とhandle残りなし。Go race/TSan/goleakは既存CI lane |
 | CLI / filesystem / process | PASS | 7 tests: exit 0/2/65/66/73/130/143とstdout/stderr分離、EACCES、`ulimit -f`によるEFBIGで既存receipt不変、SIGTERM/SIGINT mid-writeでtemp除去、space/日本語/NFC・NFD/200文字path、hung childのprocess group kill |
 | Test data / privacy | PASS | 6 tests: meaningful default、manifest（clock/seed/locale）から同一data再生成、4 process×50件で衝突0（naive sequenceは150件衝突）、namespace cleanupのidempotency、不可逆匿名化とsynthetic guard、失敗artifactのsecret/PII不在 |
+| Golden / visual approval | PASS（baseline未承認） | 5 tests: byte同一render、timestamp maskと合計金額変更の検出（bounding box）、mask/threshold監査、semantic assertionへの置換、hash単位承認・self-approval/bulk update拒否。2 baselineは人の承認待ち（pending）として記録 |
 | Go execution matrix | PASS | 通常/race、parallel 60 executions、total/parser fuzz各100x budget、generated drift、benchmark、3 intentional failures |
 | Rust execution matrix | PASS | private unit 2、public integration 6、property 256 cases、trait 1、doctest 2、mutants 7/7 |
 | PHP execution matrix | PASS | PHP 8.4、PHPUnit 12.5.31→13.2.4、high-risk mutants 14/14、equivalent mutant 1 classified |

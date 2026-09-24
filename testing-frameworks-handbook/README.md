@@ -112,6 +112,8 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 `labs/test-data`には、meaningful defaultと名前空間付きIDを持つtest data factory、並列process間の衝突防止、namespace cleanup、production data匿名化policy、artifactのPII/secret検査の例があります。
 
+`labs/golden`には、決定的renderとmask/threshold監査、意味のある差のbounding box、content hash単位の承認でbulk updateを拒否するsnapshot/golden運用の例があります。
+
 `labs/advanced` には、同じproduction codeに対する5 domain invariant、fast-check generator/shrinker監査、metamorphic/differential、model-based、concurrency、fault-injection、characterization、snapshot、performanceと、Go parser/API coverage-guided fuzzの比較実験があります。
 
 ## Issue backlog

@@ -1,0 +1,4 @@
+ORDER o-1
+book x2 = 1200
+pen x3 = 360
+TOTAL 1560

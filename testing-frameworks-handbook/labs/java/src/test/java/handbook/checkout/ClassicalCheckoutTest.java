@@ -28,7 +28,9 @@ class ClassicalCheckoutTest {
     static java.util.stream.Stream<Arguments> carts() {
         return java.util.stream.Stream.of(
             Arguments.of(List.of(new CartItem("book", 2, 600)), 1200),
-            Arguments.of(List.of(new CartItem("a", 1, 100), new CartItem("b", 3, 50)), 250)
+            Arguments.of(List.of(new CartItem("a", 1, 100), new CartItem("b", 3, 50)), 250),
+            // PIT survivor (unitPrice < 0 -> <= 0): a free line is valid billing input.
+            Arguments.of(List.of(new CartItem("gift", 1, 0)), 0)
         );
     }
 

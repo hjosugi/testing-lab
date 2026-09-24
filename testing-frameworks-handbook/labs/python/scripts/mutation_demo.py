@@ -30,6 +30,20 @@ MUTATIONS = (
         replacement="subtotal <= self.minimum_subtotal",
     ),
     Mutation(
+        name="reject a free cart under the default rule",
+        path="src/checkout/domain.py",
+        original=(
+            "        if subtotal < 0:\n"
+            '            raise ValueError("subtotal must be non-negative")\n'
+            "        return 0\n"
+        ),
+        replacement=(
+            "        if subtotal <= 0:\n"
+            '            raise ValueError("subtotal must be non-negative")\n'
+            "        return 0\n"
+        ),
+    ),
+    Mutation(
         name="disable over-discount guard",
         path="src/checkout/domain.py",
         original="if not 0 <= discount <= subtotal:",

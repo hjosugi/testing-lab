@@ -110,4 +110,41 @@ public class CheckoutTests
             Assert.That(orders.Saved, Is.Empty);
         });
     }
+
+    // Added for the dotnet-targeted mutation lane (labs/mutation/catalog/dotnet.json):
+    // NET-001 (accept quantity 0) and NET-002 (unchecked total) survived every test.
+    [Test]
+    public void ZeroQuantityIsRejectedBeforePayment()
+    {
+        var payments = new FakePayments();
+        var orders = new MemoryOrders();
+        var service = new CheckoutService(payments, orders);
+
+        Assert.ThrowsAsync<ArgumentOutOfRangeException>(
+            async () => await service.Checkout("o-zero", [new("book", 0, 600)], "t-1"));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(payments.Captured, Is.Empty);
+            Assert.That(orders.Saved, Is.Empty);
+        });
+    }
+
+    [Test]
+    public void TotalOverflowAcrossLinesIsRejectedBeforePayment()
+    {
+        var payments = new FakePayments();
+        var orders = new MemoryOrders();
+        var service = new CheckoutService(payments, orders);
+
+        Assert.ThrowsAsync<OverflowException>(
+            async () => await service.Checkout(
+                "o-overflow", [new("a", 1, int.MaxValue), new("b", 1, 1)], "t-1"));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(payments.Captured, Is.Empty);
+            Assert.That(orders.Saved, Is.Empty);
+        });
+    }
 }

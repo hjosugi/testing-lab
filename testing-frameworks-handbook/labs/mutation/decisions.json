@@ -1,0 +1,188 @@
+{
+  "decisions": [
+    {
+      "id": "D-PHP-E001",
+      "lane": "php-infection",
+      "file": "labs/php/mutation-fixtures/BooleanIdentity.php",
+      "classification": "equivalent",
+      "match": {
+        "mutator": "CastBool",
+        "original": "return (bool) $value;",
+        "replacement": "return $value;"
+      },
+      "rationale": "The parameter is declared bool, so removing the cast cannot change value or type for either input; both inputs are exhausted by the data provider.",
+      "owner": "testing-lab maintainers",
+      "reviewBy": "2027-03-31",
+      "evidence": "labs/php/MUTATION_CLASSIFICATION.md#e-001-equivalent-castbool, labs/php/scripts/verify-equivalent-mutant.sh"
+    },
+    {
+      "id": "D-PY-MSG",
+      "lane": "python-curated",
+      "file": "labs/python/src/checkout/domain.py",
+      "classification": "low-value",
+      "match": {
+        "mutator": "string literal",
+        "original": "ValueError(\"<message>\")",
+        "replacement": "ValueError(None | \"XX<message>XX\" | \"<MESSAGE>\")"
+      },
+      "rationale": "14 of 15 mutmut survivors only rewrite exception message text. The public contract is the exception type plus the guarded state (no capture, no save); messages are for humans and asserting every one would couple tests to wording. The curated lane therefore does not include message mutants.",
+      "owner": "testing-lab maintainers",
+      "reviewBy": "2027-03-31",
+      "evidence": "labs/mutation/SPIKE.md#python"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "R-JS-01",
+      "source": "js-stryker",
+      "mutant": "totalOf unitPrice guard: `|| unitPrice < 0` -> `&&` / `false` (2 mutants)",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "test/mutation-risk.test.js: unitPriceの境界と型"
+    },
+    {
+      "id": "R-JS-02",
+      "source": "js-stryker",
+      "mutant": "totalOf unitPrice guard: `!isSafeInteger` branch -> false",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "test/mutation-risk.test.js: unitPriceの境界と型"
+    },
+    {
+      "id": "R-JS-03",
+      "source": "js-stryker",
+      "mutant": "totalOf quantity guard: `||` -> `&&` / `false` (2 mutants)",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "test/mutation-risk.test.js: quantityの境界と型"
+    },
+    {
+      "id": "R-JS-04",
+      "source": "js-stryker",
+      "mutant": "totalOf quantity guard: `quantity <= 0` -> `< 0` / `false`",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "test/mutation-risk.test.js: quantityの境界と型"
+    },
+    {
+      "id": "R-JS-05",
+      "source": "js-stryker",
+      "mutant": "totalOf overflow guard: `||` -> `&&`",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "test/mutation-risk.test.js: 合計がsafe integerを超えたら拒否"
+    },
+    {
+      "id": "R-JS-06",
+      "source": "js-stryker",
+      "mutant": "totalOf overflow guard: `sum + subtotal` -> `sum - subtotal`",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "test/mutation-risk.test.js: 合計がsafe integerを超えたら拒否"
+    },
+    {
+      "id": "R-JS-07",
+      "source": "js-stryker",
+      "mutant": "Order.pay: reserved-state guard -> false (re-charge a paid order with a new key)",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "test/mutation-risk.test.js: payment state"
+    },
+    {
+      "id": "R-JS-08",
+      "source": "js-stryker",
+      "mutant": "sanitize: `card(number)?` -> `card(number)` (bare `card` leaks)",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "test/mutation-risk.test.js: secret leak"
+    },
+    {
+      "id": "R-JS-09",
+      "source": "js-stryker",
+      "mutant": "sanitize: array branch -> false (secrets inside arrays leak)",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "test/mutation-risk.test.js: secret leak"
+    },
+    {
+      "id": "R-JS-10",
+      "source": "js-stryker",
+      "mutant": "error message StringLiteral -> \"\" (3 no-coverage mutants)",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "assertions now match the field name (unitPrice/quantity/reserved order) because the message names the rejected field"
+    },
+    {
+      "id": "R-JAVA-01",
+      "source": "java-pit",
+      "mutant": "CartItem.subtotal: `unitPrice < 0` -> `unitPrice <= 0` (ConditionalsBoundary)",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "ClassicalCheckoutTest carts(): free gift line"
+    },
+    {
+      "id": "R-PY-01",
+      "source": "python-curated",
+      "mutant": "NoDiscount.discount_for: `subtotal < 0` -> `subtotal <= 0` / `< 1` (2 mutmut survivors)",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "tests/test_discount_rule.py::test_default_rule_accepts_a_free_cart + curated mutant 'reject a free cart under the default rule'"
+    },
+    {
+      "id": "R-PY-02",
+      "source": "python-curated",
+      "mutant": "13 exception-message mutants (None / XX..XX / upper-case)",
+      "outcome": "low-value",
+      "reviewedAt": "2026-09-25",
+      "evidence": "decision D-PY-MSG"
+    },
+    {
+      "id": "R-GO-01",
+      "source": "go-targeted",
+      "mutant": "GO-004 ignore Save error",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "checkout_test.go: TestCheckoutSaveFailureIsNotReportedAsConfirmed"
+    },
+    {
+      "id": "R-GO-02",
+      "source": "go-targeted",
+      "mutant": "GO-001 accept quantity 0 / GO-002 reject a free line",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "checkout_test.go: TestTotalBillingBoundaries (only the fuzz targets reached these branches before)"
+    },
+    {
+      "id": "R-GO-03",
+      "source": "go-targeted",
+      "mutant": "GO-003 drop the cross-line overflow guard",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "checkout_test.go: TestTotalBillingBoundaries/sum_across_lines_overflows"
+    },
+    {
+      "id": "R-NET-01",
+      "source": "dotnet-targeted",
+      "mutant": "NET-001 accept quantity 0 / NET-002 unchecked total",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "NUnitTests/CheckoutTests.cs: ZeroQuantityIsRejectedBeforePayment, TotalOverflowAcrossLinesIsRejectedBeforePayment"
+    },
+    {
+      "id": "R-CPP-01",
+      "source": "cpp-targeted",
+      "mutant": "CPP-003 drop the customer token",
+      "outcome": "test-added",
+      "reviewedAt": "2026-09-25",
+      "evidence": "tests/checkout_test.cpp: Checkout forwards the payment token and total"
+    },
+    {
+      "id": "R-PHP-01",
+      "source": "php-infection",
+      "mutant": "CastBool in BooleanIdentity fixture",
+      "outcome": "equivalent",
+      "reviewedAt": "2026-07-19",
+      "evidence": "decision D-PHP-E001"
+    }
+  ]
+}

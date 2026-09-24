@@ -58,6 +58,26 @@ TEST_CASE("London-style spies verify the protocol", "[london]") {
   REQUIRE(orders.saved == std::vector<Order>{result});
 }
 
+// Added for the cpp-targeted mutation lane (labs/mutation/catalog/cpp.json):
+// CPP-003 (drop the customer token) survived because FakePayments ignores it.
+TEST_CASE("Checkout forwards the payment token and total", "[london]") {
+  struct TokenRecordingPayments : PaymentGateway {
+    std::vector<std::pair<int, std::string>> calls;
+    std::string capture(int amount, const std::string &token) override {
+      calls.emplace_back(amount, token);
+      return "pay-token";
+    }
+  } payments;
+  MemoryOrders orders;
+  CheckoutService service(payments, orders);
+
+  const auto result = service.checkout("o-token", {{"book", 1, 600}}, "tok-customer");
+
+  REQUIRE(payments.calls == std::vector<std::pair<int, std::string>>{{600, "tok-customer"}});
+  REQUIRE(result.payment_id == "pay-token");
+  REQUIRE(orders.saved == std::vector<Order>{result});
+}
+
 TEST_CASE("Cart subtotal microbenchmark keeps a correctness oracle",
           "[!benchmark][benchmark]") {
   std::vector<Item> items;

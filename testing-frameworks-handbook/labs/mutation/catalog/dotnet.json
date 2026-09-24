@@ -1,0 +1,40 @@
+{
+  "lane": "dotnet-targeted",
+  "cwd": "labs/dotnet",
+  "command": ["dotnet", "test", "--project", "tests/NUnitTests/NUnitTests.csproj"],
+  "env": { "DOTNET_CLI_TELEMETRY_OPTOUT": "1", "DOTNET_NOLOGO": "1" },
+  "mutants": [
+    {
+      "id": "NET-001",
+      "file": "src/Checkout/Domain.cs",
+      "risk": "high",
+      "protects": "billing: quantity 0 must be rejected",
+      "original": "Quantity > 0 && UnitPrice >= 0",
+      "replacement": "Quantity >= 0 && UnitPrice >= 0"
+    },
+    {
+      "id": "NET-002",
+      "file": "src/Checkout/Domain.cs",
+      "risk": "high",
+      "protects": "billing: cart total overflow across lines",
+      "original": "checked(sum + item.Subtotal())",
+      "replacement": "unchecked(sum + item.Subtotal())"
+    },
+    {
+      "id": "NET-003",
+      "file": "src/Checkout/Domain.cs",
+      "risk": "high",
+      "protects": "data-loss: the confirmed order is persisted",
+      "original": "await orders.Save(order, cancellationToken);",
+      "replacement": "await Task.CompletedTask;"
+    },
+    {
+      "id": "NET-004",
+      "file": "src/Checkout/Domain.cs",
+      "risk": "high",
+      "protects": "payment: caller cancellation reaches the gateway",
+      "original": "payments.Capture(total, token, cancellationToken)",
+      "replacement": "payments.Capture(total, token, CancellationToken.None)"
+    }
+  ]
+}

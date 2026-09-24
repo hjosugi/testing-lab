@@ -173,6 +173,66 @@ func TestCheckoutPaymentFailureDoesNotSave(t *testing.T) {
 	}
 }
 
+// The go-targeted mutation lane (labs/mutation/catalog/go.json) showed that the
+// quantity/price boundaries and the cross-line overflow guard were reachable
+// only by the fuzz targets, so plain `go test` let GO-001..GO-003 survive.
+func TestTotalBillingBoundaries(t *testing.T) {
+	t.Parallel()
+	maxInt := int(^uint(0) >> 1)
+	cases := []struct {
+		name    string
+		items   []Item
+		want    int
+		wantErr error
+	}{
+		{"free line is valid", []Item{{SKU: "gift", Quantity: 1, UnitPrice: 0}}, 0, nil},
+		{"quantity zero is rejected", []Item{{SKU: "book", Quantity: 0, UnitPrice: 600}}, 0, ErrInvalidItem},
+		{"negative price is rejected", []Item{{SKU: "book", Quantity: 1, UnitPrice: -1}}, 0, ErrInvalidItem},
+		{"sum at the limit is exact", []Item{{SKU: "a", Quantity: 1, UnitPrice: maxInt - 1}, {SKU: "b", Quantity: 1, UnitPrice: 1}}, maxInt, nil},
+		{"sum across lines overflows", []Item{{SKU: "a", Quantity: 1, UnitPrice: maxInt}, {SKU: "b", Quantity: 1, UnitPrice: 1}}, 0, ErrTotalOverflow},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			got, err := Total(tc.items)
+			if !errors.Is(err, tc.wantErr) || got != tc.want {
+				t.Fatalf("Total()=(%d, %v), want (%d, %v)", got, err, tc.want, tc.wantErr)
+			}
+		})
+	}
+}
+
+type failingOrders struct {
+	err error
+}
+
+func (f failingOrders) Save(Order) error {
+	return f.err
+}
+
+// Added after the targeted mutation lane showed that swallowing a Save error
+// (a confirmed, charged order that is never persisted) survived every test.
+func TestCheckoutSaveFailureIsNotReportedAsConfirmed(t *testing.T) {
+	t.Parallel()
+	diskFull := errors.New("disk full")
+	payments := &fakePayments{}
+
+	order, err := NewService(payments, failingOrders{err: diskFull}).Checkout(
+		"o-1",
+		[]Item{{SKU: "book", Quantity: 1, UnitPrice: 600}},
+		"t-1",
+	)
+	if !errors.Is(err, diskFull) {
+		t.Fatalf("err=%v, want the repository failure", err)
+	}
+	if order != (Order{}) {
+		t.Fatalf("order=%+v, want zero value when persistence fails", order)
+	}
+	if !reflect.DeepEqual(payments.calls, []int{600}) {
+		t.Fatalf("capture calls=%v; the compensating refund is out of scope but the capture must be visible", payments.calls)
+	}
+}
+
 func TestParseItemLineExamples(t *testing.T) {
 	t.Parallel()
 	for _, testCase := range []struct {

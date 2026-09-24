@@ -1,6 +1,6 @@
 import pytest
 
-from checkout import ThresholdPercentageDiscount
+from checkout import NoDiscount, ThresholdPercentageDiscount
 
 
 @pytest.mark.parametrize(
@@ -45,5 +45,15 @@ def test_discount_rejects_a_negative_subtotal():
         percentage=10,
     )
 
+    with pytest.raises(ValueError, match="subtotal must be non-negative"):
+        rule.discount_for(-1)
+
+
+def test_default_rule_accepts_a_free_cart():
+    # mutmut spike survivor: `subtotal < 0` -> `subtotal <= 0` rejected
+    # zero-priced carts under the default rule without failing any test.
+    rule = NoDiscount()
+
+    assert rule.discount_for(0) == 0
     with pytest.raises(ValueError, match="subtotal must be non-negative"):
         rule.discount_for(-1)

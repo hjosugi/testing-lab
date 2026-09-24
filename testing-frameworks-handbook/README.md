@@ -84,6 +84,8 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 `labs/python`には、in-memory fakeとreal Postgres adapterへ同じcontract suiteを実行し、transaction、locking、constraint、timezone、migration、container lifecycleを分離して検証する例があります。
 
+`labs/mutation`には、8言語の高リスクcodeへStryker/PIT/Infection/cargo-mutants/curated/catalog mutantを割り当て、changed-file laneとscheduled full lane、期限付きsurvivor decision、review action rateで運用する例があります。
+
 `labs/advanced` には、同じproduction codeに対する5 domain invariant、fast-check generator/shrinker監査、metamorphic/differential、model-based、concurrency、fault-injection、characterization、snapshot、performanceと、Go parser/API coverage-guided fuzzの比較実験があります。
 
 ## Issue backlog

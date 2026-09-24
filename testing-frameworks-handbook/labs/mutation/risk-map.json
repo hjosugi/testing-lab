@@ -1,0 +1,30 @@
+{
+  "prBudgetSeconds": 600,
+  "sourceRoots": [
+    "labs/advanced/src/", "labs/java/src/main/", "labs/python/src/checkout/", "labs/rust/src/",
+    "labs/php/src/", "labs/go/", "labs/dotnet/src/", "labs/cpp/include/", "labs/node/src/", "labs/system/src/"
+  ],
+  "ignored": ["labs/go/README.md", "labs/go/scripts/", "labs/go/testdata/", "labs/go/intentional/"],
+  "lanes": [
+    { "id": "python-curated", "tool": "curated source mutants (mutmut spike)", "cwd": "labs/python", "command": ["python3", "scripts/mutation_demo.py", "--require-all-killed"], "estimatedSeconds": 30 },
+    { "id": "go-targeted", "tool": "catalog mutants + go test", "cwd": "labs/mutation", "command": ["node", "scripts/run-targeted.mjs", "catalog/go.json"], "estimatedSeconds": 45 },
+    { "id": "php-infection", "tool": "Infection", "cwd": "labs/php", "command": ["./scripts/run-mutation.sh"], "estimatedSeconds": 60 },
+    { "id": "js-stryker", "tool": "StrykerJS + tap-runner", "cwd": "labs/advanced", "command": ["npm", "run", "test:mutation"], "estimatedSeconds": 90 },
+    { "id": "java-pit", "tool": "PIT + JUnit 5 plugin", "cwd": "labs/java", "command": ["bash", "-c", "gradle pitest --no-daemon --console=plain && node ../mutation/scripts/gate-pit.mjs build/reports/pitest/mutations.xml"], "estimatedSeconds": 150 },
+    { "id": "rust-cargo-mutants", "tool": "cargo-mutants", "cwd": "labs/rust", "command": ["./scripts/run-mutation.sh"], "estimatedSeconds": 150 },
+    { "id": "dotnet-targeted", "tool": "catalog mutants + dotnet test", "cwd": "labs/mutation", "command": ["node", "scripts/run-targeted.mjs", "catalog/dotnet.json"], "estimatedSeconds": 300 },
+    { "id": "cpp-targeted", "tool": "catalog mutants + CTest", "cwd": "labs/mutation", "command": ["node", "scripts/run-targeted.mjs", "catalog/cpp.json"], "estimatedSeconds": 300 }
+  ],
+  "modules": [
+    { "id": "js-billing-payment-secrets", "risk": "high", "paths": ["labs/advanced/src/checkout.js", "labs/advanced/test/", "labs/advanced/stryker.config.json"], "lanes": ["js-stryker"] },
+    { "id": "js-test-generators", "risk": "low", "paths": ["labs/advanced/src/generators.js"], "lanes": ["js-stryker"] },
+    { "id": "java-checkout-billing", "risk": "high", "paths": ["labs/java/src/", "labs/java/build.gradle.kts"], "lanes": ["java-pit"] },
+    { "id": "python-checkout-billing", "risk": "high", "paths": ["labs/python/src/checkout/", "labs/python/tests/", "labs/python/scripts/mutation_demo.py"], "lanes": ["python-curated"] },
+    { "id": "rust-checkout-billing", "risk": "high", "paths": ["labs/rust/src/", "labs/rust/tests/"], "lanes": ["rust-cargo-mutants"] },
+    { "id": "php-checkout-billing", "risk": "high", "paths": ["labs/php/src/", "labs/php/tests/", "labs/php/infection.json5"], "lanes": ["php-infection"] },
+    { "id": "go-checkout-billing-data-loss", "risk": "high", "paths": ["labs/go/checkout.go", "labs/go/checkout_test.go", "labs/mutation/catalog/go.json"], "lanes": ["go-targeted"] },
+    { "id": "go-item-line-parser", "risk": "medium", "paths": ["labs/go/item_line.go"], "lanes": ["go-targeted"] },
+    { "id": "dotnet-checkout-billing-data-loss", "risk": "high", "paths": ["labs/dotnet/src/", "labs/dotnet/tests/NUnitTests/", "labs/mutation/catalog/dotnet.json"], "lanes": ["dotnet-targeted"] },
+    { "id": "cpp-checkout-billing-data-loss", "risk": "high", "paths": ["labs/cpp/include/", "labs/cpp/tests/checkout_test.cpp", "labs/mutation/catalog/cpp.json"], "lanes": ["cpp-targeted"] }
+  ]
+}

@@ -45,7 +45,7 @@ rm -f \
   dotnet test \
     --project tests/NUnitTests/NUnitTests.csproj \
     --no-restore \
-    --minimum-expected-tests 6 \
+    --minimum-expected-tests 8 \
     --no-progress \
     --report-trx \
     --report-trx-filename nunit-mtp.trx \
@@ -74,9 +74,9 @@ rm -f \
     --results-directory "$reports/vstest/mstest"
 )
 
-verify_report "$reports/mtp/nunit/nunit-mtp.trx" 6
+verify_report "$reports/mtp/nunit/nunit-mtp.trx" 8
 verify_report "$reports/mtp/mstest/mstest-mtp.trx" 9
-verify_report "$reports/vstest/nunit/nunit-vstest.trx" 6
+verify_report "$reports/vstest/nunit/nunit-vstest.trx" 8
 verify_report "$reports/vstest/mstest/mstest-vstest.trx" 9
 
 printf '%s\n' \

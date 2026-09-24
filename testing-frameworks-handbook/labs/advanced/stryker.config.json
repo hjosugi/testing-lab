@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "testRunner": "tap",
+  "tap": { "testFiles": ["test/*.test.js"] },
+  "mutate": [
+    "src/checkout.js:1-11",
+    "src/checkout.js:21-24",
+    "src/checkout.js:42-70",
+    "src/checkout.js:86-93"
+  ],
+  "concurrency": 2,
+  "coverageAnalysis": "perTest",
+  "reporters": ["clear-text", "json"],
+  "jsonReporter": { "fileName": "reports/mutation/mutation.json" },
+  "thresholds": { "high": 100, "low": 95, "break": null },
+  "timeoutMS": 20000,
+  "tempDirName": ".stryker-tmp",
+  "cleanTempDir": "always"
+}

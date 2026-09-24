@@ -3,9 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=20" },
-  "scripts": { "test": "node --test test/*.test.js" },
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "test:mutation": "stryker run && node ../mutation/scripts/gate-stryker.mjs reports/mutation/mutation.json"
+  },
   "devDependencies": {
+    "@stryker-mutator/core": "10.0.0",
+    "@stryker-mutator/tap-runner": "10.0.0",
     "fast-check": "4.9.0"
   }
 }

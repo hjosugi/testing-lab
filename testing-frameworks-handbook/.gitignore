@@ -23,3 +23,6 @@ test-results/
 storybook-static/
 schemathesis-report/
 .pact-artifacts/
+.stryker-tmp/
+labs/advanced/reports/
+*.mutation-backup

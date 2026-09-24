@@ -1,0 +1,32 @@
+{
+  "lane": "cpp-targeted",
+  "cwd": "labs/cpp",
+  "setup": [["cmake", "--fresh", "-S", ".", "-B", "build/mutation", "-G", "Ninja", "-DCMAKE_CXX_COMPILER=clang++"]],
+  "command": ["bash", "-c", "cmake --build build/mutation && ctest --test-dir build/mutation --output-on-failure --no-tests=error"],
+  "mutants": [
+    {
+      "id": "CPP-001",
+      "file": "include/checkout.hpp",
+      "risk": "high",
+      "protects": "billing: quantity 0 must be rejected",
+      "original": "if (quantity <= 0 || unit_price < 0)",
+      "replacement": "if (quantity < 0 || unit_price < 0)"
+    },
+    {
+      "id": "CPP-002",
+      "file": "include/checkout.hpp",
+      "risk": "high",
+      "protects": "data-loss: the confirmed order is persisted",
+      "original": "    orders_.save(order);\n",
+      "replacement": "    (void)orders_;\n"
+    },
+    {
+      "id": "CPP-003",
+      "file": "include/checkout.hpp",
+      "risk": "high",
+      "protects": "payment authorization: the customer token reaches the gateway",
+      "original": "payments_.capture(total, token)",
+      "replacement": "payments_.capture(total, std::string{})"
+    }
+  ]
+}

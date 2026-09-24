@@ -1,0 +1,63 @@
+name: Mutation lanes
+
+# Risk-based mutation testing (Issue #22). The changed-file lane runs only the
+# lanes whose risk-map modules were touched, highest risk first, inside the PR
+# budget in labs/mutation/risk-map.json; the scheduled lane runs every tool.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 18 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  changed-files:
+    name: changed-file lane (PR budget)
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: testing-frameworks-handbook
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+      - uses: DeterminateSystems/determinate-nix-action@2a0be2498974c2b6327e19780488744384637d88 # v3.21.7
+      - name: Resolve comparison base
+        id: base
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: echo "sha=${PR_BASE:-$PUSH_BEFORE}" >> "$GITHUB_OUTPUT"
+      - name: Bootstrap only from committed locks
+        run: nix develop --command env STRICT=1 ./scripts/bootstrap.sh
+      - name: Run selected mutation lanes
+        run: >-
+          nix develop --command node labs/mutation/scripts/mutation-lanes.mjs plan
+          --base "${{ steps.base.outputs.sha }}" --run --summary "$GITHUB_STEP_SUMMARY"
+      - name: Reject mutated sources or generated drift
+        run: test -z "$(git status --porcelain)"
+
+  scheduled-full:
+    name: scheduled full lane
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: testing-frameworks-handbook
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: DeterminateSystems/determinate-nix-action@2a0be2498974c2b6327e19780488744384637d88 # v3.21.7
+      - name: Bootstrap only from committed locks
+        run: nix develop --command env STRICT=1 ./scripts/bootstrap.sh
+      - name: Run every mutation lane
+        run: nix develop --command node labs/mutation/scripts/mutation-lanes.mjs plan --full --run --summary "$GITHUB_STEP_SUMMARY"
+      - name: Reject mutated sources or generated drift
+        run: test -z "$(git status --porcelain)"

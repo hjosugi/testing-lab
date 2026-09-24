@@ -89,6 +89,8 @@ if ! grep -Fq '"schemathesis==4.23.0"' "$root/labs/system/api-tests/pyproject.to
   failures=$((failures + 1))
 fi
 require_exact_npm_pin "labs/advanced/package.json" "fast-check" "4.9.0"
+require_exact_npm_pin "labs/advanced/package.json" "@stryker-mutator/core" "10.0.0"
+require_exact_npm_pin "labs/advanced/package.json" "@stryker-mutator/tap-runner" "10.0.0"
 require_exact_npm_pin "labs/system/package.json" "@pact-foundation/pact" "17.0.1"
 require_exact_npm_pin "labs/system/package.json" "@playwright/test" "1.61.1"
 require_exact_npm_pin "labs/system/package.json" "@storybook/addon-a11y" "10.5.2"

@@ -22,6 +22,7 @@
 | .NET runner matrix | PASS | NUnit/MSTest × MTP/VSTest、4 TRX、intentional failure 2 cases |
 | C++ sanitizer matrix | PASS | ASan heap-use-after-free、UBSan signed overflow、TSan data raceを別laneで検出 |
 | Property / fuzz suite | PASS | fast-check 18 tests、5 invariant × 500 runs、固定seed分布監査、quantity 10 / price 1までshrink、metamorphic/differential、3 committed counterexamples |
+| Risk-based mutation lanes | PASS | StrykerJS 10.0.0 86 mutant中83 killed + 3 timeout（survivor 0）、PIT 1.30.0 8/8、Python curated 7/7、Go catalog 5/5、C++ catalog 3/3、C# catalog 4/4、policy unit 14 tests、review action rate 17/19 |
 | Go execution matrix | PASS | 通常/race、parallel 60 executions、total/parser fuzz各100x budget、generated drift、benchmark、3 intentional failures |
 | Rust execution matrix | PASS | private unit 2、public integration 6、property 256 cases、trait 1、doctest 2、mutants 7/7 |
 | PHP execution matrix | PASS | PHP 8.4、PHPUnit 12.5.31→13.2.4、high-risk mutants 14/14、equivalent mutant 1 classified |
@@ -63,9 +64,9 @@ nix develop .#python --command make test-python-postgres
 | Storybook/Vitest browser component | PASS | 5 stories、real Chromium、role/name interaction、addon-a11y、image-alt mutation 5/5 failed as expected |
 | Playwright E2E / stability | PASS | 2 journeys × 3 browsers = 6 tests、100-repeat 2-shard gateは600 attempts、flake 0。accessibilityはStorybook、CSS tokenはsource component testが担当 |
 | Mobile/device matrix validator | PASS | WebDriver/gray-box/image/hierarchy分類、simulator/emulator/real-device/HIL、dimension coverage、hardware owner/予約/artifact contract |
-| Advanced generative techniques | PASS | 18 tests、5 invariant、固定seed `20260719`、boundary/cart-size分布、shrink、4 metamorphic relation、独立reference differential、synthetic defect corpus |
+| Advanced generative techniques | PASS | 25 tests（mutation由来7件を含む）、5 invariant、固定seed `20260719`、boundary/cart-size分布、shrink、4 metamorphic relation、独立reference differential、synthetic defect corpus |
 | JUnit / Mockito / Truth | PASS | 13 tests、Jupiter 6.1.1 present、Vintage absent |
-| NUnit 4 | PASS | 6 tests、MTP 2.1.0 / VSTest、cancel・async failure |
+| NUnit 4 | PASS | 8 tests、MTP 2.1.0 / VSTest、cancel・async failure |
 | MSTest 4 | PASS | 9 tests、MTP 2.3.1 / VSTest、cancel・async failure |
 | Catch2 / CTest | PASS | 3 tests、SECTION/GENERATE、2 shards、fixed-seed random order |
 | C++ benchmark / compile cost | PASS | 3 noise trials、handwritten spy対Trompeloeil clean build |

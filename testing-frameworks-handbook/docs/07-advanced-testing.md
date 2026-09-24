@@ -33,6 +33,16 @@ production codeへ小さな変更（`>`→`>=`、条件削除、return値変更�
 
 score 100%を盲目的に目指さず、money、authorization、data lossなど高risk moduleへ適用します。PHPはInfection、JavaはPIT、JSはStryker、Pythonはmutmut/cosmic-ray、Rustはcargo-mutantsなどが候補です。
 
+### Risk-based mutation lane
+
+[`labs/mutation`](../labs/mutation/README.md)は8言語へmutation laneを割り当てます。StrykerJS（JS）、PIT（Java）、Infection（PHP）、cargo-mutants（Rust）、mutmut spike由来のcurated mutant（Python）、reviewed catalog（Go/C#/C++）を、billing・payment state・duplicate charge・secret redaction・data lossのmodule単位で選びます。
+
+- 変更fileからlaneを選び、high riskから600秒のPR budgetへ詰めます。溢れた分とlow riskは理由付きでscheduled full laneへ回します。
+- survivorは`test-added`/`code-fixed`、または`equivalent`/`low-value`/`accepted-risk`のdecision（owner・期限・根拠必須）へ必ず落とします。
+- scoreの代わりにreview action rate（reviewしたsurvivorのうち行動につながった割合）を見ます。exception message mutantのように数だけ多いsurvivorは、この指標を下げるのでlaneから外します。
+
+spikeでは、既存のexample/property testが揃っていたにもかかわらず、JS 12件、Java 1件、Python 2件、Go 4件、C# 2件、C++ 1件の高リスクsurvivorが見つかり、すべてtest追加で解消しました（[SPIKE.md](../labs/mutation/SPIKE.md)）。
+
 ## Consumer-driven contract testing
 
 Pactではconsumer testが実際に必要とするrequest/response例からcontractを生成し、provider verificationで再生します。OpenAPI schema testとは目的が違います。

@@ -2,6 +2,7 @@ import org.gradle.process.CommandLineArgumentProvider
 
 plugins {
     java
+    id("info.solidsoft.pitest") version "1.19.0"
 }
 
 repositories {
@@ -64,4 +65,17 @@ tasks.test {
     testLogging {
         events("passed", "skipped", "failed")
     }
+}
+
+// Risk-based mutation lane (Issue #22): PIT mutates only production classes in
+// the checkout package; labs/mutation/scripts/gate-pit.mjs turns every
+// surviving mutant into a gate failure unless it has a reviewed decision.
+pitest {
+    pitestVersion = "1.30.0"
+    junit5PluginVersion = "1.2.3"
+    targetClasses = setOf("handbook.checkout.*")
+    threads = 2
+    outputFormats = setOf("XML", "HTML")
+    timestampedReports = false
+    jvmArgs.add(provider { "-javaagent:${mockitoAgent.singleFile.absolutePath}" })
 }

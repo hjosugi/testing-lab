@@ -1,0 +1,47 @@
+{
+  "lane": "go-targeted",
+  "cwd": "labs/go",
+  "command": ["go", "test", "-mod=readonly", "-count=1", "."],
+  "mutants": [
+    {
+      "id": "GO-001",
+      "file": "checkout.go",
+      "risk": "high",
+      "protects": "billing: quantity 0 must be rejected",
+      "original": "if item.Quantity <= 0 || item.UnitPrice < 0 {",
+      "replacement": "if item.Quantity < 0 || item.UnitPrice < 0 {"
+    },
+    {
+      "id": "GO-002",
+      "file": "checkout.go",
+      "risk": "high",
+      "protects": "billing: a free line (unit price 0) is valid",
+      "original": "if item.Quantity <= 0 || item.UnitPrice < 0 {",
+      "replacement": "if item.Quantity <= 0 || item.UnitPrice <= 0 {"
+    },
+    {
+      "id": "GO-003",
+      "file": "checkout.go",
+      "risk": "high",
+      "protects": "billing: cart total overflow across lines",
+      "original": "if total > maxInt-subtotal {",
+      "replacement": "if false && total > maxInt-subtotal {"
+    },
+    {
+      "id": "GO-004",
+      "file": "checkout.go",
+      "risk": "high",
+      "protects": "data-loss: a failed Save must not return a confirmed order",
+      "original": "\tif err := s.orders.Save(order); err != nil {\n\t\treturn Order{}, err\n\t}\n",
+      "replacement": "\t_ = s.orders.Save(order)\n"
+    },
+    {
+      "id": "GO-005",
+      "file": "checkout.go",
+      "risk": "high",
+      "protects": "payment authorization: the customer token reaches the gateway",
+      "original": "s.payments.Capture(total, token)",
+      "replacement": "s.payments.Capture(total, \"\")"
+    }
+  ]
+}

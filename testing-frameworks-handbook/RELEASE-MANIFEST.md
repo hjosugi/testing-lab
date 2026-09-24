@@ -10,6 +10,7 @@
 - HTTP integration、OpenAPI/Pact contract、property、Storybook/Vitest browser component/a11y、Playwright 3-engine critical journey/flakeラボ
 - fast-check 4.9 property/metamorphic/differential/shrink suiteとGo coverage-guided parser fuzzを含むadvanced techniqueラボ
 - StrykerJS/PIT/Infection/cargo-mutants/curated/catalog mutantによるrisk-based mutation laneとdecision ledger
+- coordinated omissionを避けたopen-model load generatorとload/stress/spike/soak/capacity/microbenchmark分離ラボ
 - Nix flakeとtoolchain別development shell
 - GitHub Issue本文52件
 - test design、strategy、device matrix、research reproduction、testing policy exception ADR template

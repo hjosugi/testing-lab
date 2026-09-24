@@ -800,6 +800,8 @@ dependency latencyがtailへどう伝播するか確認します。averageだけ
 
 systemが遅い間にload generatorがrequestを送らなくなると、遅延を過小評価します。arrival-rate modelとtool behaviorを確認します。
 
+実行例は[`labs/performance`](../labs/performance/README.md)です。同じ400ms stallに対し、closed-model clientのp99は100ms未満に留まり、intended start time基準のopen modelではp99が250msを超えることをtestで固定しています。load generator自身のsend遅れも記録し、予算を超えたrunはSLO判定をinvalidにします。
+
 ## Performance correctness
 
 高速でもresponse/drop/dataが誤っていれば失敗です。

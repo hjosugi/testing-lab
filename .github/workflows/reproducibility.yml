@@ -112,3 +112,28 @@ jobs:
       - uses: DeterminateSystems/determinate-nix-action@2a0be2498974c2b6327e19780488744384637d88 # v3.21.7
       - name: Run sanitizer suite and expected defect fixture
         run: nix develop .#cpp --command ./labs/cpp/scripts/run-sanitizer.sh ${{ matrix.sanitizer }}
+
+  performance-profiles:
+    name: Performance profiles (conclusive)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: testing-frameworks-handbook
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: DeterminateSystems/determinate-nix-action@2a0be2498974c2b6327e19780488744384637d88 # v3.21.7
+      - name: Run profile oracles and refuse inconclusive runs
+        run: nix develop .#generative --command env PERF_REQUIRE_CONCLUSIVE=1 make test-performance
+      - name: Record seeded repeats, capacity steps, and environment
+        run: nix develop .#generative --command node labs/performance/scripts/run-profiles.mjs --repeats 3 | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Microbenchmark (separate suite, informational)
+        run: nix develop .#generative --command node labs/performance/bench/quote.bench.mjs | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: performance-results
+          path: testing-frameworks-handbook/labs/performance/build/results/
+          if-no-files-found: error
+      - name: Reject generated repository drift
+        run: test -z "$(git status --porcelain)"

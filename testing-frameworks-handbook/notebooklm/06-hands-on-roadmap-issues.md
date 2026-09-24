@@ -965,18 +965,17 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] SLOとworkload modelを定義
-- [ ] microbenchmarkとsystem loadを別suite化
-- [ ] k6/JMeter/Gatling候補を比較
-- [ ] coordinated omission、warm-up、client bottleneckを確認
-- [ ] p50/p95/p99、error rate、saturationを保存
-- [ ] soakでleak/queue buildupを検証
+- [x] SLOとworkload modelを定義
+- [x] microbenchmarkとsystem loadを別suite化
+- [x] k6/JMeter/Gatling候補を比較
+- [x] coordinated omission、warm-up、client bottleneckを確認
+- [x] p50/p95/p99、error rate、saturationを保存
+- [x] soakでleak/queue buildupを検証
 
 ## Acceptance criteria
 
-- [ ] functional E2E timingを性能根拠に使わない
-- [ ] capacity limitとdegradation behaviorがdocument化
-
+- [x] functional E2E timingを性能根拠に使わない
+- [x] capacity limitとdegradation behaviorがdocument化
 
 ---
 
@@ -1482,16 +1481,15 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] workload modelとarrival processを定義
-- [ ] latency histogram、p95/p99、error、throughputを測定
-- [ ] load/stress/spike/soakを分離
-- [ ] response correctnessとresource saturationを同時観測
+- [x] workload modelとarrival processを定義
+- [x] latency histogram、p95/p99、error、throughputを測定
+- [x] load/stress/spike/soakを分離
+- [x] response correctnessとresource saturationを同時観測
 
 ## Acceptance criteria
 
-- [ ] test environment/baseline/confidenceを保存
-- [ ] coordinated omissionとwarm-upを説明可能
-
+- [x] test environment/baseline/confidenceを保存
+- [x] coordinated omissionとwarm-upを説明可能
 
 ---
 

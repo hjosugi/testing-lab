@@ -86,6 +86,8 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 `labs/mutation`には、8言語の高リスクcodeへStryker/PIT/Infection/cargo-mutants/curated/catalog mutantを割り当て、changed-file laneとscheduled full lane、期限付きsurvivor decision、review action rateで運用する例があります。
 
+`labs/performance`には、microbenchmark・load・stress・spike・soak・capacityを分離し、intended start基準のopen-model load generatorでcoordinated omissionを避け、warm-up除外・client bottleneck判定・seeded repeat・environment付きartifactでSLOを検証する例があります。
+
 `labs/advanced` には、同じproduction codeに対する5 domain invariant、fast-check generator/shrinker監査、metamorphic/differential、model-based、concurrency、fault-injection、characterization、snapshot、performanceと、Go parser/API coverage-guided fuzzの比較実験があります。
 
 ## Issue backlog

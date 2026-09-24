@@ -3,13 +3,12 @@
 
 ## Tasks
 
-- [ ] workload modelとarrival processを定義
-- [ ] latency histogram、p95/p99、error、throughputを測定
-- [ ] load/stress/spike/soakを分離
-- [ ] response correctnessとresource saturationを同時観測
+- [x] workload modelとarrival processを定義
+- [x] latency histogram、p95/p99、error、throughputを測定
+- [x] load/stress/spike/soakを分離
+- [x] response correctnessとresource saturationを同時観測
 
 ## Acceptance criteria
 
-- [ ] test environment/baseline/confidenceを保存
-- [ ] coordinated omissionとwarm-upを説明可能
-
+- [x] test environment/baseline/confidenceを保存
+- [x] coordinated omissionとwarm-upを説明可能

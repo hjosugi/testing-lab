@@ -23,6 +23,7 @@
 | C++ sanitizer matrix | PASS | ASan heap-use-after-free、UBSan signed overflow、TSan data raceを別laneで検出 |
 | Property / fuzz suite | PASS | fast-check 18 tests、5 invariant × 500 runs、固定seed分布監査、quantity 10 / price 1までshrink、metamorphic/differential、3 committed counterexamples |
 | Risk-based mutation lanes | PASS | StrykerJS 10.0.0 86 mutant中83 killed + 3 timeout（survivor 0）、PIT 1.30.0 8/8、Python curated 7/7、Go catalog 5/5、C++ catalog 3/3、C# catalog 4/4、policy unit 14 tests、review action rate 17/19 |
+| Performance profiles | PASS（CI） | model 9 tests、real HTTP profile 6 tests（load/CO/stress/spike/soak/capacity）。local共有host（load average 25〜48）ではgenerator lag p99が30ms予算を超え、profile testはinconclusive（skip）として報告。CIの専用jobは`PERF_REQUIRE_CONCLUSIVE=1`で判定 |
 | Go execution matrix | PASS | 通常/race、parallel 60 executions、total/parser fuzz各100x budget、generated drift、benchmark、3 intentional failures |
 | Rust execution matrix | PASS | private unit 2、public integration 6、property 256 cases、trait 1、doctest 2、mutants 7/7 |
 | PHP execution matrix | PASS | PHP 8.4、PHPUnit 12.5.31→13.2.4、high-risk mutants 14/14、equivalent mutant 1 classified |

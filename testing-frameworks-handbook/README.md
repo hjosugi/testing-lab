@@ -106,6 +106,8 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 `labs/combinatorial`には、制約とincident必須caseを持つpairwise設定matrixを再生成可能に作り、coverage criterionと除外理由を検証する例があります。
 
+`labs/concurrency`には、barrierでrandom sleepなしに重複注文・lost update・deadlockを再現し、worker_threadsの実並列、liveness deadline、leak検査、証拠artifactを残す例があります。
+
 `labs/advanced` には、同じproduction codeに対する5 domain invariant、fast-check generator/shrinker監査、metamorphic/differential、model-based、concurrency、fault-injection、characterization、snapshot、performanceと、Go parser/API coverage-guided fuzzの比較実験があります。
 
 ## Issue backlog

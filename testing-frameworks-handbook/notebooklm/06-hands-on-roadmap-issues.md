@@ -1310,16 +1310,15 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] shared resourceとcritical sectionをinventory
-- [ ] parallel duplicate checkoutをbarrier同期で再現
-- [ ] race detector/sanitizerをCIへ追加
-- [ ] liveness deadlineとgoroutine/thread/task leakを検査
+- [x] shared resourceとcritical sectionをinventory
+- [x] parallel duplicate checkoutをbarrier同期で再現
+- [x] race detector/sanitizerをCIへ追加
+- [x] liveness deadlineとgoroutine/thread/task leakを検査
 
 ## Acceptance criteria
 
-- [ ] sequential testでは見えない失敗を再現
-- [ ] random sleepに依存せずfailure evidenceを保存
-
+- [x] sequential testでは見えない失敗を再現
+- [x] random sleepに依存せずfailure evidenceを保存
 
 ---
 

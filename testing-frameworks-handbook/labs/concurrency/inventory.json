@@ -1,0 +1,13 @@
+{
+  "resources": [
+    { "resource": "stock count of the last item", "criticalSection": "read stock -> decide -> write stock - 1", "protection": "compare-and-swap / optimistic version check / mutex", "test": "lost update: barrier-forced interleaving oversells with unsafe read-modify-write" },
+    { "resource": "orders per customer", "criticalSection": "check existing order -> insert order", "protection": "idempotency key with a unique constraint", "test": "duplicate checkout: concurrent requests pass the check-then-act guard together" },
+    { "resource": "payment ledger lock and inventory lock", "criticalSection": "hold one lock while taking the other", "protection": "global lock order (A before B) and lock deadlines", "test": "deadlock: opposite lock order is detected by a deadline and ordered locking completes" },
+    { "resource": "worker threads", "criticalSection": "thread lifetime", "protection": "every worker is awaited to exit with code 0", "test": "leaks: every worker thread exits and no test hangs past its liveness deadline" }
+  ],
+  "ciDetectors": [
+    { "detector": "Go race detector", "where": "scripts/test-all.sh Go-race (go test -race) and labs/go/scripts/verify-intentional-failures.sh" },
+    { "detector": "ThreadSanitizer", "where": ".github/workflows/reproducibility.yml cpp-sanitizer (thread)" },
+    { "detector": "goleak", "where": "labs/go TestMain goroutine leak check" }
+  ]
+}

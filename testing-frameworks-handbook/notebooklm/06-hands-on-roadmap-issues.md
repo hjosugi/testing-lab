@@ -273,11 +273,11 @@ bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、
 [`.github/workflows/reproducibility.yml`](../../.github/workflows/reproducibility.yml)は次を実行します。
 
 - `ubuntu-24.04`で`x86_64-linux`
-- `macos-14`で`aarch64-darwin`
+- `macos-15`で`aarch64-darwin`
 - `windows-2025`でWindows固有の.NET lane
 - `ubuntu-24.04`のclean Docker daemonでreal Postgres integration
 
-GitHubのstandard `macos-14`はApple Silicon arm64 runnerです。runner labelのarchitectureは[GitHub-hosted runners reference](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)を正とし、job内でも`builtins.currentSystem`を照合します。
+GitHubのstandard `macos-15`はApple Silicon arm64 runnerです。Playwright 1.61はmacOS 14でWebKitを凍結revision 2251へ切り替えますが、nixpkgsのdarwin WebKitはmacOS 15向けrevision 2311だけを提供するため、runnerはmacOS 15以上に固定します。Linuxではnpm版playwright-coreのapt package前提のhost checkをNix shellで無効化し、Nix storeのpatch済みbrowserだけを使います。runner labelのarchitectureは[GitHub-hosted runners reference](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)を正とし、job内でも`builtins.currentSystem`を照合します。
 
 Linux/macOS laneはflake全systemの評価、lockだけを使うbootstrap、`STRICT=1 ./scripts/test-all.sh`、生成差分0をgateにします。通常laneはDocker不在時の明示failure契約だけをcontainerなしで確認し、real PostgresはDockerを持つLinux専用laneでrequiredにします。Windows laneはNixの代替ではなく、path、filesystem、native SDKなどWindowsでしか検出できないriskを担当します。
 

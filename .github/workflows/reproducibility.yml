@@ -18,7 +18,7 @@ jobs:
         include:
           - runner: ubuntu-24.04
             nix-system: x86_64-linux
-          - runner: macos-14
+          - runner: macos-15
             nix-system: aarch64-darwin
     runs-on: ${{ matrix.runner }}
     defaults:

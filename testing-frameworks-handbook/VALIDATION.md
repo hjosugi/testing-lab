@@ -78,7 +78,7 @@ nix develop .#python --command make test-python-postgres
 ローカル検証に加え、PRと`main`では次のruntime gateを必須にします。
 
 - `ubuntu-24.04`: `x86_64-linux`のstrict bootstrapと全test
-- `macos-14`: `aarch64-darwin`のstrict bootstrapと全test
+- `macos-15`: `aarch64-darwin`のstrict bootstrapと全test（WebKit 2311はmacOS 15以上が前提）
 - `windows-2025`: locked NuGet restore後のNUnit/MSTest
 - `ubuntu-24.04`: Nix Python shellとclean Docker daemonによるreal Postgres integration
 

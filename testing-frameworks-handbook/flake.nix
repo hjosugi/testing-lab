@@ -23,6 +23,10 @@
         export PLAYWRIGHT_BROWSERS_PATH="${pkgs.playwright-driver.browsers}"
         export PLAYWRIGHT_NIX_DRIVER_VERSION="${pkgs.playwright-driver.version}"
         ${pkgs.lib.optionalString pkgs.stdenv.isLinux ''
+          # The npm playwright-core host check greps apt package names
+          # (libgles2, gstreamer1.0-libav) that the Nix-patched browsers do
+          # not load from the host; nixpkgs drops the same check upstream.
+          export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true
           export __EGL_VENDOR_LIBRARY_DIRS="${pkgs.mesa}/share/glvnd/egl_vendor.d"
           export LIBGL_DRIVERS_PATH="${pkgs.mesa}/lib/dri"
           export LIBGL_ALWAYS_SOFTWARE=1

@@ -33,6 +33,7 @@
 | Research reproduction | PASS | 5 tests、7 record（再現2、部分再現3、手法のみ再現1、再現せず1）。results.jsonとrecordの数値を再実行で照合。LLM生成testは有料APIなしのため非LLMの代替generatorで評価 |
 | JS runner selection spike | PASS（team diagnosis time未計測） | node:test/Mocha/AVAで同じ5 case pass、意図的failureは3者とも非0 exit・test名/source line/両値/structured diffを表示、JUnit XMLはnode:test（junit）とMocha（xunit）がbuilt-in・AVAはTAPのみ、transitive npm依存0/51/132。ADR-0003へ記録 |
 | Oracle audit | PASS | 5 tests: 8言語251 testを静的監査しfinding 0（advanced performance testの同一式oracleを発見・修正済み）、12 critical inventory（independent 11、partial 1）、全19 lab READMEに保証範囲の節、共有式oracleのfalse negativeとE-001 false positive |
+| Model-based order lifecycle | PASS | fast-check `fc.commands`で有効・無効command列500 run、handwritten example 7件は部分refund上限defectを見逃し、model-basedは`reserve, pay(k1), refund(27), refund(974)`へ縮約してkill、seed `20260925`とpathで同じ失敗を再現、minimal sequenceをcorpus化 |
 | Go execution matrix | PASS | 通常/race、parallel 60 executions、total/parser fuzz各100x budget、generated drift、benchmark、3 intentional failures |
 | Rust execution matrix | PASS | private unit 2、public integration 6、property 256 cases、trait 1、doctest 2、mutants 7/7 |
 | PHP execution matrix | PASS | PHP 8.4、PHPUnit 12.5.31→13.2.4、high-risk mutants 14/14、equivalent mutant 1 classified |
@@ -74,7 +75,7 @@ nix develop .#python --command make test-python-postgres
 | Storybook/Vitest browser component | PASS | 5 stories、real Chromium、role/name interaction、addon-a11y、image-alt mutation 5/5 failed as expected |
 | Playwright E2E / stability | PASS | 2 journeys × 3 browsers = 6 tests、100-repeat 2-shard gateは600 attempts、flake 0。accessibilityはStorybook、CSS tokenはsource component testが担当 |
 | Mobile/device matrix validator | PASS | WebDriver/gray-box/image/hierarchy分類、simulator/emulator/real-device/HIL、dimension coverage、hardware owner/予約/artifact contract |
-| Advanced generative techniques | PASS | 25 tests（mutation由来7件を含む）、5 invariant、固定seed `20260719`、boundary/cart-size分布、shrink、4 metamorphic relation、独立reference differential、synthetic defect corpus |
+| Advanced generative techniques | PASS | 28 tests（mutation由来7件、order lifecycleのmodel-based 3件を含む）、5 invariant、固定seed `20260719`、boundary/cart-size分布、shrink、4 metamorphic relation、独立reference differential、synthetic defect corpus |
 | JUnit / Mockito / Truth | PASS | 13 tests、Jupiter 6.1.1 present、Vintage absent |
 | NUnit 4 | PASS | 8 tests、MTP 2.1.0 / VSTest、cancel・async failure |
 | MSTest 4 | PASS | 9 tests、MTP 2.3.1 / VSTest、cancel・async failure |

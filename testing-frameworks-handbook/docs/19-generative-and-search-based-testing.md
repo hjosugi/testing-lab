@@ -1,5 +1,7 @@
 # 生成・探索型テスト
 
+> 実行例: model-based testingは[`labs/advanced/test/model-based.test.js`](../labs/advanced/test/model-based.test.js)です。注文のstate/command/precondition/postconditionをmodel化し、重複・cancel・refund・retryを含む有効/無効command列を生成して、handwritten exampleが見逃す部分refund上限defectを最小sequenceまで縮約し、seedとcorpusで再現します。
+
 ## Example-based testとの違い
 
 example-based testは人がcaseを選びます。生成型testはruleに従って多数のcaseを作り、未知の組み合わせを探索します。

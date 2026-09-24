@@ -17,7 +17,7 @@ generator分布、5件のdomain invariant、shrinker、corpus運用のreview結�
 | coverage-guided fuzz | parser/APIの未知branch | valid exampleだけではmalformed inputへ届かない |
 | metamorphic | 正解値不明でも関係を確認 | exact expectedが作れない |
 | differential | 最適化実装の差 | 両実装が独立oracleになる |
-| model-based | command列・状態遷移 | 連続操作の組合せが多い |
+| model-based | command列・状態遷移（`test/model-based.test.js`: reserve/pay/ship/cancel/refund、重複・retry payment、無効command） | 連続操作の組合せが多い。部分refundを2回に分ける欠陥はexample suiteでは見逃し、fast-check `fc.commands`が最小4 commandへ縮約 |
 | concurrency | 同時実行のside effect | 逐次testではraceを作れない |
 | fault injection | retry/recovery | success pathだけでは不十分 |
 | characterization | legacyの変更前安全網 | 仕様が失われている |
@@ -27,10 +27,11 @@ generator分布、5件のdomain invariant、shrinker、corpus運用のreview結�
 
 ## 実験
 
-1. `corpus/synthetic-quantity-cap.json`を再生し、exampleでは見えないquantity 9上限を確認する。
-2. idempotent cacheを削除し、concurrency testを実行する。
-3. `sanitize`の正規表現から`authorization`を消し、新caseを加える。
-4. legacy shipping ruleの正しい仕様を決めてからcharacterizationを置換する。
+1. `corpus/order-lifecycle-refund-cap.json`のseedとminimal commandで、model-based testingがexampleの見逃すrefund上限defectをkillすることを確認する。
+2. `corpus/synthetic-quantity-cap.json`を再生し、exampleでは見えないquantity 9上限を確認する。
+3. idempotent cacheを削除し、concurrency testを実行する。
+4. `sanitize`の正規表現から`authorization`を消し、新caseを加える。
+5. legacy shipping ruleの正しい仕様を決めてからcharacterizationを置換する。
 
 意図的変更を元へ戻してから次へ進んでください。
 

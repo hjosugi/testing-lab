@@ -1,0 +1,9 @@
+{
+  "defect": "refund-per-call-cap: each refund is checked against the paid amount instead of the remaining refundable amount",
+  "oracle": "model postcondition refunded <= paid, and rejected commands change nothing",
+  "tool": "fast-check 4.9.0 fc.commands + fc.modelRun",
+  "seed": 20260925,
+  "path": "451:5:4:5:6:5:5:6:6:5",
+  "minimalCommands": ["reserve", "pay(k1)", "refund(27)", "refund(974)"],
+  "missedBy": "test/model-based.test.js exampleSuite (single partial refund, single full refund, over-refund by 1 in one call)"
+}

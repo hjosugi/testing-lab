@@ -2,6 +2,8 @@
 
 # Part 1: Data testing
 
+> 実行例: [`labs/ai-evals`](../labs/ai-evals/README.md)は、有料APIを使わずfake model・seed付き合成data・versioned datasetで、data quality（schema/null/range/unique/reconciliation、late/duplicate/out-of-order）、ML（critical slice gate、fairness、robustness、PSI drift、seed分布）、RAG（recall@kとgroundednessの分離）、LLM-as-judgeのhuman calibration（Cohen's kappa）、agentのtool schema・sandbox・prompt injection・trajectory/outcome/cost/latency分離・provenanceをtestします。
+
 ## なぜpipeline successだけでは足りないか
 
 jobがexit 0でもdataは壊れます。

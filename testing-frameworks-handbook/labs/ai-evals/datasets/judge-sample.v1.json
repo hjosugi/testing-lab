@@ -1,0 +1,327 @@
+{
+  "name": "judge-calibration",
+  "version": "1.0.0",
+  "labelledBy": "handbook maintainers (2 reviewers, disagreements resolved)",
+  "items": [
+    {
+      "id": "J-01",
+      "question": "How to handle a surviving mutant?",
+      "answer": "Add an assertion or record a decision for the surviving mutant.",
+      "rubric": {
+        "required": [
+          "assertion",
+          "decision"
+        ],
+        "forbidden": [
+          "ignore"
+        ]
+      },
+      "human": 1,
+      "note": "complete"
+    },
+    {
+      "id": "J-02",
+      "question": "How to handle a surviving mutant?",
+      "answer": "Add an assertion.",
+      "rubric": {
+        "required": [
+          "assertion",
+          "decision"
+        ],
+        "forbidden": [
+          "ignore"
+        ]
+      },
+      "human": 0,
+      "note": "misses the decision path"
+    },
+    {
+      "id": "J-03",
+      "question": "How to handle a surviving mutant?",
+      "answer": "Ignore it; add an assertion or a decision only if the score drops.",
+      "rubric": {
+        "required": [
+          "assertion",
+          "decision"
+        ],
+        "forbidden": [
+          "ignore"
+        ]
+      },
+      "human": 0,
+      "note": "recommends ignoring"
+    },
+    {
+      "id": "J-04",
+      "question": "Why intended start time?",
+      "answer": "Because closed-loop generators omit requests during stalls, so latency is measured from the intended start time.",
+      "rubric": {
+        "required": [
+          "intended",
+          "stalls"
+        ],
+        "forbidden": [
+          "average"
+        ]
+      },
+      "human": 1,
+      "note": "complete"
+    },
+    {
+      "id": "J-05",
+      "question": "Why intended start time?",
+      "answer": "Use the average latency from the intended start time; stalls do not matter.",
+      "rubric": {
+        "required": [
+          "intended",
+          "stalls"
+        ],
+        "forbidden": [
+          "average"
+        ]
+      },
+      "human": 0,
+      "note": "wrong claim about average"
+    },
+    {
+      "id": "J-06",
+      "question": "Why intended start time?",
+      "answer": "Stalls hide latency.",
+      "rubric": {
+        "required": [
+          "intended",
+          "stalls"
+        ],
+        "forbidden": [
+          "average"
+        ]
+      },
+      "human": 0,
+      "note": "incomplete"
+    },
+    {
+      "id": "J-07",
+      "question": "How do retries double charge?",
+      "answer": "Without idempotency keys each retry is a new charge.",
+      "rubric": {
+        "required": [
+          "idempotency",
+          "retry"
+        ],
+        "forbidden": [
+          "never"
+        ]
+      },
+      "human": 1,
+      "note": "complete"
+    },
+    {
+      "id": "J-08",
+      "question": "How do retries double charge?",
+      "answer": "Retries never double charge because of idempotency.",
+      "rubric": {
+        "required": [
+          "idempotency",
+          "retry"
+        ],
+        "forbidden": [
+          "never"
+        ]
+      },
+      "human": 0,
+      "note": "false guarantee"
+    },
+    {
+      "id": "J-09",
+      "question": "How do retries double charge?",
+      "answer": "Each retry without an idempotency key creates another charge.",
+      "rubric": {
+        "required": [
+          "idempotency",
+          "retry"
+        ],
+        "forbidden": [
+          "never"
+        ]
+      },
+      "human": 1,
+      "note": "complete"
+    },
+    {
+      "id": "J-10",
+      "question": "What to record before retrying a flaky test?",
+      "answer": "Record the first attempt failure before retry.",
+      "rubric": {
+        "required": [
+          "first",
+          "retry"
+        ],
+        "forbidden": [
+          "delete"
+        ]
+      },
+      "human": 1,
+      "note": "complete"
+    },
+    {
+      "id": "J-11",
+      "question": "What to record before retrying a flaky test?",
+      "answer": "Delete the failure and retry until green; keep the first attempt log.",
+      "rubric": {
+        "required": [
+          "first",
+          "retry"
+        ],
+        "forbidden": [
+          "delete"
+        ]
+      },
+      "human": 0,
+      "note": "hides failures"
+    },
+    {
+      "id": "J-12",
+      "question": "What to record before retrying a flaky test?",
+      "answer": "Keep the log.",
+      "rubric": {
+        "required": [
+          "first",
+          "retry"
+        ],
+        "forbidden": [
+          "delete"
+        ]
+      },
+      "human": 0,
+      "note": "incomplete"
+    },
+    {
+      "id": "J-13",
+      "question": "Which requests are excluded from SLO measurement?",
+      "answer": "Warm-up requests are excluded from SLO measurement.",
+      "rubric": {
+        "required": [
+          "warm",
+          "excluded"
+        ],
+        "forbidden": [
+          "all"
+        ]
+      },
+      "human": 1,
+      "note": "complete"
+    },
+    {
+      "id": "J-14",
+      "question": "Which requests are excluded from SLO measurement?",
+      "answer": "All slow requests are excluded, including warm-up ones.",
+      "rubric": {
+        "required": [
+          "warm",
+          "excluded"
+        ],
+        "forbidden": [
+          "all"
+        ]
+      },
+      "human": 0,
+      "note": "wrong: excludes slow requests"
+    },
+    {
+      "id": "J-15",
+      "question": "Who verifies consumer expectations?",
+      "answer": "The provider verifies the consumer contract before deploy.",
+      "rubric": {
+        "required": [
+          "provider",
+          "verifies"
+        ],
+        "forbidden": [
+          "consumer-only"
+        ]
+      },
+      "human": 1,
+      "note": "complete"
+    },
+    {
+      "id": "J-16",
+      "question": "Who verifies consumer expectations?",
+      "answer": "The consumer checks itself.",
+      "rubric": {
+        "required": [
+          "provider",
+          "verifies"
+        ],
+        "forbidden": [
+          "consumer-only"
+        ]
+      },
+      "human": 0,
+      "note": "wrong actor"
+    },
+    {
+      "id": "J-17",
+      "question": "What is a flaky test?",
+      "answer": "A test that passes and fails on the same code; record the first failure before retry.",
+      "rubric": {
+        "required": [
+          "same",
+          "first"
+        ],
+        "forbidden": [
+          "delete"
+        ]
+      },
+      "human": 1,
+      "note": "complete"
+    },
+    {
+      "id": "J-18",
+      "question": "What is a flaky test?",
+      "answer": "A slow test.",
+      "rubric": {
+        "required": [
+          "same",
+          "first"
+        ],
+        "forbidden": [
+          "delete"
+        ]
+      },
+      "human": 0,
+      "note": "wrong"
+    },
+    {
+      "id": "J-19",
+      "question": "How to handle a surviving mutant?",
+      "answer": "Record a decision with an owner or add an assertion that kills it.",
+      "rubric": {
+        "required": [
+          "assertion",
+          "decision"
+        ],
+        "forbidden": [
+          "ignore"
+        ]
+      },
+      "human": 1,
+      "note": "complete"
+    },
+    {
+      "id": "J-20",
+      "question": "Why intended start time?",
+      "answer": "Measuring from the intended start time charges stalls to every delayed request instead of the average.",
+      "rubric": {
+        "required": [
+          "intended",
+          "stalls"
+        ],
+        "forbidden": [
+          "average"
+        ]
+      },
+      "human": 1,
+      "note": "human accepts: mentions average only to contrast (rubric false negative)"
+    }
+  ]
+}

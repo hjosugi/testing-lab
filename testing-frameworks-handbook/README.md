@@ -92,6 +92,8 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 `labs/resilience`には、clock・scheduler・random・network・diskを仮想化したdeterministic simulationでretry/backoff/circuit breaker/idempotencyを検証し、失敗をseedから再現し、real HTTPのfault proxyでsteady state・blast radius・abort・rollbackを持つchaos experimentとsemantic gapを比較する例があります。
 
+`labs/ai-evals`には、有料APIを使わずfake modelとversioned datasetで、data quality、ML critical slice/drift/fairness、RAG recallとgroundedness、LLM-as-judgeのhuman calibration、agentのtool sandbox・prompt injection・trajectory/outcome/cost/latency分離・provenanceを評価する例があります。
+
 `labs/advanced` には、同じproduction codeに対する5 domain invariant、fast-check generator/shrinker監査、metamorphic/differential、model-based、concurrency、fault-injection、characterization、snapshot、performanceと、Go parser/API coverage-guided fuzzの比較実験があります。
 
 ## Issue backlog

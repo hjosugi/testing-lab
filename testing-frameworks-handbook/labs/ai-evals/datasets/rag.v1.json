@@ -1,0 +1,20 @@
+{
+  "name": "handbook-rag",
+  "version": "1.0.0",
+  "documents": [
+    { "id": "d-mutation", "title": "Mutation testing", "text": "Mutation testing changes production code slightly and checks whether tests fail. A surviving mutant needs a new assertion or a recorded decision." },
+    { "id": "d-co", "title": "Coordinated omission", "text": "Coordinated omission happens when a closed-loop load generator stops sending while the server stalls. Measure latency from the intended start time." },
+    { "id": "d-idempotency", "title": "Idempotency keys", "text": "Retries without idempotency keys can double charge a customer. The provider stores one result per idempotency key." },
+    { "id": "d-flaky", "title": "Flaky tests", "text": "A flaky test passes and fails on the same code. Record the first attempt failure before any retry." },
+    { "id": "d-contract", "title": "Contract testing", "text": "Consumer-driven contracts let a consumer publish expectations that the provider verifies before deploy." },
+    { "id": "d-slo", "title": "Service level objectives", "text": "An SLO states a latency percentile and error budget for a workload. Warm-up requests are excluded from measurement." }
+  ],
+  "questions": [
+    { "id": "q1", "slice": "testing-technique", "question": "What should happen to a surviving mutant?", "relevant": ["d-mutation"] },
+    { "id": "q2", "slice": "performance", "question": "Why measure latency from the intended start time?", "relevant": ["d-co"] },
+    { "id": "q3", "slice": "payments", "question": "How do retries double charge a customer?", "relevant": ["d-idempotency"] },
+    { "id": "q4", "slice": "ci", "question": "What should be recorded before a retry of a flaky test?", "relevant": ["d-flaky"] },
+    { "id": "q5", "slice": "performance", "question": "Which requests are excluded from SLO measurement?", "relevant": ["d-slo"] },
+    { "id": "q6", "slice": "testing-technique", "question": "Who verifies consumer expectations before deploy?", "relevant": ["d-contract"] }
+  ]
+}

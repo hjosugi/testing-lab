@@ -1028,19 +1028,18 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] schema/null/range/unique/reconciliation test
-- [ ] late/duplicate/out-of-order dataとidempotency
-- [ ] model slice/robustness/drift/fairness test
-- [ ] RAG retrieval recallとgroundedness dataset
-- [ ] prompt/agent tool contractとstate transition test
-- [ ] LLM-as-judgeをhuman sampleでcalibrate
-- [ ] model/prompt/dataset/version provenanceを保存
+- [x] schema/null/range/unique/reconciliation test
+- [x] late/duplicate/out-of-order dataとidempotency
+- [x] model slice/robustness/drift/fairness test
+- [x] RAG retrieval recallとgroundedness dataset
+- [x] prompt/agent tool contractとstate transition test
+- [x] LLM-as-judgeをhuman sampleでcalibrate
+- [x] model/prompt/dataset/version provenanceを保存
 
 ## Acceptance criteria
 
-- [ ] aggregate scoreだけでなくcritical slice failureをgate
-- [ ] nondeterminismをdistribution/seed/repeatで評価
-
+- [x] aggregate scoreだけでなくcritical slice failureをgate
+- [x] nondeterminismをdistribution/seed/repeatで評価
 
 ---
 
@@ -1517,17 +1516,16 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] deterministic parser/tool-schema tests
-- [ ] golden dataset、rubric、slice、adversarial casesをversion化
-- [ ] tool emulatorでfailure/timeout/permissionを注入
-- [ ] trajectory、final outcome、cost、latencyを分離評価
-- [ ] judgeをhuman sampleでcalibrate
+- [x] deterministic parser/tool-schema tests
+- [x] golden dataset、rubric、slice、adversarial casesをversion化
+- [x] tool emulatorでfailure/timeout/permissionを注入
+- [x] trajectory、final outcome、cost、latencyを分離評価
+- [x] judgeをhuman sampleでcalibrate
 
 ## Acceptance criteria
 
-- [ ] prompt injectionで権限外tool/actionが起きない
-- [ ] model/prompt/tool/data versionを再現可能
-
+- [x] prompt injectionで権限外tool/actionが起きない
+- [x] model/prompt/tool/data versionを再現可能
 
 ---
 

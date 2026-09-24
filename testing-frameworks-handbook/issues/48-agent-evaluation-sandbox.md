@@ -3,14 +3,13 @@
 
 ## Tasks
 
-- [ ] deterministic parser/tool-schema tests
-- [ ] golden dataset、rubric、slice、adversarial casesをversion化
-- [ ] tool emulatorでfailure/timeout/permissionを注入
-- [ ] trajectory、final outcome、cost、latencyを分離評価
-- [ ] judgeをhuman sampleでcalibrate
+- [x] deterministic parser/tool-schema tests
+- [x] golden dataset、rubric、slice、adversarial casesをversion化
+- [x] tool emulatorでfailure/timeout/permissionを注入
+- [x] trajectory、final outcome、cost、latencyを分離評価
+- [x] judgeをhuman sampleでcalibrate
 
 ## Acceptance criteria
 
-- [ ] prompt injectionで権限外tool/actionが起きない
-- [ ] model/prompt/tool/data versionを再現可能
-
+- [x] prompt injectionで権限外tool/actionが起きない
+- [x] model/prompt/tool/data versionを再現可能

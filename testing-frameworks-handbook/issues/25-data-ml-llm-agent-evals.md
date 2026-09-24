@@ -3,16 +3,15 @@
 
 ## Tasks
 
-- [ ] schema/null/range/unique/reconciliation test
-- [ ] late/duplicate/out-of-order dataとidempotency
-- [ ] model slice/robustness/drift/fairness test
-- [ ] RAG retrieval recallとgroundedness dataset
-- [ ] prompt/agent tool contractとstate transition test
-- [ ] LLM-as-judgeをhuman sampleでcalibrate
-- [ ] model/prompt/dataset/version provenanceを保存
+- [x] schema/null/range/unique/reconciliation test
+- [x] late/duplicate/out-of-order dataとidempotency
+- [x] model slice/robustness/drift/fairness test
+- [x] RAG retrieval recallとgroundedness dataset
+- [x] prompt/agent tool contractとstate transition test
+- [x] LLM-as-judgeをhuman sampleでcalibrate
+- [x] model/prompt/dataset/version provenanceを保存
 
 ## Acceptance criteria
 
-- [ ] aggregate scoreだけでなくcritical slice failureをgate
-- [ ] nondeterminismをdistribution/seed/repeatで評価
-
+- [x] aggregate scoreだけでなくcritical slice failureをgate
+- [x] nondeterminismをdistribution/seed/repeatで評価

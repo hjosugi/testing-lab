@@ -1,0 +1,241 @@
+{
+  "system": "multi-tenant order API (labs/security/src/service.mjs)",
+  "assets": [
+    {
+      "id": "A1",
+      "name": "tenant order data (owner, note, total)",
+      "classification": "confidential"
+    },
+    {
+      "id": "A2",
+      "name": "refund capability",
+      "classification": "financial"
+    },
+    {
+      "id": "A3",
+      "name": "bearer tokens, signing secrets, card numbers in requests",
+      "classification": "secret"
+    },
+    {
+      "id": "A4",
+      "name": "service availability for other tenants",
+      "classification": "availability"
+    }
+  ],
+  "trustBoundaries": [
+    {
+      "id": "TB1",
+      "name": "internet client -> HTTP API",
+      "crossesWith": "bearer token"
+    },
+    {
+      "id": "TB2",
+      "name": "API -> SQL store",
+      "crossesWith": "query parameters"
+    },
+    {
+      "id": "TB3",
+      "name": "API -> logs and CI artifacts",
+      "crossesWith": "audit events"
+    }
+  ],
+  "attackers": [
+    {
+      "id": "T1",
+      "capability": "authenticated user of tenant B who knows or guesses order IDs of tenant A"
+    },
+    {
+      "id": "T2",
+      "capability": "authenticated non-admin who calls admin endpoints directly"
+    },
+    {
+      "id": "T3",
+      "capability": "network observer who can capture and resend a signed refund request"
+    },
+    {
+      "id": "T4",
+      "capability": "attacker who forges, tampers, or re-uses expired tokens, including alg=none"
+    },
+    {
+      "id": "T5",
+      "capability": "authenticated user sending crafted query strings"
+    },
+    {
+      "id": "T6",
+      "capability": "single principal flooding the API"
+    },
+    {
+      "id": "T7",
+      "capability": "insider or CI viewer reading logs and build artifacts"
+    }
+  ],
+  "abuseCases": [
+    {
+      "id": "AC-01",
+      "title": "Cross-tenant order read (IDOR)",
+      "attacker": "T1",
+      "asset": "A1",
+      "boundary": "TB1",
+      "impact": "confidential order data of another tenant disclosed",
+      "mitigation": "tenant predicate on every query; identical 404 for missing and foreign IDs",
+      "severity": "critical",
+      "asvs": [
+        "V8 Authorization"
+      ],
+      "wstg": [
+        "WSTG-ATHZ-04"
+      ],
+      "tests": [
+        "AC-01 cross-tenant read returns the same 404 as a missing order"
+      ],
+      "gate": "release"
+    },
+    {
+      "id": "AC-02",
+      "title": "Privilege escalation to refunds",
+      "attacker": "T2",
+      "asset": "A2",
+      "boundary": "TB1",
+      "impact": "unauthorized money movement",
+      "mitigation": "role check before any refund processing",
+      "severity": "critical",
+      "asvs": [
+        "V8 Authorization"
+      ],
+      "wstg": [
+        "WSTG-ATHZ-03"
+      ],
+      "tests": [
+        "AC-02 non-admin cannot issue refunds"
+      ],
+      "gate": "release"
+    },
+    {
+      "id": "AC-03",
+      "title": "Replay of a signed refund",
+      "attacker": "T3",
+      "asset": "A2",
+      "boundary": "TB1",
+      "impact": "duplicate refund",
+      "mitigation": "HMAC over method/path/timestamp/nonce/body, 60 s window, single-use nonce",
+      "severity": "critical",
+      "asvs": [
+        "V4 API and Web Service",
+        "V2 Validation and Business Logic"
+      ],
+      "wstg": [
+        "WSTG-BUSL-05"
+      ],
+      "tests": [
+        "AC-03 replayed, stale, or tampered refund requests are rejected"
+      ],
+      "gate": "release"
+    },
+    {
+      "id": "AC-04",
+      "title": "Forged, tampered, expired, or alg=none token",
+      "attacker": "T4",
+      "asset": "A1",
+      "boundary": "TB1",
+      "impact": "authentication bypass",
+      "mitigation": "HS256 only, constant-time signature check, exp required",
+      "severity": "critical",
+      "asvs": [
+        "V9 Self-contained Tokens"
+      ],
+      "wstg": [
+        "WSTG-SESS-10"
+      ],
+      "tests": [
+        "AC-04 forged, tampered, expired, and alg=none tokens are unauthenticated"
+      ],
+      "gate": "release"
+    },
+    {
+      "id": "AC-05",
+      "title": "SQL injection through search",
+      "attacker": "T5",
+      "asset": "A1",
+      "boundary": "TB2",
+      "impact": "cross-tenant data disclosure or data destruction",
+      "mitigation": "prepared statements only; input length limit",
+      "severity": "critical",
+      "asvs": [
+        "V1 Encoding and Sanitization"
+      ],
+      "wstg": [
+        "WSTG-INPV-05"
+      ],
+      "tests": [
+        "AC-05 injection payloads stay inside the caller's tenant",
+        "AC-05 control: string-built SQL leaks another tenant (oracle sanity)"
+      ],
+      "gate": "release"
+    },
+    {
+      "id": "AC-06",
+      "title": "Request flooding by one principal",
+      "attacker": "T6",
+      "asset": "A4",
+      "boundary": "TB1",
+      "impact": "degraded service for other tenants",
+      "mitigation": "per-principal token bucket with Retry-After",
+      "severity": "high",
+      "asvs": [
+        "V2 Validation and Business Logic"
+      ],
+      "wstg": [
+        "WSTG-BUSL-07"
+      ],
+      "tests": [
+        "AC-06 one principal is throttled without affecting another"
+      ],
+      "gate": "ci"
+    },
+    {
+      "id": "AC-07",
+      "title": "Secrets or card numbers in logs and artifacts",
+      "attacker": "T7",
+      "asset": "A3",
+      "boundary": "TB3",
+      "impact": "credential or PAN disclosure",
+      "mitigation": "structured audit events passed through redact(); secret scan of fixtures and artifacts",
+      "severity": "critical",
+      "asvs": [
+        "V16 Security Logging and Error Handling",
+        "V14 Data Protection"
+      ],
+      "wstg": [],
+      "tests": [
+        "AC-07 audit log never contains tokens, signatures, or card numbers",
+        "AC-07 fixtures and test artifacts contain no secrets or real PANs"
+      ],
+      "gate": "release"
+    },
+    {
+      "id": "AC-08",
+      "title": "Malformed input causing 5xx or stack disclosure",
+      "attacker": "T5",
+      "asset": "A4",
+      "boundary": "TB1",
+      "impact": "information disclosure and crash",
+      "mitigation": "size limit, JSON/shape validation, generic error body with correlation ID",
+      "severity": "high",
+      "asvs": [
+        "V16 Security Logging and Error Handling",
+        "V2 Validation and Business Logic"
+      ],
+      "wstg": [
+        "WSTG-ERRH-01"
+      ],
+      "tests": [
+        "AC-08 API fuzz: malformed requests never yield 5xx or stack traces"
+      ],
+      "gate": "ci"
+    }
+  ],
+  "standards": {
+    "asvs": "OWASP ASVS 5.0 chapter (requirement-level mapping is a follow-up once the team adopts a version)",
+    "wstg": "OWASP WSTG v4.2 test IDs"
+  }
+}

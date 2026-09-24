@@ -43,8 +43,10 @@ run_test Playwright npm labs/system npm run test:e2e
 run_test Playwright-stability npm labs/system npm run test:e2e:stability
 run_test Device-matrix node . node scripts/verify-device-matrix.mjs
 run_test Advanced npm labs/advanced npm test
-run_test Mutation-policy node labs/mutation node --test test/
-run_test Performance-profiles node labs/performance node --test --test-concurrency=1 test/
+run_test Mutation-policy node labs/mutation node --test 'test/*.test.mjs'
+run_test Performance-profiles node labs/performance node --test --test-concurrency=1 'test/*.test.mjs'
+run_test Security-portfolio node labs/security node --test 'test/*.test.mjs'
+run_test Security-SBOM node labs/security node scripts/sbom.mjs
 run_test Java gradle labs/java gradle test --no-daemon
 run_test NUnit dotnet labs/dotnet dotnet test --project tests/NUnitTests/NUnitTests.csproj
 run_test MSTest dotnet labs/dotnet dotnet test --project tests/MSTestTests/MSTestTests.csproj

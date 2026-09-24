@@ -3,15 +3,14 @@
 
 ## Tasks
 
-- [ ] SAST/SCA/secret/IaC scan
-- [ ] authn/authz/tenant isolationのnegative test
-- [ ] API fuzz/DASTをtest environmentへ実行
-- [ ] rate limit/abuse caseを追加
-- [ ] SBOM/provenance/signature verification
-- [ ] OWASP ASVS/WSTG requirementへtrace
+- [x] SAST/SCA/secret/IaC scan
+- [x] authn/authz/tenant isolationのnegative test
+- [x] API fuzz/DASTをtest environmentへ実行
+- [x] rate limit/abuse caseを追加
+- [x] SBOM/provenance/signature verification
+- [x] OWASP ASVS/WSTG requirementへtrace
 
 ## Acceptance criteria
 
-- [ ] security findingのowner/SLA/suppression期限がある
-- [ ] production secret/PIIをfixtureへ含めない
-
+- [x] security findingのowner/SLA/suppression期限がある
+- [x] production secret/PIIをfixtureへ含めない

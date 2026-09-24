@@ -3,13 +3,12 @@
 
 ## Tasks
 
-- [ ] asset/trust boundary/attacker capabilityをmodel化
-- [ ] authorization、injection、replay、rate abuseをtest
-- [ ] SAST/SCA/DAST findingをriskでtriage
-- [ ] secret/log/artifact leakをtest
+- [x] asset/trust boundary/attacker capabilityをmodel化
+- [x] authorization、injection、replay、rate abuseをtest
+- [x] SAST/SCA/DAST findingをriskでtriage
+- [x] secret/log/artifact leakをtest
 
 ## Acceptance criteria
 
-- [ ] scanner件数ではなくexploit impactとmitigationを記録
-- [ ] critical abuse caseをCI/release gateへ接続
-
+- [x] scanner件数ではなくexploit impactとmitigationを記録
+- [x] critical abuse caseをCI/release gateへ接続

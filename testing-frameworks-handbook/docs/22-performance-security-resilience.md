@@ -133,6 +133,8 @@ Boundary: browser/API/service/DB/third-party
 Abuse: IDOR, privilege escalation, replay, injection, exfiltration
 ```
 
+実行例は[`labs/security`](../labs/security/README.md)です。8件のabuse caseをthreat modelのattacker・asset・trust boundaryへ結び、critical caseはrequired checkへ接続し、scanner findingはexploit impact・owner・SLA・suppression期限を持つledgerで管理します。
+
 ## SAST
 
 source/bytecodeのpattern/data flowを分析します。

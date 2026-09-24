@@ -1,4 +1,4 @@
-.PHONY: bootstrap bootstrap-locked check-locks test verify-device-matrix test-generative test-python test-python-parallel test-python-mutation test-python-postgres test-python-postgres-unavailable test-node test-node-semantics test-node-unawaited test-system-api test-system-pact test-system-storybook test-system-e2e-stability test-system-http-stability test-advanced test-mutation-policy test-mutation-changed test-mutation-full test-performance test-performance-report test-performance-bench test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-cpp-ctest test-cpp-benchmark test-cpp-compile-time test-cpp-sanitizers test-go test-go-race test-go-parallel test-go-fuzz test-go-generated test-go-benchmark test-go-failures test-rust test-rust-boundaries test-rust-quality test-rust-mutation test-php test-php-migration test-php-mutation test-php-equivalent issues-dry-run notebooklm
+.PHONY: bootstrap bootstrap-locked check-locks test verify-device-matrix test-generative test-python test-python-parallel test-python-mutation test-python-postgres test-python-postgres-unavailable test-node test-node-semantics test-node-unawaited test-system-api test-system-pact test-system-storybook test-system-e2e-stability test-system-http-stability test-advanced test-mutation-policy test-mutation-changed test-mutation-full test-performance test-performance-report test-performance-bench test-security test-security-sca test-security-sbom test-java test-java-agent-matrix test-dotnet test-dotnet-runner-matrix test-dotnet-failure-diagnostics test-cpp test-cpp-ctest test-cpp-benchmark test-cpp-compile-time test-cpp-sanitizers test-go test-go-race test-go-parallel test-go-fuzz test-go-generated test-go-benchmark test-go-failures test-rust test-rust-boundaries test-rust-quality test-rust-mutation test-php test-php-migration test-php-mutation test-php-equivalent issues-dry-run notebooklm
 
 bootstrap:
 	./scripts/bootstrap.sh
@@ -62,7 +62,7 @@ test-advanced:
 	cd labs/advanced && npm test
 
 test-mutation-policy:
-	node --test labs/mutation/test/
+	node --test 'labs/mutation/test/*.test.mjs'
 
 test-mutation-changed:
 	node labs/mutation/scripts/mutation-lanes.mjs plan --base origin/main --run
@@ -71,13 +71,22 @@ test-mutation-full:
 	node labs/mutation/scripts/mutation-lanes.mjs plan --full --run
 
 test-performance:
-	cd labs/performance && node --test --test-concurrency=1 test/
+	cd labs/performance && node --test --test-concurrency=1 'test/*.test.mjs'
 
 test-performance-report:
 	node labs/performance/scripts/run-profiles.mjs --repeats 3
 
 test-performance-bench:
 	node labs/performance/bench/quote.bench.mjs
+
+test-security:
+	cd labs/security && node --test 'test/*.test.mjs'
+
+test-security-sca:
+	node labs/security/scripts/sca-triage.mjs
+
+test-security-sbom:
+	node labs/security/scripts/sbom.mjs
 
 test-java:
 	cd labs/java && gradle test --no-daemon

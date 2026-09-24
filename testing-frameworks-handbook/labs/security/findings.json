@@ -1,0 +1,89 @@
+{
+  "findings": [
+    {
+      "id": "SEC-001",
+      "source": "sast",
+      "rule": "sql-template-literal",
+      "path": "labs/security/src/service.mjs",
+      "severity": "critical",
+      "impact": "Cross-tenant disclosure (AC-05) if the `unsafe.stringConcatSql` switch were reachable in production.",
+      "status": "suppressed",
+      "rationale": "The string-built query exists only behind an options flag that no server entry point sets; it is the negative control proving the AC-05 oracle can fail. Removing the control would leave AC-05 without evidence of oracle strength.",
+      "owner": "testing-lab maintainers",
+      "openedAt": "2026-09-25",
+      "suppressionExpires": "2027-03-01"
+    },
+    {
+      "id": "SEC-101",
+      "rule": "GHSA-mh99-v99m-4gvg",
+      "path": "labs/node:brace-expansion",
+      "impact": "Transitive dev dependency of the Mocha/AVA runners. Expansion input comes from repository-controlled test globs, never from an attacker; worst case is a crashed local/CI test process. Triaged severity is low (scanner: high); fix by the Dependabot/lockfile refresh within the 180-day low SLA.",
+      "source": "sca",
+      "scannerSeverity": "high",
+      "severity": "low",
+      "status": "open",
+      "owner": "testing-lab maintainers",
+      "openedAt": "2026-09-25"
+    },
+    {
+      "id": "SEC-102",
+      "rule": "GHSA-rgw5-rvv9-x895",
+      "path": "labs/node:brace-expansion",
+      "impact": "Same path as SEC-101 (glob patterns written by maintainers); no untrusted input reaches brace expansion. Triaged severity is low (scanner: high); fix by the Dependabot/lockfile refresh within the 180-day low SLA.",
+      "source": "sca",
+      "scannerSeverity": "high",
+      "severity": "low",
+      "status": "open",
+      "owner": "testing-lab maintainers",
+      "openedAt": "2026-09-25"
+    },
+    {
+      "id": "SEC-103",
+      "rule": "GHSA-5p4m-2wfm-xmqj",
+      "path": "labs/node:js-yaml",
+      "impact": "Transitive dev dependency used to read runner config files committed to this repository; no untrusted YAML is parsed, so the quadratic-CPU vector needs repository write access. Triaged severity is low (scanner: high); fix by the Dependabot/lockfile refresh within the 180-day low SLA.",
+      "source": "sca",
+      "scannerSeverity": "high",
+      "severity": "low",
+      "status": "open",
+      "owner": "testing-lab maintainers",
+      "openedAt": "2026-09-25"
+    },
+    {
+      "id": "SEC-104",
+      "rule": "GHSA-2883-xcg3-v3hh",
+      "path": "labs/node:js-yaml",
+      "impact": "Same path as SEC-103; merge keys only appear in maintainer-written config. Triaged severity is low (scanner: high); fix by the Dependabot/lockfile refresh within the 180-day low SLA.",
+      "source": "sca",
+      "scannerSeverity": "high",
+      "severity": "low",
+      "status": "open",
+      "owner": "testing-lab maintainers",
+      "openedAt": "2026-09-25"
+    },
+    {
+      "id": "SEC-105",
+      "rule": "GHSA-r292-9mhp-454m",
+      "path": "labs/node:tar",
+      "impact": "Pulled in by dev tooling; the labs never extract attacker-supplied tar archives, so the recursion DoS is not reachable. Triaged severity is low (scanner: high); fix by the Dependabot/lockfile refresh within the 180-day low SLA.",
+      "source": "sca",
+      "scannerSeverity": "high",
+      "severity": "low",
+      "status": "open",
+      "owner": "testing-lab maintainers",
+      "openedAt": "2026-09-25"
+    },
+    {
+      "id": "SEC-106",
+      "rule": "GHSA-2v37-7h3g-55p8",
+      "path": "labs/system:nanoid",
+      "impact": "Transitive dev dependency of the Vite/Storybook toolchain; the lab never calls a custom nanoid generator with size 0. Triaged severity is low (scanner: high); fix by the Dependabot/lockfile refresh within the 180-day low SLA.",
+      "source": "sca",
+      "scannerSeverity": "high",
+      "severity": "low",
+      "status": "open",
+      "owner": "testing-lab maintainers",
+      "openedAt": "2026-09-25"
+    }
+  ]
+}

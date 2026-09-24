@@ -986,18 +986,17 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] SAST/SCA/secret/IaC scan
-- [ ] authn/authz/tenant isolationのnegative test
-- [ ] API fuzz/DASTをtest environmentへ実行
-- [ ] rate limit/abuse caseを追加
-- [ ] SBOM/provenance/signature verification
-- [ ] OWASP ASVS/WSTG requirementへtrace
+- [x] SAST/SCA/secret/IaC scan
+- [x] authn/authz/tenant isolationのnegative test
+- [x] API fuzz/DASTをtest environmentへ実行
+- [x] rate limit/abuse caseを追加
+- [x] SBOM/provenance/signature verification
+- [x] OWASP ASVS/WSTG requirementへtrace
 
 ## Acceptance criteria
 
-- [ ] security findingのowner/SLA/suppression期限がある
-- [ ] production secret/PIIをfixtureへ含めない
-
+- [x] security findingのowner/SLA/suppression期限がある
+- [x] production secret/PIIをfixtureへ含めない
 
 ---
 
@@ -1500,16 +1499,15 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] asset/trust boundary/attacker capabilityをmodel化
-- [ ] authorization、injection、replay、rate abuseをtest
-- [ ] SAST/SCA/DAST findingをriskでtriage
-- [ ] secret/log/artifact leakをtest
+- [x] asset/trust boundary/attacker capabilityをmodel化
+- [x] authorization、injection、replay、rate abuseをtest
+- [x] SAST/SCA/DAST findingをriskでtriage
+- [x] secret/log/artifact leakをtest
 
 ## Acceptance criteria
 
-- [ ] scanner件数ではなくexploit impactとmitigationを記録
-- [ ] critical abuse caseをCI/release gateへ接続
-
+- [x] scanner件数ではなくexploit impactとmitigationを記録
+- [x] critical abuse caseをCI/release gateへ接続
 
 ---
 

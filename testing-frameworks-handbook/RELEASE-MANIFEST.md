@@ -11,6 +11,7 @@
 - fast-check 4.9 property/metamorphic/differential/shrink suiteとGo coverage-guided parser fuzzを含むadvanced techniqueラボ
 - StrykerJS/PIT/Infection/cargo-mutants/curated/catalog mutantによるrisk-based mutation laneとdecision ledger
 - coordinated omissionを避けたopen-model load generatorとload/stress/spike/soak/capacity/microbenchmark分離ラボ
+- threat-model駆動abuse-case test、secret/SAST/workflow/SCA scan、SBOM署名、finding ledgerのsecurity verification lab
 - Nix flakeとtoolchain別development shell
 - GitHub Issue本文52件
 - test design、strategy、device matrix、research reproduction、testing policy exception ADR template

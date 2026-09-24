@@ -65,7 +65,7 @@ run_probe \
   tests/NUnitTests/NUnitTests.csproj \
   ConstraintFailureShowsExpectedAndActualValues \
   "constraint comparison probe" \
-  7
+  9
 run_probe \
   MSTest \
   tests/MSTestTests/MSTestTests.csproj \

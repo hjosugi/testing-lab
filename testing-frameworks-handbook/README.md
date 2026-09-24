@@ -88,6 +88,8 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 `labs/performance`には、microbenchmark・load・stress・spike・soak・capacityを分離し、intended start基準のopen-model load generatorでcoordinated omissionを避け、warm-up除外・client bottleneck判定・seeded repeat・environment付きartifactでSLOを検証する例があります。
 
+`labs/security`には、threat model（asset・trust boundary・attacker）から導いたIDOR・権限昇格・replay・token偽造・SQL injection・flood・secret漏洩・API fuzzのabuse-case testと、secret/SAST/workflow/SCA scan、SBOM署名をowner・SLA・suppression期限付きfinding ledgerで運用する例があります。
+
 `labs/advanced` には、同じproduction codeに対する5 domain invariant、fast-check generator/shrinker監査、metamorphic/differential、model-based、concurrency、fault-injection、characterization、snapshot、performanceと、Go parser/API coverage-guided fuzzの比較実験があります。
 
 ## Issue backlog

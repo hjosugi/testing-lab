@@ -3,13 +3,12 @@
 
 ## Tasks
 
-- [ ] browser、locale、auth、payment、feature flagの因子/値を列挙
-- [ ] invalid constraintを定義
-- [ ] pairwise suiteとfull matrix costを比較
-- [ ] past incident combinationを必須caseに固定
+- [x] browser、locale、auth、payment、feature flagの因子/値を列挙
+- [x] invalid constraintを定義
+- [x] pairwise suiteとfull matrix costを比較
+- [x] past incident combinationを必須caseに固定
 
 ## Acceptance criteria
 
-- [ ] coverage criterionと除外理由が説明可能
-- [ ] matrixを再生成できる
-
+- [x] coverage criterionと除外理由が説明可能
+- [x] matrixを再生成できる

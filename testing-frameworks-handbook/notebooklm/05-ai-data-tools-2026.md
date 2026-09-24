@@ -713,6 +713,8 @@ PHP labは公式PHPUnit 12.5.31 PHARをNixでhash pinし、同じ10-test suite�
 
 # 100種類のテスト設計カード
 
+> 実行例: pairwise / combinatorial testingは[`labs/combinatorial`](../labs/combinatorial/README.md)で、制約・incident必須case・除外理由付きのmatrixを再生成可能に作ります。
+
 ## 読み方
 
 これは「100種類すべて導入する」リストではありません。同じテストを**対象、目的、技法、実行時期**の別軸で呼ぶため、用語は重なります。各行の「核心」を見て、自分のriskに必要なものだけ選びます。

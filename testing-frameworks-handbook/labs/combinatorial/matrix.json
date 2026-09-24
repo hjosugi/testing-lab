@@ -1,0 +1,196 @@
+{
+  "generatedBy": "labs/combinatorial/scripts/generate.mjs",
+  "seed": 38,
+  "criterion": "2-way (pairwise) coverage of every value pair that some valid configuration contains; incident cases pinned first",
+  "cases": [
+    {
+      "browser": "webkit",
+      "locale": "ar-SA",
+      "auth": "passkey",
+      "payment": "card",
+      "bundleDiscountFlag": "on",
+      "reason": "INC-2026-031"
+    },
+    {
+      "browser": "firefox",
+      "locale": "ja-JP",
+      "auth": "guest",
+      "payment": "konbini",
+      "bundleDiscountFlag": "off",
+      "reason": "INC-2026-044"
+    },
+    {
+      "browser": "chromium",
+      "locale": "ar-SA",
+      "auth": "sso",
+      "payment": "invoice",
+      "bundleDiscountFlag": "off",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "firefox",
+      "locale": "ja-JP",
+      "auth": "sso",
+      "payment": "paypay",
+      "bundleDiscountFlag": "on",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "chromium",
+      "locale": "en-US",
+      "auth": "password",
+      "payment": "card",
+      "bundleDiscountFlag": "off",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "chromium",
+      "locale": "ja-JP",
+      "auth": "passkey",
+      "payment": "paypay",
+      "bundleDiscountFlag": "off",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "webkit",
+      "locale": "ja-JP",
+      "auth": "password",
+      "payment": "konbini",
+      "bundleDiscountFlag": "on",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "firefox",
+      "locale": "en-US",
+      "auth": "sso",
+      "payment": "invoice",
+      "bundleDiscountFlag": "on",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "webkit",
+      "locale": "ja-JP",
+      "auth": "sso",
+      "payment": "invoice",
+      "bundleDiscountFlag": "off",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "firefox",
+      "locale": "ar-SA",
+      "auth": "password",
+      "payment": "card",
+      "bundleDiscountFlag": "on",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "chromium",
+      "locale": "ja-JP",
+      "auth": "passkey",
+      "payment": "konbini",
+      "bundleDiscountFlag": "on",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "webkit",
+      "locale": "en-US",
+      "auth": "guest",
+      "payment": "card",
+      "bundleDiscountFlag": "off",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "webkit",
+      "locale": "ja-JP",
+      "auth": "password",
+      "payment": "paypay",
+      "bundleDiscountFlag": "on",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "chromium",
+      "locale": "ja-JP",
+      "auth": "sso",
+      "payment": "card",
+      "bundleDiscountFlag": "on",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "firefox",
+      "locale": "en-US",
+      "auth": "passkey",
+      "payment": "card",
+      "bundleDiscountFlag": "off",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "chromium",
+      "locale": "ar-SA",
+      "auth": "guest",
+      "payment": "card",
+      "bundleDiscountFlag": "off",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "webkit",
+      "locale": "ja-JP",
+      "auth": "guest",
+      "payment": "paypay",
+      "bundleDiscountFlag": "off",
+      "reason": "pairwise"
+    },
+    {
+      "browser": "firefox",
+      "locale": "ja-JP",
+      "auth": "sso",
+      "payment": "konbini",
+      "bundleDiscountFlag": "off",
+      "reason": "pairwise"
+    }
+  ],
+  "stats": {
+    "fullCartesian": 288,
+    "validConfigurations": 123,
+    "pairwiseCases": 18,
+    "pairCoverage": 1,
+    "tripleCoverage": 0.62,
+    "ciMinutes": {
+      "pairwise": 27,
+      "fullValid": 185
+    }
+  },
+  "excludedPairs": [
+    {
+      "pair": "locale=en-US&payment=konbini",
+      "constraint": "C1"
+    },
+    {
+      "pair": "locale=en-US&payment=paypay",
+      "constraint": "C1"
+    },
+    {
+      "pair": "locale=ar-SA&payment=konbini",
+      "constraint": "C1"
+    },
+    {
+      "pair": "locale=ar-SA&payment=paypay",
+      "constraint": "C1"
+    },
+    {
+      "pair": "auth=guest&payment=invoice",
+      "constraint": "C2"
+    },
+    {
+      "pair": "auth=password&payment=invoice",
+      "constraint": "C2"
+    },
+    {
+      "pair": "auth=passkey&payment=invoice",
+      "constraint": "C2"
+    },
+    {
+      "pair": "auth=guest&bundleDiscountFlag=on",
+      "constraint": "C3"
+    }
+  ]
+}

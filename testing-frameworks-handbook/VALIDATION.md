@@ -34,6 +34,7 @@
 | JS runner selection spike | PASS（team diagnosis time未計測） | node:test/Mocha/AVAで同じ5 case pass、意図的failureは3者とも非0 exit・test名/source line/両値/structured diffを表示、JUnit XMLはnode:test（junit）とMocha（xunit）がbuilt-in・AVAはTAPのみ、transitive npm依存0/51/132。ADR-0003へ記録 |
 | Oracle audit | PASS | 5 tests: 8言語251 testを静的監査しfinding 0（advanced performance testの同一式oracleを発見・修正済み）、12 critical inventory（independent 11、partial 1）、全19 lab READMEに保証範囲の節、共有式oracleのfalse negativeとE-001 false positive |
 | Model-based order lifecycle | PASS | fast-check `fc.commands`で有効・無効command列500 run、handwritten example 7件は部分refund上限defectを見逃し、model-basedは`reserve, pay(k1), refund(27), refund(974)`へ縮約してkill、seed `20260925`とpathで同じ失敗を再現、minimal sequenceをcorpus化 |
+| Pairwise configuration | PASS | 6 tests: 全直積288・有効123に対しpairwise 18 case（incident 2件先頭固定）、有効pair 93組を100%、3-way 62%、除外pair 8組すべてを制約C1〜C3で説明、model.jsonとseedから再生成一致、CI 27分 vs 185分 |
 | Go execution matrix | PASS | 通常/race、parallel 60 executions、total/parser fuzz各100x budget、generated drift、benchmark、3 intentional failures |
 | Rust execution matrix | PASS | private unit 2、public integration 6、property 256 cases、trait 1、doctest 2、mutants 7/7 |
 | PHP execution matrix | PASS | PHP 8.4、PHPUnit 12.5.31→13.2.4、high-risk mutants 14/14、equivalent mutant 1 classified |

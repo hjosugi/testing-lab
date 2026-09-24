@@ -1,0 +1,20 @@
+{
+  "name": "checkout configuration",
+  "costPerCaseSeconds": 90,
+  "factors": {
+    "browser": ["chromium", "firefox", "webkit"],
+    "locale": ["ja-JP", "en-US", "ar-SA"],
+    "auth": ["guest", "password", "passkey", "sso"],
+    "payment": ["card", "konbini", "paypay", "invoice"],
+    "bundleDiscountFlag": ["on", "off"]
+  },
+  "constraints": [
+    { "id": "C1", "when": { "payment": ["konbini", "paypay"] }, "require": { "locale": ["ja-JP"] }, "reason": "konbini and PayPay are offered only to Japanese storefront customers" },
+    { "id": "C2", "when": { "payment": ["invoice"] }, "require": { "auth": ["sso"] }, "reason": "invoice payment exists only for business accounts, which always sign in with SSO" },
+    { "id": "C3", "when": { "auth": ["guest"] }, "forbid": { "bundleDiscountFlag": ["on"] }, "reason": "bundle discount is a member benefit; the flag is not evaluated for guests" }
+  ],
+  "mustInclude": [
+    { "id": "INC-2026-031", "case": { "browser": "webkit", "locale": "ar-SA", "auth": "passkey", "payment": "card", "bundleDiscountFlag": "on" }, "reason": "RTL layout hid the passkey prompt on WebKit" },
+    { "id": "INC-2026-044", "case": { "browser": "firefox", "locale": "ja-JP", "auth": "guest", "payment": "konbini", "bundleDiscountFlag": "off" }, "reason": "konbini slip number was not rendered for guests on Firefox" }
+  ]
+}

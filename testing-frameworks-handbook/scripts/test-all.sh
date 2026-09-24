@@ -53,6 +53,7 @@ run_test Flake-dashboard node labs/flakiness node scripts/dashboard.mjs
 run_test Acceptance-BDD node labs/acceptance node --test 'test/*.test.mjs'
 run_test Production-verification node labs/production node --test 'test/*.test.mjs'
 run_test Research-reproduction node labs/research node --test 'test/*.test.mjs'
+run_test Oracle-audit node labs/oracles node --test 'test/*.test.mjs'
 run_test Security-SBOM node labs/security node scripts/sbom.mjs
 run_test Java gradle labs/java gradle test --no-daemon
 run_test NUnit dotnet labs/dotnet dotnet test --project tests/NUnitTests/NUnitTests.csproj

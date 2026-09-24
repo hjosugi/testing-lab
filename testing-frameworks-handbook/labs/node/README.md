@@ -18,3 +18,9 @@ npm run test:unawaited
 - unawaited rejectionをintentional failureとして子processで再現
 
 実測値、選定基準、保存したfailure outputは[`EXECUTION-MODEL.md`](EXECUTION-MODEL.md)を参照してください。
+
+## Passしても保証しないこと
+
+- 3 runnerで同じbehaviorが通ることは、runner固有のscheduling差（file内並列、process分離）で共有state bugが出ないことまでは示しません。[EXECUTION-MODEL.md](EXECUTION-MODEL.md)を参照してください。
+- module mockは実moduleとの互換性を確認しません。
+- runner spikeの診断性比較はfailure出力の要素の有無で、人のtriage時間は未計測です（ADR-0003）。

@@ -102,6 +102,8 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 `labs/research`には、coverage/mutation相関、assertion数、PBT generator/shrinking、生成test vs human testなどの論文主張を同一budget・同一oracleで再現し、negative resultも含めてtemplate形式で記録する例があります。
 
+`labs/oracles`には、critical riskごとのoracle独立性inventoryと、全言語のtestからassertionなし・常にtrue・production同一式の期待値を検出する監査があります。
+
 `labs/advanced` には、同じproduction codeに対する5 domain invariant、fast-check generator/shrinker監査、metamorphic/differential、model-based、concurrency、fault-injection、characterization、snapshot、performanceと、Go parser/API coverage-guided fuzzの比較実験があります。
 
 ## Issue backlog

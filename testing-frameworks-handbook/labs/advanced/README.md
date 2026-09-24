@@ -33,3 +33,9 @@ generator分布、5件のdomain invariant、shrinker、corpus運用のreview結�
 4. legacy shipping ruleの正しい仕様を決めてからcharacterizationを置換する。
 
 意図的変更を元へ戻してから次へ進んでください。
+
+## Passしても保証しないこと
+
+- generatorの分布外（巨大cart、非整数通貨）の入力は探索していません。分布は[GENERATOR-REVIEW.md](GENERATOR-REVIEW.md)で確認します。
+- performance characterizationは測定値を記録するだけで、性能gateではありません（`labs/performance`が担当）。
+- concurrency testはprocess内のPromise並行で、複数process・DBのraceは対象外です。

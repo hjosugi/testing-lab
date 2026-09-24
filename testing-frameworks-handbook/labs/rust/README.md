@@ -102,3 +102,9 @@ CIは`Cargo.lock`以外のresolutionを許可せず、Nix側でrustc/Cargo/rustf
 - [rstest 0.26.1](https://docs.rs/rstest/0.26.1/rstest/)
 - [Proptest book](https://proptest-rs.github.io/proptest/)
 - [cargo-mutants guide](https://mutants.rs/)
+
+## Passしても保証しないこと
+
+- proptestの期待値は同じ掛け算を`u64`で計算するため、式そのものの誤りには独立したoracleではありません（rstestのexample caseが補完、`labs/oracles/inventory.json`でpartialと記録）。
+- cargo-mutantsはtotal pathの7 mutantだけが対象です。
+- `Send + Sync`のcompile-time checkは型の性質を示し、実行時のlock順序やdeadlockの不在は示しません。

@@ -39,3 +39,9 @@ nix develop .#python --command make test-python-postgres-unavailable
 ```
 
 adapter、migration、container lifecycle support、共有contract、Postgres engine固有testを別moduleに分けています。domain coverageは`checkout`だけを対象にし、real infrastructureの保証は専用integration suiteのobservable behaviorで扱います。
+
+## Passしても保証しないこと
+
+- coverage 100%は全branchを実行したことだけを示し、assertionの強さは示しません（mutation laneと`labs/oracles`で補完）。
+- in-memory fakeとPostgresのshared contractは記述したbehaviorだけを揃えます。contractにないSQL semanticsは`postgres_tests`だけが見ます。
+- Hypothesisの探索はprofileのexample数の範囲です。

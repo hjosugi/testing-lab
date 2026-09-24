@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { performance } from 'node:perf_hooks';
 import {
   Order, discountedTotal, idempotent, legacyShippingFee,
-  renderReceipt, retry, sanitize, totalOf
+  referenceTotal, renderReceipt, retry, sanitize, totalOf
 } from '../src/checkout.js';
 
 test('example: quantity × unit priceを合計する', () => {
@@ -70,7 +70,8 @@ test('performance characterization: 絶対閾値ではなく測定値とcorrectn
     quantity: index + 1,
     unitPrice: index * 997
   }));
-  const expected = items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
+  // Independent oracle (repeated addition), not the production formula; found by labs/oracles.
+  const expected = referenceTotal(items);
   const started = performance.now();
   let result;
   for (let i = 0; i < 10_000; i += 1) result = totalOf(items);

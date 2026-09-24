@@ -97,3 +97,9 @@ GitHub Actionsは`address`、`undefined`、`thread`を独立matrix jobとして�
 - [Clang AddressSanitizer](https://clang.llvm.org/docs/AddressSanitizer.html)
 - [Clang UndefinedBehaviorSanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
 - [Clang ThreadSanitizer](https://clang.llvm.org/docs/ThreadSanitizer.html)
+
+## Passしても保証しないこと
+
+- sanitizer laneは実行されたpathの未定義動作だけを検出します。未実行pathのUB不在は示しません。
+- benchmarkはnoise測定と最適化消去の確認で、性能退行のgateではありません。
+- `int`加算のoverflowは通常buildではcheckせず、UBSan laneで検出します。通貨精度や巨大cartは対象外です。

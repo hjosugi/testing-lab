@@ -1,0 +1,7 @@
+{
+  "reviewedAt": "2026-09-25",
+  "fixed": [
+    { "path": "advanced/test/advanced.test.js", "rule": "same-algorithm-expected", "test": "performance characterization", "change": "expected value now comes from referenceTotal (repeated addition) instead of the production quantity*unitPrice formula" }
+  ],
+  "accepted": []
+}

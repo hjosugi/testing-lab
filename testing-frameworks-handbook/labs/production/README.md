@@ -38,3 +38,8 @@ canary、shadow traffic、synthetic monitoring、runtime business invariant、SL
 ```bash
 nix develop .#generative --command make test-production
 ```
+
+## Passしても保証しないこと
+
+- canary・shadow・synthetic・alertはprocess内の模型での検証で、実traffic、実alert manager、実on-call通知の動作は示しません。
+- telemetryのsecret検査は既知の値の完全一致で、encodeや分割されたsecretは検出しません。

@@ -108,3 +108,9 @@ order fixtureはmutatorと「clean stateを仮定するtest」を固定seedで�
 - [`testing` package](https://pkg.go.dev/testing)
 - [GoMock](https://github.com/uber-go/mock)
 - [goleak](https://github.com/uber-go/goleak)
+
+## Passしても保証しないこと
+
+- fuzzはCI budget（100x）内で到達したinputだけを見ます。corpus外の欠陥の不在は示しません。
+- `-race`は実行されたinterleavingのdata raceだけを検出します。
+- file repositoryは一時directoryでの確認で、disk fullや権限などのfilesystem faultは対象外です。

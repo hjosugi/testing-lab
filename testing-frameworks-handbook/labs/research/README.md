@@ -37,3 +37,8 @@
 ```bash
 nix develop .#generative --command make test-research
 ```
+
+## Passしても保証しないこと
+
+- testは「recordの数値が実験の出力と一致する」ことを保証します。論文の主張が一般に正しいかどうかは保証しません。
+- 小さなsubjectでの結果を大規模codebaseへ外挿しないでください（上記external validity）。

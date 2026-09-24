@@ -18,6 +18,7 @@
 - example mappingから実行可能Gherkinとtraceabilityまでのacceptance/BDD lab
 - canary/shadow/synthetic/runtime invariantとobservability-as-behaviorのproduction verification lab
 - 7件の論文主張を同一budgetで再現し、negative resultも保存するresearch reproduction lab
+- 8言語のtest oracle監査とcritical oracle inventory
 - Nix flakeとtoolchain別development shell
 - GitHub Issue本文52件
 - test design、strategy、device matrix、research reproduction、testing policy exception ADR template

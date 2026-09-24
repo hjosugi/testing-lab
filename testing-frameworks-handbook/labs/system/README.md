@@ -325,3 +325,9 @@ downloadするfallbackを持ちます。
 - [Playwright video options](https://playwright.dev/docs/videos)
 - [Playwright custom reporters](https://playwright.dev/docs/api/class-reporter)
 - [Playwright best practices](https://playwright.dev/docs/best-practices)
+
+## Passしても保証しないこと
+
+- OpenAPI/Pact contractはshapeと互換性を守りますが、schemaを満たす誤った値（金額計算の誤り）は検出しません。
+- Playwright journeyは2本のcritical journeyだけで、visual regressionやrole/name以外のaccessibilityは対象外です。
+- HTTP stabilityの100連続greenはこのrunner環境でのflake不在の証拠で、他環境での安定性を保証しません。

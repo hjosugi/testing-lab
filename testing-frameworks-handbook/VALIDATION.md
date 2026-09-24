@@ -32,6 +32,7 @@
 | Production verification / observability | PASS（plan未review） | 9 tests: pre-deploy invariant coverage、synthetic idempotent cleanup、5% sticky canaryのabort/rollback、10% flag cohortとkill switch、shadowのPII除去と欠陥検出、burn-rate page/ticketとrunbook anchor、real HTTP checkout→paymentのtraceparent伝播とtrace ID結合log、telemetryのemail/PAN/token不在、label/series上限。blast radius/privacy reviewは未実施 |
 | Research reproduction | PASS | 5 tests、7 record（再現2、部分再現3、手法のみ再現1、再現せず1）。results.jsonとrecordの数値を再実行で照合。LLM生成testは有料APIなしのため非LLMの代替generatorで評価 |
 | JS runner selection spike | PASS（team diagnosis time未計測） | node:test/Mocha/AVAで同じ5 case pass、意図的failureは3者とも非0 exit・test名/source line/両値/structured diffを表示、JUnit XMLはnode:test（junit）とMocha（xunit）がbuilt-in・AVAはTAPのみ、transitive npm依存0/51/132。ADR-0003へ記録 |
+| Oracle audit | PASS | 5 tests: 8言語251 testを静的監査しfinding 0（advanced performance testの同一式oracleを発見・修正済み）、12 critical inventory（independent 11、partial 1）、全19 lab READMEに保証範囲の節、共有式oracleのfalse negativeとE-001 false positive |
 | Go execution matrix | PASS | 通常/race、parallel 60 executions、total/parser fuzz各100x budget、generated drift、benchmark、3 intentional failures |
 | Rust execution matrix | PASS | private unit 2、public integration 6、property 256 cases、trait 1、doctest 2、mutants 7/7 |
 | PHP execution matrix | PASS | PHP 8.4、PHPUnit 12.5.31→13.2.4、high-risk mutants 14/14、equivalent mutant 1 classified |

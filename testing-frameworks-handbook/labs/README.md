@@ -75,8 +75,9 @@ canonical suite名は [`<subject>/<real-boundary>/<purpose>` 規約](../docs/00-
 | `checkout/production-model/verification-and-telemetry` | [`labs/production/`](production/README.md) / `make test-production` | canary / shadow / synthetic / runtime invariant / observability-as-behavior | 実物はcheckout v1/v2・canary router・flag・shadow sanitizer・burn-rate alert・real HTTP 2 serviceのtrace伝播、doubleは本番trafficとalert managerのprocess内模型、oracleはabort/rollback・kill switch・PII不在・trace tree・runbook実在・label拒否、riskはproduction monitoringにpre-deploy testを任せ、telemetryから漏洩やtriage不能が起きることです。 |
 | `research/seeded-experiments/claim-reproduction` | [`labs/research/`](research/README.md) / `make test-research` | research reproduction / equal budget / negative results | 実物はprobe付きsubject・16 mutant・24 test pool・generator/shrinker・生成oracle、doubleはLLMの代わりの非LLM regression-oracle generator、oracleはcommit済みresults.jsonとrecordの数値一致・template準拠・positive/negative両方の保存、riskは論文の主張を文脈や予算を揃えずに自社へ持ち込むことです。 |
 | `node-checkout/runner-adapters/selection-spike` | [`test/spike/`](node/test/spike/) / `npm run test:spike` | runner selection spike / diagnostic comparison | 実物はnode:test・Mocha・AVAの各CLIと同一の5 case（async、期待失敗、parameterized、並列isolation、意図的diagnostic failure）、doubleはfake payment/repository、oracleは5 case pass・意図的failureの非0 exit・failure出力の診断要素・JUnit XML・依存数のrecorded scorecard一致、riskは構文の好みやstar数でrunnerを選び、診断性とlock-inを見落とすことです。 |
+| `all-labs/static-test-source/oracle-audit` | [`labs/oracles/`](oracles/README.md) / `make test-oracles` | oracle strength / independence audit | 実物は8言語の全test sourceとcritical test inventory、doubleはなし、oracleはassertion有無・tautology・production同一式の期待値・snapshotのfindingが0件またはdecision済み、critical riskごとの独立oracle、全READMEの保証範囲、riskはpassするが何も守らないtestやproductionと一緒に間違うoracleです。 |
 
-この表にないsuiteを追加するときは、実装と同じ変更でcanonical名と4項目の要約も追加します。
+この表にないsuiteを追加するときは、実装と同じ変更でcanonical名と4項目の要約も追加します。各labのREADMEには「passしても保証しないこと」を書き、`labs/oracles`のtestがその存在を検査します。
 
 ## Advanced比較ラボ
 

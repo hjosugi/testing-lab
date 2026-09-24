@@ -112,3 +112,9 @@ ignore設定でreal escaped mutantを隠さないようにします。
 - [PHPUnit supported versions](https://phpunit.de/supported-versions.html)
 - [Infection guide and metrics](https://infection.github.io/guide/)
 - [Infection CLI options](https://infection.github.io/guide/command-line-options.html)
+
+## Passしても保証しないこと
+
+- Infectionのhigh-risk laneは`src/Checkout.php`だけが対象です。MSI 100%は他fileのassertion強度を示しません。
+- PHPUnit 12.5→13のmigration確認は現在のtest APIの範囲で、未使用APIのdeprecationは検出しません。
+- equivalent mutant E-001の分類はfixtureの型制約に依存します。

@@ -1,5 +1,7 @@
 # Test oracle完全ガイド
 
+> 実行例: [`labs/oracles`](../labs/oracles/README.md)は、critical riskごとのoracle種類・独立性・守るfailure・保証しないことをinventory化し、8言語の全testをassertionなし・常にtrue・production同一式の期待値・snapshotで静的監査し、findingをfixed/acceptedとして記録します。初回監査でperformance testの同一式oracleを発見し、独立実装へ置き換えました。
+
 ## Oracle problem
 
 test inputを作れても、正解を判定できなければtestになりません。複雑なoptimizer、ML model、画像処理、distributed system、scientific computationでは、完全なexpected outputを手で列挙できないことがあります。

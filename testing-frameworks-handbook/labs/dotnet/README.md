@@ -80,3 +80,9 @@ xUnit.net v3はMTP runnerをtest applicationへ組み込めるため、次のfra
 - [.NET: MSTest SDK configuration](https://learn.microsoft.com/dotnet/core/testing/unit-testing-mstest-sdk)
 - [NUnit and Microsoft.Testing.Platform](https://docs.nunit.org/articles/vs-test-adapter/NUnit-And-Microsoft-Test-Platform.html)
 - [xUnit.net v3 Microsoft Testing Platform](https://xunit.net/docs/getting-started/v3/microsoft-testing-platform)
+
+## Passしても保証しないこと
+
+- NUnit/MSTestとMTP/VSTestの組合せで同じbehaviorが通ることは、他runner（xUnit.net）やIDE adapterでの挙動を保証しません。
+- payment/repositoryはfakeで、実DBのtransactionやtimeoutは検証していません。
+- Windows laneはpath/SDK差分の確認で、全OSでの同一性は示しません。

@@ -1046,6 +1046,8 @@ time/network/disk/schedulerをsimulation runtimeで制御し、多数のfailure/
 - simulator/real gap
 - native/external dependency
 
+実行例は[`labs/resilience`](../labs/resilience/README.md)です。clock・scheduler・random・network・diskをseamとして仮想化し、同じseedで同一event traceを再現します。idempotency keyを外した実装はseed searchでdouble chargeが見つかり、そのseedで同じ失敗が再現します。real HTTPのfault proxyでは、steady state・blast radius・abort condition・rollbackを持つchaos experimentと、simulationとのsemantic gapを比較します。
+
 ## Cross-cutting checklist
 
 - [ ] measurable requirement/SLO/threat/hypothesisがある

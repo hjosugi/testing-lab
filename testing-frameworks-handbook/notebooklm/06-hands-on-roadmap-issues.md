@@ -1007,18 +1007,17 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] clock/network/disk/random/scheduler seamを棚卸し
-- [ ] retry/backoff/circuit breaker/idempotency test
-- [ ] deterministic seedでdelay/failure scheduleを再現
-- [ ] steady state、blast radius、abort conditionを定義
-- [ ] Chaos Monkey/Kubernetes chaos候補をcontrolled環境で評価
-- [ ] simulationとreal environmentのsemantic gapを検証
+- [x] clock/network/disk/random/scheduler seamを棚卸し
+- [x] retry/backoff/circuit breaker/idempotency test
+- [x] deterministic seedでdelay/failure scheduleを再現
+- [x] steady state、blast radius、abort conditionを定義
+- [x] Chaos Monkey/Kubernetes chaos候補をcontrolled環境で評価
+- [x] simulationとreal environmentのsemantic gapを検証
 
 ## Acceptance criteria
 
-- [ ] failureをseedから再現可能
-- [ ] chaos experimentが安全にabort/rollback可能
-
+- [x] failureをseedから再現可能
+- [x] chaos experimentが安全にabort/rollback可能
 
 ---
 

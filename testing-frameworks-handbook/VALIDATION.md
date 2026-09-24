@@ -25,6 +25,7 @@
 | Risk-based mutation lanes | PASS | StrykerJS 10.0.0 86 mutant中83 killed + 3 timeout（survivor 0）、PIT 1.30.0 8/8、Python curated 7/7、Go catalog 5/5、C++ catalog 3/3、C# catalog 4/4、policy unit 14 tests、review action rate 17/19 |
 | Performance profiles | PASS（CI） | model 9 tests、real HTTP profile 6 tests（load/CO/stress/spike/soak/capacity）。local共有host（load average 25〜48）ではgenerator lag p99が30ms予算を超え、profile testはinconclusive（skip）として報告。CIの専用jobは`PERF_REQUIRE_CONCLUSIVE=1`で判定 |
 | Security portfolio | PASS | abuse case 9 tests（AC-01〜08、各controlの対照付き）、portfolio 8 tests（traceability、secret/SAST/workflow scan、ledger SLA/suppression、SBOM provenance/Ed25519署名）。AC-08 fuzzがJSON `null` bodyの500を発見し修正。SCA triageはhigh 6件をexploit impactでlowへ再分類しowner/SLA付きで記録 |
+| Resilience simulation / chaos | PASS | simulation 8 tests（同一seed同一trace hash、50 seed×20 checkoutでdouble charge 0、idempotency key除去をseed searchで発見し同seedで再現、outage吸収/明示失敗、breaker遷移、disk fault）、real HTTP chaos 4 tests（30% blast radiusでcompleted、全断でabort+rollback回復、事前steady state guard、semantic gap） |
 | Go execution matrix | PASS | 通常/race、parallel 60 executions、total/parser fuzz各100x budget、generated drift、benchmark、3 intentional failures |
 | Rust execution matrix | PASS | private unit 2、public integration 6、property 256 cases、trait 1、doctest 2、mutants 7/7 |
 | PHP execution matrix | PASS | PHP 8.4、PHPUnit 12.5.31→13.2.4、high-risk mutants 14/14、equivalent mutant 1 classified |

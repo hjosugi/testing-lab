@@ -32,7 +32,7 @@
 
 | 観点 | Linux（ext4/btrfs、CI ubuntu-24.04） | macOS（APFS、CI macos-15） | Windows（未対象） |
 |---|---|---|---|
-| NFC/NFDのfile名 | 別のfile名として2つ存在 | normalization-insensitiveのため同じfile（testは件数の差を明示的に期待） | — |
+| NFC/NFDを含むfile名 | 与えた名前でround-trip | 与えた名前でround-trip。APFSは名前を正規化非依存で比較するため、testのNFC/NFD名は接尾辞を変えて別fileにしている | — |
 | `ulimit -f`による書込み失敗 | `EFBIG` | `EFBIG` | なし（skip） |
 | directory permission | rootは無視（skip） | 同左 | ACLで別挙動 |
 | signal | SIGTERM/SIGINT handler | 同左 | `SIGTERM`はprocessを即終了（handler不可） |

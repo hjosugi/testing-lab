@@ -119,10 +119,10 @@ test('paths: spaces, Unicode (NFC/NFD), and long names round-trip', async t => {
     assert.equal(JSON.parse(result.stdout).out, out);
     assert.ok(readFileSync(out, 'utf8').startsWith('ORDER o-1'));
   }
-  // Linux ext4/btrfs treat NFC and NFD as different names; macOS APFS is
-  // normalization-insensitive, so the two spellings are the same file there.
-  const distinct = platform() === 'darwin' ? names.length - 1 : names.length;
-  assert.equal(readdirSync(dir).length, distinct);
+  // The NFD and NFC spellings carry different suffixes, so every name is a
+  // distinct file on both Linux and macOS (APFS compares names
+  // normalization-insensitively, which is why the suffixes differ).
+  assert.equal(readdirSync(dir).length, names.length);
 });
 
 test('child timeout: a hung CLI is killed with its process group and reported', async t => {

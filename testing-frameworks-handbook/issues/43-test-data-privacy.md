@@ -3,13 +3,12 @@
 
 ## Tasks
 
-- [ ] minimal factoryとmeaningful defaultsを作成
-- [ ] unique namespace/tenantとcleanupを実装
-- [ ] production data利用の禁止/匿名化policyを定義
-- [ ] clock、random seed、localeをrecord
+- [x] minimal factoryとmeaningful defaultsを作成
+- [x] unique namespace/tenantとcleanupを実装
+- [x] production data利用の禁止/匿名化policyを定義
+- [x] clock、random seed、localeをrecord
 
 ## Acceptance criteria
 
-- [ ] parallel実行でcollisionしない
-- [ ] artifactにPII/secretが残らない
-
+- [x] parallel実行でcollisionしない
+- [x] artifactにPII/secretが残らない

@@ -394,6 +394,9 @@ Wallaby.jsのようなcontinuous runner、GoCDのようなdelivery platform、Ku
 
 テスト名を先に選ばないでください。「integration testを追加する」ではなく、「どの故障を、どの観測点で、どの時間予算内に検出するか」から設計します。
 
+
+> 実行例: test dataの設計は[`labs/test-data`](../labs/test-data/README.md)です。meaningful defaultのfactory、名前空間付きID、manifest（clock/seed/locale）、並列processでの衝突防止、namespace cleanup、production data匿名化とartifactのPII/secret検査をtestします。
+
 ## 1. Test design card
 
 本書のすべてのテストは次のカードで設計します。

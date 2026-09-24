@@ -57,6 +57,7 @@ run_test Oracle-audit node labs/oracles node --test 'test/*.test.mjs'
 run_test Pairwise-matrix node labs/combinatorial node --test 'test/*.test.mjs'
 run_test Concurrency node labs/concurrency node --test 'test/*.test.mjs'
 run_test CLI-process-contract node labs/cli node --test 'test/*.test.mjs'
+run_test Test-data node labs/test-data node --test 'test/*.test.mjs'
 run_test Security-SBOM node labs/security node scripts/sbom.mjs
 run_test Java gradle labs/java gradle test --no-daemon
 run_test NUnit dotnet labs/dotnet dotnet test --project tests/NUnitTests/NUnitTests.csproj

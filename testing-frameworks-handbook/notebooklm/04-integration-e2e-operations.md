@@ -9,6 +9,8 @@
 
 # Integration testing完全ガイド
 
+> 実行例: process/filesystem境界のintegrationは[`labs/cli`](../labs/cli/README.md)です。exit code・stdout/stderr・signal・EACCES・disk full相当のEFBIG・atomic rename・Unicode path・hung childのprocess group killをchild process越しにtestします。
+
 ## 一言で
 
 Integration testingは、本物の境界を使って「接続・変換・設定・実装差」が正しいか確認するテストです。

@@ -3,13 +3,12 @@
 
 ## Tasks
 
-- [ ] exit code、stdout、stderr、signalをcontract化
-- [ ] permission、disk full、partial write、atomic renameを注入
-- [ ] path space/Unicode/long pathを確認
-- [ ] child process timeoutとcleanupを確認
+- [x] exit code、stdout、stderr、signalをcontract化
+- [x] permission、disk full、partial write、atomic renameを注入
+- [x] path space/Unicode/long pathを確認
+- [x] child process timeoutとcleanupを確認
 
 ## Acceptance criteria
 
-- [ ] temp directory/processをtestごとに隔離
-- [ ] OS固有差とmatrixを文書化
-
+- [x] temp directory/processをtestごとに隔離
+- [x] OS固有差とmatrixを文書化

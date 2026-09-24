@@ -21,6 +21,7 @@
 - 8言語のtest oracle監査とcritical oracle inventory
 - 制約付きpairwise設定matrixのcombinatorial lab
 - barrierで決定的に再現するrace/lost update/deadlock/leakのconcurrency lab
+- exit code・signal・disk full・atomic renameを検証するCLI/process protocol lab
 - Nix flakeとtoolchain別development shell
 - GitHub Issue本文52件
 - test design、strategy、device matrix、research reproduction、testing policy exception ADR template

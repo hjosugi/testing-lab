@@ -108,6 +108,8 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 `labs/concurrency`には、barrierでrandom sleepなしに重複注文・lost update・deadlockを再現し、worker_threadsの実並列、liveness deadline、leak検査、証拠artifactを残す例があります。
 
+`labs/cli`には、CLIのexit code・stdout/stderr・signal・permission・disk full・atomic rename・Unicode path・child timeoutをprocess外からtestする例があります。
+
 `labs/advanced` には、同じproduction codeに対する5 domain invariant、fast-check generator/shrinker監査、metamorphic/differential、model-based、concurrency、fault-injection、characterization、snapshot、performanceと、Go parser/API coverage-guided fuzzの比較実験があります。
 
 ## Issue backlog

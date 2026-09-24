@@ -15,6 +15,12 @@ on:
 permissions:
   contents: read
 
+# One run in progress and at most one pending per ref: a newer push replaces
+# the pending run instead of queueing every intermediate commit.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   changed-files:
     name: changed-file lane (PR budget)

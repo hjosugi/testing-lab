@@ -1071,17 +1071,16 @@ runner、framework、assertion、double、specialized toolと、各test layerの
 
 ## Tasks
 
-- [ ] example mappingでrule/example/questionを整理
-- [ ] UI手順でなくbusiness behaviorをGherkin化
-- [ ] Cucumber/Gauge/Concordion等の実行層を比較
-- [ ] acceptance criteriaとlower-level testsをtrace
-- [ ] duplicate scenarioとslow step definitionを削減
+- [x] example mappingでrule/example/questionを整理
+- [x] UI手順でなくbusiness behaviorをGherkin化
+- [x] Cucumber/Gauge/Concordion等の実行層を比較
+- [x] acceptance criteriaとlower-level testsをtrace
+- [x] duplicate scenarioとslow step definitionを削減
 
 ## Acceptance criteria
 
 - [ ] product/QA/engineerが同じexampleをreview
-- [ ] feature fileがimplementation detailに依存しない
-
+- [x] feature fileがimplementation detailに依存しない
 
 ---
 

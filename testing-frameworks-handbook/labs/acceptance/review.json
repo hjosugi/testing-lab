@@ -1,0 +1,5 @@
+{
+  "feature": "features/coupon.feature",
+  "requiredRoles": ["product", "qa", "engineer"],
+  "reviews": []
+}

@@ -272,6 +272,8 @@ ruleと具体例をliving documentationとして維持します。
 - obsolete scenarioのretirement
 - stakeholderが読める語彙
 
+実行例は[`labs/acceptance`](../labs/acceptance/README.md)です。example mappingのrule/example/questionから`Rule:`付きGherkinを書き、依存なしの最小runnerで実行し、UI detail・duplicate scenario・rule tag・undefined/ambiguous step・slow stepをgateし、各ruleをacceptance criterion・scenario・lower-level testへtraceし、product/QA/engineerのsign-offをfeature fileのhashへ結び付けます。
+
 ## Exploratory testingとの関係
 
 scripted acceptanceは既知の期待を確認します。exploratory testingは未知のriskを発見します。両方必要です。

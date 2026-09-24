@@ -96,6 +96,8 @@ Nix が未導入なら、先に [docs/12-nix-setup.md](docs/12-nix-setup.md) を
 
 `labs/flakiness`には、attempt-level CI historyからflakeをhost・fixture順序・intrinsic・regressionへ分類し、owner/期限付きquarantine、retryで緑にならないrequired check、miss rateを測るtest selectionとdashboardを作る例があります。
 
+`labs/acceptance`には、example mapping、business languageのGherkin、依存なしの最小runner、UI detail/duplicate/traceability lint、feature hashへ結び付く3役review記録によるSpecification by Exampleの例があります。
+
 `labs/advanced` には、同じproduction codeに対する5 domain invariant、fast-check generator/shrinker監査、metamorphic/differential、model-based、concurrency、fault-injection、characterization、snapshot、performanceと、Go parser/API coverage-guided fuzzの比較実験があります。
 
 ## Issue backlog

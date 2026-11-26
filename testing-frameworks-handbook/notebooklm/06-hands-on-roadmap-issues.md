@@ -256,7 +256,7 @@ bootstrapはnpmの`npm ci`、uvの`sync --frozen`、Gradle dependency locking、
 | Nix/toolchain | `flake.lock` | `nix flake check --all-systems --no-build` |
 | Node/Mocha/AVA | `labs/node/package-lock.json` | `npm ci` |
 | Node advanced | `labs/advanced/package-lock.json`、fast-check 4.9.0 exact pin | `npm ci`、5 property、distribution/shrink、metamorphic/differential |
-| Pact/Storybook/Vitest/Playwright/system | `labs/system/package-lock.json` + `flake.lock`のPlaywright driver/browser | `npm ci` + Pact 17.0.1 provider verification + Storybook 10.5.2/Vitest 4.1.10 browser test + 3-engine E2E + `verify:browser-lock` |
+| Pact/Storybook/Vitest/Playwright/system | `labs/system/package-lock.json` + `flake.lock`のPlaywright driver/browser | `npm ci` + Pact 17.0.1 provider verification + Storybook 10.6.3/Vitest 4.1.12 browser test + 3-engine E2E + `verify:browser-lock` |
 | OpenAPI/Schemathesis | `labs/system/api-tests/uv.lock` | NixのPython 3.13/uv + `uv sync --frozen`、Schemathesis 4.23.0 |
 | JVM | `labs/java/gradle.lockfile` | Gradle dependency locking |
 | .NET | 各projectの`packages.lock.json` + `global.json` | `dotnet restore --locked-mode` |
@@ -341,8 +341,8 @@ Brokerを使うbranch/pending/WIP/deploy policyは
 
 ## Storybook/Vitest browser componentの1 command実行
 
-同じ`node` shellと`labs/system/package-lock.json`からStorybook 10.5.2、
-Vitest 4.1.10、Vite 8.1.5、Web Components renderer、accessibility addonを
+同じ`node` shellと`labs/system/package-lock.json`からStorybook 10.6.3、
+Vitest 4.1.12、Vite 8.3.5、Web Components renderer、accessibility addonを
 復元します。Nixが供給して`verify:browser-lock`で照合するPlaywright Chromiumを
 Vitest browser providerでも使うため、system browserやglobal packageは不要です。
 

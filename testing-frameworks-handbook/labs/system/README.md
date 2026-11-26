@@ -60,7 +60,7 @@ uvによるPython downloadは無効です。
 | schema property | OpenAPI 3.1からSchemathesisがpositive/negative requestを生成しreal HTTPへ送る | なし | status/content/header/response schema、4xx rejection、5xxなし |
 | stateful API | OpenAPI LinkをたどるPOST→GET→DELETE→GET | in-memory order store | create後の可用性、delete後の非可用性、response schema |
 | property | pureな`totalOf`をgenerated itemsで呼ぶ | なし | valid itemを追加してtotalが減らないinvariant |
-| browser component | Storybook 10.5.2、Vitest browser mode、Playwright Chromium、production Web Component | order clientだけ | state matrix、role/name interaction、addon-a11y violation |
+| browser component | Storybook 10.6.3、Vitest browser mode、Playwright Chromium、production Web Component | order clientだけ | state matrix、role/name interaction、addon-a11y violation |
 | browser E2E | application server、Chromium/Firefox/WebKit、testごとのBrowserContext、DOM、fetch、real HTTP | failure journeyだけ`/orders`をHTTP 503で置換。server外部portはin-memory | role経由で観測するsuccess statusとfailure alert |
 | CSS token contract | production CSS sourceをNode component testで読む | なし | typography・layout・colorの主要declarationが`:root` custom propertiesを参照 |
 

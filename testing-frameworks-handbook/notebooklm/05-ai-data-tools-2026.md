@@ -404,7 +404,7 @@ real serviceの前にdeterministic tool simulatorで次を注入します。
 | Mocha 11.7.6 | runner/framework | serial default、pluggable assertion/mock | mature/自由 | dependency compositionとparallel制約 |
 | AVA 8.0.1 | runner/framework | file/thread isolationとconcurrency | isolationを規約化 | 独自API/migration |
 | Jest 30.4.2 | batteries-included | transform/mock/snapshot/ecosystem | broad ecosystem | ESM、transform、worker設定の複雑さ |
-| Vitest 4.1.10 | Vite-native runner | Vite config再利用、browser mode | modern frontend/Vite | production bundlerとのcouplingを理解 |
+| Vitest 4.1.12 | Vite-native runner | Vite config再利用、browser mode | modern frontend/Vite | production bundlerとのcouplingを理解 |
 | Rstest (JS) | Rspack-native runner | Rspack/Rsbuild pipelineを再利用 | Rstack project | Rust crate `rstest`と別物 |
 | Jasmine | framework | batteries-included BDD style | legacy/browser資産 | 新規でのecosystem fitを比較 |
 | Sinon 22 | test-double library | spies/stubs/mocks/fake timers | runner-neutral | frameworkではない |
@@ -419,7 +419,7 @@ real serviceの前にdeterministic tool simulatorで次を注入します。
 | Tool | Category | Design center |
 |---|---|---|
 | Testing Library | UI test utility | userに近いrole/name/query、implementation detailを避ける |
-| Storybook 10.5.2 + Vitest addon 10.5.2 | component workshop/test | storyをVitest 4.1.10 browser modeのinteraction/a11y testへ変換 |
+| Storybook 10.6.3 + Vitest addon 10.6.3 | component workshop/test | storyをVitest 4.1.12 browser modeのinteraction/a11y testへ変換 |
 | Playwright 1.61.1 | browser E2E | per-test context、role locator、web-first assertion、failure-only artifact、sharding、Chromium/Firefox/WebKit |
 | Cypress 15.18 | browser/component E2E | in-browser command model、time-travel diagnostics |
 | TestCafe | browser E2E | hybrid native/proxy automation、sandbox、auto-wait |

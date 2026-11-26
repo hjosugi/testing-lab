@@ -94,12 +94,12 @@ require_exact_npm_pin "labs/advanced/package.json" "@stryker-mutator/tap-runner"
 require_exact_npm_pin "labs/system/package.json" "@pact-foundation/pact" "17.0.1"
 require_exact_npm_pin "labs/system/package.json" "@playwright/test" "1.61.1"
 require_exact_npm_pin "labs/system/package.json" "@storybook/addon-a11y" "10.5.2"
-require_exact_npm_pin "labs/system/package.json" "@storybook/addon-vitest" "10.5.2"
+require_exact_npm_pin "labs/system/package.json" "@storybook/addon-vitest" "10.6.3"
 require_exact_npm_pin "labs/system/package.json" "@storybook/web-components-vite" "10.5.2"
-require_exact_npm_pin "labs/system/package.json" "@vitest/browser-playwright" "4.1.10"
-require_exact_npm_pin "labs/system/package.json" "storybook" "10.5.2"
-require_exact_npm_pin "labs/system/package.json" "vite" "8.1.5"
-require_exact_npm_pin "labs/system/package.json" "vitest" "4.1.10"
+require_exact_npm_pin "labs/system/package.json" "@vitest/browser-playwright" "4.1.12"
+require_exact_npm_pin "labs/system/package.json" "storybook" "10.6.3"
+require_exact_npm_pin "labs/system/package.json" "vite" "8.3.5"
+require_exact_npm_pin "labs/system/package.json" "vitest" "4.1.12"
 if grep -Fq '"@storybook/test-runner"' "$root/labs/system/package.json"; then
   echo "DEPRECATED  remove @storybook/test-runner from labs/system/package.json" >&2
   failures=$((failures + 1))

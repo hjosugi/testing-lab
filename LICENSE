@@ -1,0 +1,15 @@
+Copyright (c) 2026 Avishai Kofun
+
+This repository is released under two licenses, depending on the kind of
+content:
+
+- Code (the sample code, scripts and labs): MIT License.
+  The full text is in testing-frameworks-handbook/LICENSE-CODE.
+
+- Documentation (the handbook text): Creative Commons Attribution 4.0
+  International (CC BY 4.0).
+  The notice is in testing-frameworks-handbook/LICENSE-DOCS, which links to
+  https://creativecommons.org/licenses/by/4.0/legalcode.
+
+This file only points to those two files. They are the license terms, and this
+file does not change them.
